@@ -194,9 +194,6 @@ textarea{resize:none;line-height:1.6}
 
 <!-- P1-S3 経験・就労希望 -->
 <div class="screen" id="sc-p1-3">
-  <div id="job-list"></div>
-  <button class="add-btn" id="add-job-btn" onclick="addJob()">+ 経験を追加（最大4件）</button>
-  <div class="divider"></div>
   <div class="fg">
     <div class="fl">希望職種 <span class="req">必須</span></div>
     <div class="hint" style="margin-bottom:10px">複数選択可</div>
@@ -208,6 +205,10 @@ textarea{resize:none;line-height:1.6}
       <div class="chip" data-m="1" onclick="cm(this)">解体</div>
     </div>
   </div>
+  <div class="divider"></div>
+  <div id="job-list"></div>
+  <button class="add-btn" id="add-job-btn" onclick="addJob()">+ 経験を追加（最大4件）</button>
+  <div class="divider"></div>
   <div class="fg"><div class="fl">勤務希望期間 <span class="req">必須</span></div><div class="cg"><div class="chip" data-g="term" onclick="cs(this)">1ヶ月</div><div class="chip" data-g="term" onclick="cs(this)">3ヶ月</div><div class="chip" data-g="term" onclick="cs(this)">6ヶ月</div><div class="chip" data-g="term" onclick="cs(this)">1年</div><div class="chip" data-g="term" onclick="cs(this)">長期希望</div></div></div>
   <div class="fg"><div class="fl">週出勤希望 <span class="req">必須</span></div><div class="cg"><div class="chip" data-g="days" onclick="cs(this)">1日</div><div class="chip" data-g="days" onclick="cs(this)">2日</div><div class="chip" data-g="days" onclick="cs(this)">3日</div><div class="chip" data-g="days" onclick="cs(this)">4日</div><div class="chip" data-g="days" onclick="cs(this)">5日</div><div class="chip" data-g="days" onclick="cs(this)">6日</div><div class="chip" data-g="days" onclick="cs(this)">7日</div></div></div>
   <div class="fg">
