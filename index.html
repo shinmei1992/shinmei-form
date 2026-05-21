@@ -197,19 +197,23 @@ textarea{resize:none;line-height:1.6}
   <div id="job-list"></div>
   <button class="add-btn" id="add-job-btn" onclick="addJob()">+ 経験を追加（最大4件）</button>
   <div class="divider"></div>
+  <div class="fg">
+    <div class="fl">希望職種 <span class="req">必須</span></div>
+    <div class="hint" style="margin-bottom:10px">複数選択可</div>
+    <div class="cg">
+      <div class="chip" data-m="1" onclick="cm(this)">土工</div>
+      <div class="chip" data-m="1" onclick="cm(this)">鳶</div>
+      <div class="chip" data-m="1" onclick="cm(this)">鉄筋</div>
+      <div class="chip" data-m="1" onclick="cm(this)">舗装</div>
+      <div class="chip" data-m="1" onclick="cm(this)">解体</div>
+    </div>
+  </div>
   <div class="fg"><div class="fl">勤務希望期間 <span class="req">必須</span></div><div class="cg"><div class="chip" data-g="term" onclick="cs(this)">1ヶ月</div><div class="chip" data-g="term" onclick="cs(this)">3ヶ月</div><div class="chip" data-g="term" onclick="cs(this)">6ヶ月</div><div class="chip" data-g="term" onclick="cs(this)">1年</div><div class="chip" data-g="term" onclick="cs(this)">長期希望</div></div></div>
   <div class="fg"><div class="fl">週出勤希望 <span class="req">必須</span></div><div class="cg"><div class="chip" data-g="days" onclick="cs(this)">1日</div><div class="chip" data-g="days" onclick="cs(this)">2日</div><div class="chip" data-g="days" onclick="cs(this)">3日</div><div class="chip" data-g="days" onclick="cs(this)">4日</div><div class="chip" data-g="days" onclick="cs(this)">5日</div><div class="chip" data-g="days" onclick="cs(this)">6日</div><div class="chip" data-g="days" onclick="cs(this)">7日</div></div></div>
   <div class="fg">
     <div class="fl">出張 <span class="req">必須</span></div>
     <div class="cg"><div class="chip" data-g="trip" onclick="cs(this);document.getElementById('trip-r').className='cb'">可能</div><div class="chip" data-g="trip" onclick="cs(this);document.getElementById('trip-r').className='cb show'">不可</div></div>
     <div class="cb" id="trip-r"><div class="fl" style="margin-bottom:8px">不可の理由 <span class="req">必須</span></div><textarea rows="3" placeholder="出張できない理由をご記入ください"></textarea></div>
-  </div>
-  <div class="fg">
-    <div class="fl">希望作業 <span class="req">必須</span></div>
-    <div class="hint" style="margin-bottom:10px">複数選択可</div>
-    <div class="cg">
-      <div class="chip" data-m="1" onclick="cm(this)">場内整備</div><div class="chip" data-m="1" onclick="cm(this)">掘方</div><div class="chip" data-m="1" onclick="cm(this)">コンクリート</div><div class="chip" data-m="1" onclick="cm(this)">ライン作業</div><div class="chip" data-m="1" onclick="cm(this)">ケーブル引き</div><div class="chip" data-m="1" onclick="cm(this)">養生</div><div class="chip" data-m="1" onclick="cm(this)">鳶</div><div class="chip" data-m="1" onclick="cm(this)">鉄筋</div><div class="chip" data-m="1" onclick="cm(this)">舗装</div><div class="chip" data-m="1" onclick="cm(this)">解体</div>
-    </div>
   </div>
 </div>
 
@@ -546,7 +550,8 @@ textarea{resize:none;line-height:1.6}
 
 <script>
 // ===== Apps Script URL（デプロイ後に変更） =====
-var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby4RsbpyKVvi9iS-9OXYQL6TIJctM6r3KeARn-SRYXcpohBl5bTlnBlcoNMcPfQHLCRsg/exec';
+var APPS_SCRIPT_URL = 'YOUR_APPS_SCRIPT_URL_HERE';
+var savedFormData = {}; // 送信前にデータを保存
 
 // ===== フロー定義 =====
 var flow = [
@@ -918,20 +923,16 @@ function fillFinalConfirm(){
 function generatePDF(){
   var today=new Date();
   var dateStr=today.getFullYear()+'年'+(today.getMonth()+1)+'月'+today.getDate()+'日';
-  var gv=function(id){var el=document.getElementById(id);return el&&el.value?el.value:'—';};
-  var gt=function(id){var el=document.getElementById(id);return el&&el.textContent?el.textContent.trim():'—';};
-  var gcv=function(g){var el=document.querySelector('[data-g="'+g+'"].sel');return el?el.dataset.v||el.textContent.trim():'—';};
-  var y=gv('by'),m=gv('bm'),d=gv('bd');
-  var birth=(y!=='—'&&m!=='—'&&d!=='—')?y+'年'+m+'月'+d+'日':'—';
-  var works=Array.from(document.querySelectorAll('[data-m="1"].sel')).map(function(e){return e.textContent.trim();}).join('、')||'—';
-  var branchEl=document.getElementById('branch-sel');
-  var branch=branchEl&&branchEl.value?branchEl.value:'—';
-  var rentEl=document.getElementById('rent-price-detail');
-  var rentPrice=rentEl?rentEl.value:'';
+  // 保存済みデータから取得
+  var d=savedFormData;
+  var sd=function(key){return d[key]||'—';};
+  var birth=sd('birth');
+  var works=sd('works');
+  var branch=sd('branch');
+  var rentPrice=d.rentPrice||'';
   var rentMap={'1550':'1,550円','2050':'2,050円','3150':'3,150円','3750':'3,750円'};
-  var docCount=document.querySelectorAll('.dcb.on').length;
-  var bankHasEl=document.querySelector('[data-g="bank-has"].sel');
-  var bankHas=bankHasEl?bankHasEl.textContent.trim():'—';
+  var docCount=d.docCount||0;
+  var bankHas=sd('bankHas');
   var regNoEl=document.querySelector('.reg-no');
   var regNo=regNoEl?regNoEl.textContent.trim():'—';
 
@@ -997,63 +998,63 @@ function generatePDF(){
 
   // PHASE1
   bodyDiv.appendChild(makeSection('PHASE 1 — 基本情報','#185FA5',[
-    makeRow('氏名（漢字）',gv('name-k')),
-    makeRow('氏名（フリガナ）',gv('name-f')),
+    makeRow('氏名（漢字）',sd('nameK')),
+    makeRow('氏名（フリガナ）',sd('nameF')),
     makeRow('生年月日',birth),
-    makeRow('郵便番号',gv('zipcode')),
-    makeRow('現住所',gv('addr')),
-    makeRow('電話番号',gv('phone')),
-    makeRow('住まい',st.live||'—'),
-    makeRow('社会保険',st.ins||'—'),
-    makeRow('国籍',st.nation||'—')
+    makeRow('郵便番号',sd('zip')),
+    makeRow('現住所',sd('addr')),
+    makeRow('電話番号',sd('phone')),
+    makeRow('住まい',sd('live')),
+    makeRow('社会保険',sd('ins')),
+    makeRow('国籍',sd('nation'))
   ]));
   bodyDiv.appendChild(makeSection('PHASE 1 — 就労希望','#185FA5',[
-    makeRow('勤務希望期間',gcv('term')),
-    makeRow('週出勤希望',gcv('days')),
-    makeRow('出張可否',gcv('trip')),
+    makeRow('勤務希望期間',sd('term')),
+    makeRow('週出勤希望',sd('days')),
+    makeRow('出張可否',sd('trip')),
     makeRow('希望作業',works)
   ]));
   bodyDiv.appendChild(makeSection('PHASE 1 — 身体・健康','#185FA5',[
-    makeRow('身長',gv('height')!=='—'?gv('height')+'cm':'—'),
-    makeRow('体重',gv('weight')!=='—'?gv('weight')+'kg':'—'),
-    makeRow('視力（左/右）',gv('vision-l')+' / '+gv('vision-r')),
-    makeRow('眼鏡・コンタクト',gcv('eye')),
-    makeRow('健康状態',gcv('health')),
-    makeRow('治療中の病気',gcv('sick')),
-    makeRow('自覚症状',gcv('symp')),
-    makeRow('免許',gcv('lic')),
-    makeRow('資格',gcv('cert')),
-    makeRow('負傷経験',gcv('inj'))
+    makeRow('身長',d.height?d.height+'cm':'—'),
+    makeRow('体重',d.weight?d.weight+'kg':'—'),
+    makeRow('視力（左/右）',(d.visionL||'—')+' / '+(d.visionR||'—')),
+    makeRow('眼鏡・コンタクト',sd('eye')),
+    makeRow('健康状態',sd('health')),
+    makeRow('治療中の病気',sd('sick')),
+    makeRow('自覚症状',sd('symp')),
+    makeRow('免許',sd('lic')),
+    makeRow('資格',sd('cert')),
+    makeRow('負傷経験',sd('inj'))
   ]));
   bodyDiv.appendChild(makeSection('PHASE 1 — 作業服・靴','#185FA5',[
-    makeRow('作業服の持参',gcv('clothes')),
-    makeRow('安全靴・長靴の持参',gcv('shoes'))
+    makeRow('作業服の持参',sd('clothes')),
+    makeRow('安全靴・長靴の持参',sd('shoes'))
   ]));
   bodyDiv.appendChild(makeSection('PHASE 2 — 契約書類','#0F6E56',[
-    makeRow('契約書（日雇就労）',agreed['p2-0']?'✓ 同意済':'—'),
-    makeRow('誓約書',agreed['p2-1']?'✓ 誓約済':'—'),
-    makeRow('道具レンタル',agreed['p2-2']?'✓ 同意済':'—'),
-    makeRow('現場指示確認書',agreed['p2-3']?'✓ 確認済':'—'),
+    makeRow('契約書（日雇就労）',d.agree_c01?'✓ 同意済':'—'),
+    makeRow('誓約書',d.agree_c02?'✓ 誓約済':'—'),
+    makeRow('道具レンタル',d.agree_c03?'✓ 同意済':'—'),
+    makeRow('現場指示確認書',d.agree_c04?'✓ 確認済':'—'),
     makeRow('安全衛生教育','✓ チェック完了'),
-    makeRow('賃貸借契約',agreed['p2-5']?'✓ 同意済':'スキップ'),
+    makeRow('賃貸借契約',d.agree_c06?'✓ 同意済':'スキップ'),
     makeRow('賃料（日額）',rentPrice&&rentMap[rentPrice]?rentMap[rentPrice]:'—'),
     makeRow('登録支店・営業所',branch)
   ]));
   bodyDiv.appendChild(makeSection('PHASE 3 — 書類・保険登録','#854F0B',[
     makeRow('社保書類チェック数',docCount+'件'),
-    makeRow('書類回収日',gv('doc-date')),
-    makeRow('住民税',gcv('t1')),
-    makeRow('国民健康保険税',gcv('t2')),
-    makeRow('国民年金',gcv('nen')),
-    makeRow('他借金',gcv('dbt')),
-    makeRow('身元保証人氏名',gv('honin-name')),
+    makeRow('書類回収日',sd('docDate')),
+    makeRow('住民税',sd('tax1')),
+    makeRow('国民健康保険税',sd('tax2')),
+    makeRow('国民年金',sd('nenkin')),
+    makeRow('他借金',sd('debt')),
+    makeRow('身元保証人氏名',sd('hoshounin')),
     makeRow('銀行口座',bankHas),
-    makeRow('銀行名',bankHas==='あり'?gv('bank-name'):'—')
+    makeRow('銀行名',bankHas==='あり'?sd('bankName'):'—')
   ]));
   bodyDiv.appendChild(makeSection('PHASE 3 — 扶養控除申告書','#854F0B',[
-    makeRow('配偶者',gcv('spouse')),
-    makeRow('16歳以上の扶養親族',gcv('fyt')),
-    makeRow('障害者・寡婦・ひとり親・勤労学生',gcv('tokubetsu'))
+    makeRow('配偶者',sd('spouse')),
+    makeRow('16歳以上の扶養親族',sd('fyt')),
+    makeRow('障害者・寡婦・ひとり親・勤労学生',sd('tokubetsu'))
   ]));
 
   // フッター
@@ -1133,6 +1134,7 @@ async function sendToSheet(data) {
 
 function submit(){
   var data = collectData();
+  savedFormData = data; // グローバルに保存
   var mc = document.getElementById('main-content');
   mc.innerHTML = '<div class="succ" style="display:flex"><div class="si" style="background:#e8f4fd"><div style="width:30px;height:30px;border:3px solid #185FA5;border-top-color:transparent;border-radius:50%;animation:spin 1s linear infinite"></div></div><div style="font-size:16px;color:#888">送信中...</div></div>';
   document.getElementById('nav').style.display='none';
