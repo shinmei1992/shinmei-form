@@ -198,11 +198,11 @@ textarea{resize:none;line-height:1.6}
     <div class="fl">希望職種 <span class="req">必須</span></div>
     <div class="hint" style="margin-bottom:10px">複数選択可</div>
     <div class="cg">
-      <div class="chip" data-m="1" onclick="cm(this)">土工</div>
-      <div class="chip" data-m="1" onclick="cm(this)">鳶</div>
-      <div class="chip" data-m="1" onclick="cm(this)">鉄筋</div>
-      <div class="chip" data-m="1" onclick="cm(this)">舗装</div>
-      <div class="chip" data-m="1" onclick="cm(this)">解体</div>
+      <div class="chip" data-g="works" data-m="w" onclick="cm(this)">土工</div>
+      <div class="chip" data-g="works" data-m="w" onclick="cm(this)">鳶</div>
+      <div class="chip" data-g="works" data-m="w" onclick="cm(this)">鉄筋</div>
+      <div class="chip" data-g="works" data-m="w" onclick="cm(this)">舗装</div>
+      <div class="chip" data-g="works" data-m="w" onclick="cm(this)">解体</div>
     </div>
   </div>
   <div class="divider"></div>
@@ -233,12 +233,12 @@ textarea{resize:none;line-height:1.6}
   <div class="fg">
     <div class="fl">治療中の病気 <span class="req">必須</span></div>
     <div class="cg" style="margin-bottom:10px"><div class="chip" data-g="sick" onclick="cs(this);document.getElementById('sick-d').className='cb'">なし</div><div class="chip" data-g="sick" onclick="cs(this);document.getElementById('sick-d').className='cb show'">あり</div></div>
-    <div class="cb" id="sick-d"><div class="cg" style="margin-bottom:10px"><div class="chip" data-m="1" onclick="cm(this)">高血圧</div><div class="chip" data-m="1" onclick="cm(this)">糖尿病</div><div class="chip" data-m="1" onclick="cm(this)">狭心症</div><div class="chip" data-m="1" onclick="cm(this)">不整脈</div><div class="chip" data-m="1" onclick="cm(this)">その他</div></div><textarea rows="2" placeholder="詳細（任意）"></textarea></div>
+    <div class="cb" id="sick-d"><div class="cg" style="margin-bottom:10px"><div class="chip" data-g="sick-type" data-m="s" onclick="cm(this)">高血圧</div><div class="chip" data-g="sick-type" data-m="s" onclick="cm(this)">糖尿病</div><div class="chip" data-g="sick-type" data-m="s" onclick="cm(this)">狭心症</div><div class="chip" data-g="sick-type" data-m="s" onclick="cm(this)">不整脈</div><div class="chip" data-g="sick-type" data-m="s" onclick="cm(this)">その他</div></div><textarea rows="2" placeholder="詳細（任意）"></textarea></div>
   </div>
   <div class="fg">
     <div class="fl">自覚症状 <span class="req">必須</span></div>
     <div class="cg" style="margin-bottom:10px"><div class="chip" data-g="symp" onclick="cs(this);document.getElementById('symp-d').className='cb'">なし</div><div class="chip" data-g="symp" onclick="cs(this);document.getElementById('symp-d').className='cb show'">あり</div></div>
-    <div class="cb" id="symp-d"><div class="cg"><div class="chip" data-m="1" onclick="cm(this)">腰痛</div><div class="chip" data-m="1" onclick="cm(this)">難聴</div><div class="chip" data-m="1" onclick="cm(this)">めまい</div><div class="chip" data-m="1" onclick="cm(this)">その他</div></div></div>
+    <div class="cb" id="symp-d"><div class="cg"><div class="chip" data-g="symp-type" data-m="sy" onclick="cm(this)">腰痛</div><div class="chip" data-g="symp-type" data-m="sy" onclick="cm(this)">難聴</div><div class="chip" data-g="symp-type" data-m="sy" onclick="cm(this)">めまい</div><div class="chip" data-g="symp-type" data-m="sy" onclick="cm(this)">その他</div></div></div>
   </div>
 </div>
 
@@ -964,10 +964,10 @@ function generatePDF(){
   // オーバーレイ作成
   var overlay=document.createElement('div');
   overlay.id='pdf-overlay';
-  overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);z-index:9999;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px';
+  overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);z-index:9999;overflow-y:scroll;-webkit-overflow-scrolling:touch;padding:16px';
 
   var inner=document.createElement('div');
-  inner.style.cssText='background:#fff;border-radius:12px;overflow:hidden;max-width:700px;margin:0 auto';
+  inner.style.cssText='background:#fff;border-radius:12px;overflow:visible;max-width:700px;margin:0 auto 40px auto';
 
   // ボタンバー
   var btnBar=document.createElement('div');
