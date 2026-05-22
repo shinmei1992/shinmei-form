@@ -301,7 +301,7 @@ textarea{resize:none;line-height:1.6}
   <div class="fg">
     <div class="fl">負傷経験 <span class="req">必須</span></div>
     <div class="cg" style="margin-bottom:10px"><div class="chip" data-g="inj" onclick="cs(this);document.getElementById('inj-d').className='cb'">なし</div><div class="chip" data-g="inj" onclick="cs(this);document.getElementById('inj-d').className='cb show'">あり</div></div>
-    <div class="cb" id="inj-d"><div class="fl" style="margin-bottom:10px">種別 <span class="req">必須</span></div><div class="cg" style="margin-bottom:10px"><div class="chip" data-m="1" onclick="cm(this)">墜落・転落</div><div class="chip" data-m="1" onclick="cm(this)">転倒</div><div class="chip" data-m="1" onclick="cm(this)">飛来・落下</div><div class="chip" data-m="1" onclick="cm(this)">その他</div></div><textarea rows="2" placeholder="状況（任意）"></textarea></div>
+    <div class="cb" id="inj-d"><div class="fl" style="margin-bottom:10px">種別 <span class="req">必須</span></div><div class="cg" style="margin-bottom:10px"><div class="chip" data-g="inj-type" data-m="i" onclick="cm(this)">墜落・転落</div><div class="chip" data-g="inj-type" data-m="i" onclick="cm(this)">転倒</div><div class="chip" data-g="inj-type" data-m="i" onclick="cm(this)">飛来・落下</div><div class="chip" data-g="inj-type" data-m="i" onclick="cm(this)">その他</div></div><textarea rows="2" placeholder="状況（任意）"></textarea></div>
   </div>
   <div class="divider"></div>
   <div class="fg">
@@ -1081,7 +1081,7 @@ function collectData() {
     var gcv=function(g){var el=document.querySelector('[data-g="'+g+'"].sel');return el?el.dataset.v||el.textContent.trim():'';};
     var y=gv('by'),m=gv('bm'),d=gv('bd');
     var ageStr=gt('age-out').replace('年齢：','').replace('歳','');
-    var works=Array.from(document.querySelectorAll('[data-m="1"].sel')).map(function(e){return e.textContent.trim();}).join('、');
+    var works=Array.from(document.querySelectorAll('[data-g="works"].sel')).map(function(e){return e.textContent.trim();}).join('、');
     var docCount=document.querySelectorAll('.dcb.on').length;
     var branchEl=document.getElementById('branch-sel');
     var rentEl=document.getElementById('rent-price-detail');
