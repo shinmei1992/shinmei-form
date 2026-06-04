@@ -964,19 +964,29 @@ function generatePDF(){
   // オーバーレイ作成
   var overlay=document.createElement('div');
   overlay.id='pdf-overlay';
-  overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);z-index:9999;overflow-y:scroll;-webkit-overflow-scrolling:touch;padding:16px';
+  overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);z-index:9999;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px;box-sizing:border-box';
 
   var inner=document.createElement('div');
-  inner.style.cssText='background:#fff;border-radius:12px;overflow:visible;max-width:700px;margin:0 auto 40px auto';
+  inner.style.cssText='background:#fff;border-radius:12px;overflow:hidden;max-width:700px;margin:0 auto 60px auto;position:relative';
 
   // ボタンバー
   var btnBar=document.createElement('div');
-  btnBar.style.cssText='position:sticky;top:0;background:#fff;padding:12px 16px;border-bottom:1px solid #eee;display:flex;gap:10px;z-index:10';
+  btnBar.style.cssText='position:sticky;top:0;background:#fff;padding:12px 16px;border-bottom:1px solid #eee;display:flex;gap:10px;z-index:10;-webkit-position:sticky';
 
   var printBtn=document.createElement('button');
   printBtn.textContent='印刷 / PDF保存';
   printBtn.style.cssText='flex:2;padding:12px;background:#185FA5;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit';
-  printBtn.onclick=function(){window.print();};
+  printBtn.onclick=function(){
+    // 印刷用スタイルを追加
+    var printStyle=document.getElementById('print-style');
+    if(!printStyle){
+      printStyle=document.createElement('style');
+      printStyle.id='print-style';
+      printStyle.textContent='@media print{#pdf-overlay{position:static!important;background:none!important;padding:0!important;overflow:visible!important}#pdf-overlay>div{border-radius:0!important;box-shadow:none!important}#pdf-overlay button{display:none!important}.bn{display:none!important}.top-bar,.pw{display:none!important}}';
+      document.head.appendChild(printStyle);
+    }
+    window.print();
+  };
 
   var closeBtn=document.createElement('button');
   closeBtn.textContent='閉じる';
@@ -991,10 +1001,32 @@ function generatePDF(){
 
   // ヘッダー
   var hdr=document.createElement('div');
-  hdr.style.cssText='text-align:center;margin-bottom:20px;padding-bottom:14px;border-bottom:2px solid #185FA5';
-  hdr.innerHTML='<div style="font-size:17px;font-weight:600;color:#185FA5">神明株式会社 作業員登録確認書</div>'
+  hdr.style.cssText='margin-bottom:20px;padding-bottom:14px;border-bottom:2px solid #185FA5;display:flex;align-items:center;gap:16px';
+
+  // 写真
+  var photoWrap=document.createElement('div');
+  photoWrap.style.cssText='flex-shrink:0';
+  if(d.photoData){
+    var photoEl=document.createElement('img');
+    photoEl.src=d.photoData;
+    photoEl.style.cssText='width:80px;height:100px;object-fit:cover;border-radius:6px;border:1px solid #ddd';
+    photoWrap.appendChild(photoEl);
+  } else {
+    var noPhoto=document.createElement('div');
+    noPhoto.style.cssText='width:80px;height:100px;border-radius:6px;border:1px solid #ddd;background:#f8f8f8;display:flex;align-items:center;justify-content:center;font-size:11px;color:#aaa;text-align:center';
+    noPhoto.textContent='写真なし';
+    photoWrap.appendChild(noPhoto);
+  }
+  hdr.appendChild(photoWrap);
+
+  // テキスト情報
+  var hdrText=document.createElement('div');
+  hdrText.style.cssText='flex:1;text-align:left';
+  hdrText.innerHTML='<div style="font-size:17px;font-weight:600;color:#185FA5">神明株式会社 作業員登録確認書</div>'
+    +'<div style="font-size:14px;font-weight:600;color:#222;margin-top:6px">'+sd('nameK')+(sd('nameF')!=='—'?' （'+sd('nameF')+'）':'')+'</div>'
     +'<div style="font-size:12px;color:#888;margin-top:4px">登録日：'+dateStr+'</div>'
     +'<div style="display:inline-block;background:#185FA5;color:#fff;padding:3px 14px;border-radius:20px;font-size:12px;font-weight:600;margin-top:6px">'+regNo+'</div>';
+  hdr.appendChild(hdrText);
   bodyDiv.appendChild(hdr);
 
   // PHASE1
@@ -1025,7 +1057,8 @@ function generatePDF(){
     makeRow('自覚症状',sd('symp')),
     makeRow('免許',sd('lic')),
     makeRow('資格',sd('cert')),
-    makeRow('負傷経験',sd('inj'))
+    makeRow('負傷経験',sd('inj')),
+    makeRow('負傷種別',d.injType&&d.inj==='あり'?d.injType:'—')
   ]));
   bodyDiv.appendChild(makeSection('PHASE 1 — 作業服・靴','#185FA5',[
     makeRow('作業服の持参',sd('clothes')),
@@ -1085,8 +1118,11 @@ function collectData() {
     var docCount=document.querySelectorAll('.dcb.on').length;
     var branchEl=document.getElementById('branch-sel');
     var rentEl=document.getElementById('rent-price-detail');
+    var photoImg=document.getElementById('photo-preview-img');
+    var photoData=photoImg&&photoImg.src&&photoImg.src.startsWith('data:')?photoImg.src:'';
     return {
       nameK:gv('name-k'), nameF:gv('name-f'),
+      photoData:photoData,
       birth:(y&&m&&d)?y+'年'+m+'月'+d+'日':'', age:ageStr,
       zip:gv('zipcode'), addr:gv('addr'), phone:gv('phone'),
       live:st.live||'', ins:st.ins||'', nation:st.nation||'',
@@ -1097,7 +1133,9 @@ function collectData() {
       visionL:gv('vision-l'), visionR:gv('vision-r'), eye:gcv('eye'),
       health:gcv('health'), sick:gcv('sick'), symp:gcv('symp'),
       lic:gcv('lic'), cert:gcv('cert'),
-      inj:gcv('inj'), clothes:gcv('clothes'), shoes:gcv('shoes'),
+      inj:gcv('inj'),
+      injType:Array.from(document.querySelectorAll('[data-g="inj-type"].sel')).map(function(e){return e.textContent.trim();}).join('、')||'',
+      clothes:gcv('clothes'), shoes:gcv('shoes'),
       wsSize:gcv('ws'), pantsSize:gv('pants-size'),
       shoeSize:gv('shoe-size'), bootSize:gv('boot-size'),
       agree_c01:agreed['p2-0']||false,
