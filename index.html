@@ -551,7 +551,7 @@ textarea{resize:none;line-height:1.6}
 
 <script>
 // ===== Apps Script URL（デプロイ後に変更） =====
-var APPS_SCRIPT_URL = 'YOUR_APPS_SCRIPT_URL_HERE';
+var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby4RsbpyKVvi9iS-9OXYQL6TIJctM6r3KeARn-SRYXcpohBl5bTlnBlcoNMcPfQHLCRsg/exec';
 var savedFormData = {}; // 送信前にデータを保存
 
 // ===== フロー定義 =====
@@ -1157,7 +1157,7 @@ function collectData() {
 }
 
 async function sendToSheet(data) {
-  if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL === 'YOUR_APPS_SCRIPT_URL_HERE') {
+  if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL === 'https://script.google.com/macros/s/AKfycby4RsbpyKVvi9iS-9OXYQL6TIJctM6r3KeARn-SRYXcpohBl5bTlnBlcoNMcPfQHLCRsg/exec') {
     return { status: 'skip', registrationNo: 'TEST-0001' };
   }
   try {
