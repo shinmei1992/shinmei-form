@@ -893,8 +893,13 @@ async function searchZip(){
 
 // ===== 確認画面 =====
 function fillP1Confirm(){
-  var nk=document.getElementById('name-k').value,nf=document.getElementById('name-f').value;
-  document.getElementById('cv-name').textContent=(nk||'—')+(nf?' （'+nf+'）':'');
+  var seiK=document.getElementById('name-sei-k')?document.getElementById('name-sei-k').value:'';
+  var meiK=document.getElementById('name-mei-k')?document.getElementById('name-mei-k').value:'';
+  var seiF=document.getElementById('name-sei-f')?document.getElementById('name-sei-f').value:'';
+  var meiF=document.getElementById('name-mei-f')?document.getElementById('name-mei-f').value:'';
+  var fullK=(seiK+' '+meiK).trim()||'—';
+  var fullF=(seiF+' '+meiF).trim();
+  document.getElementById('cv-name').textContent=fullK+(fullF?' （'+fullF+'）':'');
   document.getElementById('cv-live').textContent=st.live||'—';
   document.getElementById('cv-ins').textContent=st.ins||'—';
   document.getElementById('cv-nation').textContent=st.nation||'—';
