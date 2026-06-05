@@ -142,8 +142,10 @@ textarea{resize:none;line-height:1.6}
 
 <!-- P1-S1 基本情報 -->
 <div class="screen" id="sc-p1-1">
-  <div class="fg"><div class="fl">氏名（漢字） <span class="req">必須</span></div><input type="text" id="name-k" placeholder="例：神明 太郎"></div>
-  <div class="fg"><div class="fl">氏名（フリガナ） <span class="req">必須</span></div><input type="text" id="name-f" placeholder="例：シンメイ タロウ" autocomplete="off"><div class="hint">カタカナで入力してください</div></div>
+  <div class="fg"><div class="fl">苗字（漢字） <span class="req">必須</span></div><input type="text" id="name-sei-k" placeholder="例：神明"></div>
+  <div class="fg"><div class="fl">苗字（フリガナ） <span class="req">必須</span></div><input type="text" id="name-sei-f" placeholder="例：シンメイ" autocomplete="off"><div class="hint">カタカナで入力してください</div></div>
+  <div class="fg"><div class="fl">名前（漢字） <span class="req">必須</span></div><input type="text" id="name-mei-k" placeholder="例：太郎"></div>
+  <div class="fg"><div class="fl">名前（フリガナ） <span class="req">必須</span></div><input type="text" id="name-mei-f" placeholder="例：タロウ" autocomplete="off"><div class="hint">カタカナで入力してください</div></div>
   <div class="fg">
     <div class="fl">生年月日 <span class="req">必須</span></div>
     <div class="g2" style="margin-bottom:10px"><select id="by"><option value="">年を選択</option></select><select id="bm"><option value="">月</option></select></div>
@@ -212,6 +214,19 @@ textarea{resize:none;line-height:1.6}
   <div class="fg"><div class="fl">勤務希望期間 <span class="req">必須</span></div><div class="cg"><div class="chip" data-g="term" onclick="cs(this)">1ヶ月</div><div class="chip" data-g="term" onclick="cs(this)">3ヶ月</div><div class="chip" data-g="term" onclick="cs(this)">6ヶ月</div><div class="chip" data-g="term" onclick="cs(this)">1年</div><div class="chip" data-g="term" onclick="cs(this)">長期希望</div></div></div>
   <div class="fg"><div class="fl">週出勤希望 <span class="req">必須</span></div><div class="cg"><div class="chip" data-g="days" onclick="cs(this)">1日</div><div class="chip" data-g="days" onclick="cs(this)">2日</div><div class="chip" data-g="days" onclick="cs(this)">3日</div><div class="chip" data-g="days" onclick="cs(this)">4日</div><div class="chip" data-g="days" onclick="cs(this)">5日</div><div class="chip" data-g="days" onclick="cs(this)">6日</div><div class="chip" data-g="days" onclick="cs(this)">7日</div></div></div>
   <div class="fg">
+    <div class="fl">出勤可能曜日 <span class="req">必須</span></div>
+    <div class="hint" style="margin-bottom:10px">複数選択可</div>
+    <div class="cg">
+      <div class="chip" data-g="weekday" data-m="wd" onclick="cm(this)">月</div>
+      <div class="chip" data-g="weekday" data-m="wd" onclick="cm(this)">火</div>
+      <div class="chip" data-g="weekday" data-m="wd" onclick="cm(this)">水</div>
+      <div class="chip" data-g="weekday" data-m="wd" onclick="cm(this)">木</div>
+      <div class="chip" data-g="weekday" data-m="wd" onclick="cm(this)">金</div>
+      <div class="chip" data-g="weekday" data-m="wd" onclick="cm(this)">土</div>
+      <div class="chip" data-g="weekday" data-m="wd" onclick="cm(this)">日</div>
+    </div>
+  </div>
+  <div class="fg">
     <div class="fl">出張 <span class="req">必須</span></div>
     <div class="cg"><div class="chip" data-g="trip" onclick="cs(this);document.getElementById('trip-r').className='cb'">可能</div><div class="chip" data-g="trip" onclick="cs(this);document.getElementById('trip-r').className='cb show'">不可</div></div>
     <div class="cb" id="trip-r"><div class="fl" style="margin-bottom:8px">不可の理由 <span class="req">必須</span></div><textarea rows="3" placeholder="出張できない理由をご記入ください"></textarea></div>
@@ -222,7 +237,7 @@ textarea{resize:none;line-height:1.6}
 <div class="screen" id="sc-p1-4">
   <div class="fg"><div class="fl">身長 <span class="req">必須</span></div><div style="display:flex;align-items:center;gap:10px"><input type="number" id="height" placeholder="例：170" style="flex:1"><span style="font-size:15px;color:#888">cm</span></div></div>
   <div class="fg"><div class="fl">体重 <span class="req">必須</span></div><div style="display:flex;align-items:center;gap:10px"><input type="number" id="weight" placeholder="例：65" style="flex:1"><span style="font-size:15px;color:#888">kg</span></div></div>
-  <div class="fg"><div class="fl">血圧 <span class="opt">任意</span></div><div style="display:flex;align-items:center;gap:10px"><input type="number" id="bp-hi" placeholder="上" style="flex:1"><span style="color:#888">／</span><input type="number" id="bp-lo" placeholder="下" style="flex:1"></div></div>
+  <div class="fg"><div class="fl">血圧 <span class="req">必須</span></div><div style="display:flex;align-items:center;gap:10px"><input type="number" id="bp-hi" placeholder="上" style="flex:1"><span style="color:#888">／</span><input type="number" id="bp-lo" placeholder="下" style="flex:1"></div></div>
   <div class="fg"><div class="fl">視力 <span class="req">必須</span></div><div class="g2"><div><div class="hint" style="margin-bottom:6px">左</div><input type="number" id="vision-l" placeholder="例：1.0" step="0.1"></div><div><div class="hint" style="margin-bottom:6px">右</div><input type="number" id="vision-r" placeholder="例：0.8" step="0.1"></div></div></div>
   <div class="fg"><div class="fl">コンタクト・眼鏡 <span class="req">必須</span></div><div class="cg"><div class="chip" data-g="eye" onclick="cs(this)">使用していない</div><div class="chip" data-g="eye" onclick="cs(this)">コンタクト</div><div class="chip" data-g="eye" onclick="cs(this)">眼鏡</div></div></div>
 </div>
@@ -233,7 +248,7 @@ textarea{resize:none;line-height:1.6}
   <div class="fg">
     <div class="fl">治療中の病気 <span class="req">必須</span></div>
     <div class="cg" style="margin-bottom:10px"><div class="chip" data-g="sick" onclick="cs(this);document.getElementById('sick-d').className='cb'">なし</div><div class="chip" data-g="sick" onclick="cs(this);document.getElementById('sick-d').className='cb show'">あり</div></div>
-    <div class="cb" id="sick-d"><div class="cg" style="margin-bottom:10px"><div class="chip" data-g="sick-type" data-m="s" onclick="cm(this)">高血圧</div><div class="chip" data-g="sick-type" data-m="s" onclick="cm(this)">糖尿病</div><div class="chip" data-g="sick-type" data-m="s" onclick="cm(this)">狭心症</div><div class="chip" data-g="sick-type" data-m="s" onclick="cm(this)">不整脈</div><div class="chip" data-g="sick-type" data-m="s" onclick="cm(this)">その他</div></div><textarea rows="2" placeholder="詳細（任意）"></textarea></div>
+    <div class="cb" id="sick-d"><div class="cg" style="margin-bottom:10px"><div class="chip" data-g="sick-type" data-m="s" onclick="cm(this)">高血圧</div><div class="chip" data-g="sick-type" data-m="s" onclick="cm(this)">糖尿病</div><div class="chip" data-g="sick-type" data-m="s" onclick="cm(this)">狭心症</div><div class="chip" data-g="sick-type" data-m="s" onclick="cm(this)">不整脈</div><div class="chip" data-g="sick-type" data-m="s" onclick="cm(this)">てんかん</div><div class="chip" data-g="sick-type" data-m="s" onclick="cm(this)">その他</div></div><textarea rows="2" placeholder="詳細（任意）"></textarea></div>
   </div>
   <div class="fg">
     <div class="fl">自覚症状 <span class="req">必須</span></div>
@@ -248,20 +263,36 @@ textarea{resize:none;line-height:1.6}
     <div class="fl">免許の有無 <span class="req">必須</span></div>
     <div class="cg" style="margin-bottom:10px"><div class="chip" data-g="lic" onclick="cs(this);document.getElementById('lic-d').className='cb'">なし</div><div class="chip" data-g="lic" onclick="cs(this);document.getElementById('lic-d').className='cb show'">あり</div></div>
     <div class="cb" id="lic-d">
-      <div class="fg" style="margin-bottom:0">
-        <div class="fl" style="margin-bottom:8px">免許証 <span class="req">必須</span></div>
-        <input type="file" id="lic-input" accept="image/*" capture="environment" style="display:none" onchange="onDocSelected(this,'lic-preview-wrap','lic-preview-img')">
+      <div class="fg" style="margin-bottom:10px">
+        <div class="fl" style="margin-bottom:8px">免許証（表面） <span class="req">必須</span></div>
+        <input type="file" id="lic-input-f" accept="image/*" capture="environment" style="display:none" onchange="onDocSelected(this,'lic-preview-wrap-f','lic-preview-img-f')">
         <div style="display:flex;gap:10px;margin-bottom:8px">
-          <button onclick="document.getElementById('lic-input').setAttribute('capture','environment');document.getElementById('lic-input').click()" style="flex:1;padding:10px;border:1.5px dashed #ccc;border-radius:10px;background:#f8f8f8;color:#555;font-size:13px;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:4px">
+          <button onclick="document.getElementById('lic-input-f').setAttribute('capture','environment');document.getElementById('lic-input-f').click()" style="flex:1;padding:10px;border:1.5px dashed #ccc;border-radius:10px;background:#f8f8f8;color:#555;font-size:13px;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:4px">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="2" y="5" width="20" height="15" rx="2" stroke="#888" stroke-width="1.5"/><circle cx="12" cy="12" r="4" stroke="#888" stroke-width="1.5"/></svg>撮影
           </button>
-          <button onclick="document.getElementById('lic-input').removeAttribute('capture');document.getElementById('lic-input').click()" style="flex:1;padding:10px;border:1.5px dashed #ccc;border-radius:10px;background:#f8f8f8;color:#555;font-size:13px;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:4px">
+          <button onclick="document.getElementById('lic-input-f').removeAttribute('capture');document.getElementById('lic-input-f').click()" style="flex:1;padding:10px;border:1.5px dashed #ccc;border-radius:10px;background:#f8f8f8;color:#555;font-size:13px;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:4px">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="#888" stroke-width="1.5"/><path d="M21 15l-5-5L5 21" stroke="#888" stroke-width="1.5"/></svg>ライブラリ
           </button>
         </div>
-        <div id="lic-preview-wrap" style="display:none;position:relative">
-          <img id="lic-preview-img" style="width:100%;border-radius:10px;max-height:160px;object-fit:cover" src="">
-          <button onclick="resetDoc('lic-input','lic-preview-wrap','lic-preview-img')" style="position:absolute;top:6px;right:6px;background:rgba(0,0,0,0.5);color:#fff;border:none;border-radius:20px;padding:3px 10px;font-size:12px;cursor:pointer">撮り直す</button>
+        <div id="lic-preview-wrap-f" style="display:none;position:relative">
+          <img id="lic-preview-img-f" style="width:100%;border-radius:10px;max-height:160px;object-fit:cover" src="">
+          <button onclick="resetDoc('lic-input-f','lic-preview-wrap-f','lic-preview-img-f')" style="position:absolute;top:6px;right:6px;background:rgba(0,0,0,0.5);color:#fff;border:none;border-radius:20px;padding:3px 10px;font-size:12px;cursor:pointer">撮り直す</button>
+        </div>
+      </div>
+      <div class="fg" style="margin-bottom:0">
+        <div class="fl" style="margin-bottom:8px">免許証（裏面） <span class="req">必須</span></div>
+        <input type="file" id="lic-input-b" accept="image/*" capture="environment" style="display:none" onchange="onDocSelected(this,'lic-preview-wrap-b','lic-preview-img-b')">
+        <div style="display:flex;gap:10px;margin-bottom:8px">
+          <button onclick="document.getElementById('lic-input-b').setAttribute('capture','environment');document.getElementById('lic-input-b').click()" style="flex:1;padding:10px;border:1.5px dashed #ccc;border-radius:10px;background:#f8f8f8;color:#555;font-size:13px;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:4px">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="2" y="5" width="20" height="15" rx="2" stroke="#888" stroke-width="1.5"/><circle cx="12" cy="12" r="4" stroke="#888" stroke-width="1.5"/></svg>撮影
+          </button>
+          <button onclick="document.getElementById('lic-input-b').removeAttribute('capture');document.getElementById('lic-input-b').click()" style="flex:1;padding:10px;border:1.5px dashed #ccc;border-radius:10px;background:#f8f8f8;color:#555;font-size:13px;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:4px">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="#888" stroke-width="1.5"/><path d="M21 15l-5-5L5 21" stroke="#888" stroke-width="1.5"/></svg>ライブラリ
+          </button>
+        </div>
+        <div id="lic-preview-wrap-b" style="display:none;position:relative">
+          <img id="lic-preview-img-b" style="width:100%;border-radius:10px;max-height:160px;object-fit:cover" src="">
+          <button onclick="resetDoc('lic-input-b','lic-preview-wrap-b','lic-preview-img-b')" style="position:absolute;top:6px;right:6px;background:rgba(0,0,0,0.5);color:#fff;border:none;border-radius:20px;padding:3px 10px;font-size:12px;cursor:pointer">撮り直す</button>
         </div>
       </div>
     </div>
@@ -551,7 +582,7 @@ textarea{resize:none;line-height:1.6}
 
 <script>
 // ===== Apps Script URL（デプロイ後に変更） =====
-var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby4RsbpyKVvi9iS-9OXYQL6TIJctM6r3KeARn-SRYXcpohBl5bTlnBlcoNMcPfQHLCRsg/exec';
+var APPS_SCRIPT_URL = 'YOUR_APPS_SCRIPT_URL_HERE';
 var savedFormData = {}; // 送信前にデータを保存
 
 // ===== フロー定義 =====
@@ -565,17 +596,6 @@ var flow = [
   {id:'sc-p1-6',phase:1,step:'STEP 7/9',label:'免許・資格',skip:false},
   {id:'sc-p1-7',phase:1,step:'STEP 8/9',label:'作業服・負傷',skip:false},
   {id:'sc-p1-8',phase:1,step:'STEP 9/9',label:'PHASE 1 確認',skip:false},
-  {id:'sc-p2-0',phase:2,step:'C01/6',label:'契約書',skip:false},
-  {id:'sc-p2-1',phase:2,step:'C02/6',label:'誓約書',skip:false},
-  {id:'sc-p2-2',phase:2,step:'C03/6',label:'道具レンタル',skip:false},
-  {id:'sc-p2-3',phase:2,step:'C04/6',label:'現場指示確認書',skip:false},
-  {id:'sc-p2-4',phase:2,step:'C05/6',label:'安全衛生教育',skip:false},
-  {id:'sc-p2-5',phase:2,step:'C06/6',label:'賃貸借契約（入寮者）',skip:true},
-  {id:'sc-p3-0',phase:3,step:'I01/5',label:'社保書類チェック',skip:true},
-  {id:'sc-p3-1',phase:3,step:'I02/5',label:'税金・年金状況',skip:true},
-  {id:'sc-p3-2',phase:3,step:'I03/5',label:'身元保証書＋社員登録票',skip:true},
-  {id:'sc-p3-5',phase:3,step:'I04/5',label:'扶養控除申告書',skip:true},
-  {id:'sc-p3-6',phase:3,step:'I05/5',label:'最終確認・完了',skip:false},
 ];
 
 var phaseColors = {1:'#185FA5',2:'#0F6E56',3:'#854F0B'};
@@ -667,11 +687,10 @@ function updateUI(){
 function goNext(){
   try{
     if(cur===flow.length-1){
-      fillFinalConfirm();
+      fillP1Confirm();
       setTimeout(function(){submit();},200);
       return;
     }
-    if(cur===8)fillP1Confirm();
     var curEl=document.getElementById(flow[cur].id);
     if(curEl)curEl.classList.remove('active');
     cur++;
@@ -899,7 +918,8 @@ function fillFinalConfirm(){
     var sv=function(id,val){var el=document.getElementById(id);if(el)el.textContent=val;};
     var gv=function(id){var el=document.getElementById(id);return el&&el.value?el.value:'—';};
     var nk=gv('name-k'),nf=gv('name-f');
-    sv('f-name',(nk||'—')+(nf&&nf!=='—'?' （'+nf+'）':''));
+    var seiK=gv('name-sei-k'),meiK=gv('name-mei-k'),seiF=gv('name-sei-f'),meiF=gv('name-mei-f');
+    sv('f-name',(seiK+' '+meiK).trim()||'—');
     sv('f-live',st.live||'—');
     sv('f-ins',st.ins||'—');
     sv('f-addr',gv('addr'));
@@ -1031,7 +1051,10 @@ function generatePDF(){
 
   // PHASE1
   bodyDiv.appendChild(makeSection('PHASE 1 — 基本情報','#185FA5',[
-    makeRow('氏名（漢字）',sd('nameK')),
+    makeRow('苗字（漢字）',sd('seiK')),
+    makeRow('苗字（フリガナ）',sd('seiF')),
+    makeRow('名前（漢字）',sd('meiK')),
+    makeRow('名前（フリガナ）',sd('meiF')),
     makeRow('氏名（フリガナ）',sd('nameF')),
     makeRow('生年月日',birth),
     makeRow('郵便番号',sd('zip')),
@@ -1045,6 +1068,7 @@ function generatePDF(){
     makeRow('勤務希望期間',sd('term')),
     makeRow('週出勤希望',sd('days')),
     makeRow('出張可否',sd('trip')),
+    makeRow('出勤可能曜日',sd('weekdays')),
     makeRow('希望職種',works)
   ]));
   bodyDiv.appendChild(makeSection('PHASE 1 — 身体・健康','#185FA5',[
@@ -1121,13 +1145,17 @@ function collectData() {
     var photoImg=document.getElementById('photo-preview-img');
     var photoData=photoImg&&photoImg.src&&photoImg.src.startsWith('data:')?photoImg.src:'';
     return {
-      nameK:gv('name-k'), nameF:gv('name-f'),
+      seiK:gv('name-sei-k'), seiF:gv('name-sei-f'),
+      meiK:gv('name-mei-k'), meiF:gv('name-mei-f'),
+      nameK:(gv('name-sei-k')+' '+gv('name-mei-k')).trim(),
+      nameF:(gv('name-sei-f')+' '+gv('name-mei-f')).trim(),
       photoData:photoData,
       birth:(y&&m&&d)?y+'年'+m+'月'+d+'日':'', age:ageStr,
       zip:gv('zipcode'), addr:gv('addr'), phone:gv('phone'),
       live:st.live||'', ins:st.ins||'', nation:st.nation||'',
       term:gcv('term'), days:gcv('days'), trip:gcv('trip'),
       works:works,
+      weekdays:Array.from(document.querySelectorAll('[data-g="weekday"].sel')).map(function(e){return e.textContent.trim();}).join('・')||'—',
       height:gv('height'), weight:gv('weight'),
       bpHi:gv('bp-hi'), bpLo:gv('bp-lo'),
       visionL:gv('vision-l'), visionR:gv('vision-r'), eye:gcv('eye'),
@@ -1157,7 +1185,7 @@ function collectData() {
 }
 
 async function sendToSheet(data) {
-  if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL === 'https://script.google.com/macros/s/AKfycby4RsbpyKVvi9iS-9OXYQL6TIJctM6r3KeARn-SRYXcpohBl5bTlnBlcoNMcPfQHLCRsg/exec') {
+  if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL === 'YOUR_APPS_SCRIPT_URL_HERE') {
     return { status: 'skip', registrationNo: 'TEST-0001' };
   }
   try {
@@ -1187,11 +1215,11 @@ function submit(){
     var regNo = result.registrationNo || '—';
     mc.innerHTML = '<div class="succ" style="display:flex">'
       + '<div class="si"><div class="bck"></div></div>'
-      + '<div style="font-size:22px;font-weight:600;color:#222">全フェーズ完了！</div>'
+      + '<div style="font-size:22px;font-weight:600;color:#222">PHASE 1 完了！</div>'
       + '<div style="font-size:13px;color:#185FA5;font-weight:600;background:#e8f4fd;padding:8px 16px;border-radius:8px;width:100%;text-align:center">登録番号：' + regNo + '</div>'
-      + '<div style="font-size:15px;color:#888;line-height:1.7">登録が完了しました。<br>担当者が内容を確認の上ご連絡いたします。</div>'
+      + '<div style="font-size:15px;color:#888;line-height:1.7">面接登録が完了しました。<br>PHASE 2・3は当日契約の際に行います。</div>'
       + '<div class="done-box"><div style="font-size:12px;font-weight:600;color:#1a5c32;margin-bottom:8px">完了した書類</div>'
-      + '<div style="font-size:14px;color:#1a5c32;line-height:2.2">✓ PHASE 1 — 面接登録<br>✓ PHASE 2 — 本登録・契約書類<br>✓ PHASE 3 — 書類・保険登録</div></div>'
+      + '<div style="font-size:14px;color:#1a5c32;line-height:2.2">✓ PHASE 1 — 面接登録</div></div>'
       + '<button class="pdf-btn" onclick="generatePDF()">'
       + '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="width:20px;height:20px"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z" stroke="#fff" stroke-width="1.5"/><path d="M14 2v6h6M12 18v-6M9 15l3 3 3-3" stroke="#fff" stroke-width="1.5"/></svg>PDFを保存する</button>'
       + '<button class="print-btn" onclick="printForm()">'
