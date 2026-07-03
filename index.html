@@ -1190,7 +1190,7 @@ function collectData() {
 }
 
 async function sendToSheet(data) {
-  if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL === 'https://script.google.com/macros/s/AKfycby4RsbpyKVvi9iS-9OXYQL6TIJctM6r3KeARn-SRYXcpohBl5bTlnBlcoNMcPfQHLCRsg/exec') {
+  if (!APPS_SCRIPT_URL) {
     return { status: 'skip', registrationNo: 'TEST-0001' };
   }
   try {
