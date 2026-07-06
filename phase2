@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>神明株式会社 契約・書類登録フォーム</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;background:#f5f5f5;max-width:480px;margin:0 auto;min-height:100vh}
+.top-bar{padding:12px 16px;position:sticky;top:0;z-index:10}
+.tb-title{color:#fff;font-size:15px;font-weight:600}
+.tb-sub{color:rgba(255,255,255,.8);font-size:12px;margin-top:2px}
+.pw{background:#f0f0f0;padding:10px 16px;border-bottom:1px solid #ddd;position:sticky;top:56px;z-index:9}
+.pl{font-size:11px;color:#888;margin-bottom:5px}
+.pb{display:flex;gap:3px}
+.ps{flex:1;height:4px;border-radius:2px;background:#ddd}
+.ps.done{background:#0F6E56}
+.ps.active{background:#1D9E75}
+.content{padding:20px 16px 120px}
+.screen{display:none}.screen.active{display:block}
+.fg{margin-bottom:20px}
+.fl{font-size:14px;font-weight:600;color:#222;margin-bottom:8px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.req{font-size:11px;color:#c0392b;background:#fdecea;padding:2px 7px;border-radius:3px;font-weight:500}
+.opt{font-size:11px;color:#555;background:#f0f0f0;padding:2px 7px;border-radius:3px;font-weight:500}
+.cond{font-size:11px;color:#7d4e00;background:#fff3cd;padding:2px 7px;border-radius:3px;font-weight:500}
+input[type=text],input[type=tel],input[type=number],input[type=date],select,textarea{width:100%;font-size:16px;padding:12px 14px;border:1px solid #ccc;border-radius:10px;background:#fff;color:#222;-webkit-appearance:none;appearance:none;font-family:inherit}
+input:focus,select:focus,textarea:focus{outline:none;border-color:#1D9E75;box-shadow:0 0 0 3px rgba(29,158,117,.15)}
+select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
+textarea{resize:none;line-height:1.6}
+.cg{display:flex;flex-wrap:wrap;gap:10px}
+.chip{padding:10px 18px;border-radius:24px;border:1px solid #ccc;font-size:15px;cursor:pointer;background:#fff;color:#333;-webkit-tap-highlight-color:transparent;transition:all .15s}
+.chip.sel{background:#E1F5EE;border-color:#1D9E75;color:#085041;font-weight:600}
+.chip-full{padding:14px 16px;border-radius:12px;border:1px solid #ccc;font-size:15px;cursor:pointer;background:#fff;color:#333;display:flex;align-items:center;gap:12px;margin-bottom:8px;-webkit-tap-highlight-color:transparent}
+.chip-full.sel{background:#E1F5EE;border-color:#1D9E75;color:#085041;font-weight:600}
+.ci{width:22px;height:22px;border-radius:50%;border:1.5px solid #ccc;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.chip-full.sel .ci{background:#1D9E75;border-color:#1D9E75}
+.ck{width:11px;height:7px;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(-45deg);margin-top:-2px;display:none}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.hint{font-size:13px;color:#888;margin-top:5px}
+.cb{background:#fff8e6;border-radius:12px;padding:14px;margin-top:10px;display:none;border:1px solid #f0d080}
+.cb.show{display:block}
+.divider{height:1px;background:#eee;margin:20px 0}
+.info-box{background:#E1F5EE;border-left:3px solid #1D9E75;padding:12px 14px;margin-bottom:16px;font-size:13px;color:#085041;line-height:1.6;border-radius:0 8px 8px 0}
+.skip-box{background:#d6eaf8;border-left:3px solid #2e86c1;padding:12px 14px;margin-bottom:16px;font-size:13px;color:#1a5276;line-height:1.6;border-radius:0 8px 8px 0}
+.contract-text{background:#fff;border:1px solid #ddd;border-radius:12px;padding:14px;margin-bottom:16px;font-size:13px;color:#444;line-height:1.8}
+.contract-text p{margin-bottom:6px}
+.agree-box{border:1px solid #ccc;border-radius:12px;padding:16px;margin-bottom:16px;background:#fff}
+.agree-row{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.agree-check{width:26px;height:26px;border-radius:6px;border:1.5px solid #ccc;flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;background:#fff}
+.agree-check.on{background:#0F6E56;border-color:#0F6E56}
+.agree-text{font-size:14px;color:#222;flex:1;line-height:1.5}
+.sc-canvas{width:100%;height:90px;border:1px solid #ccc;border-radius:10px;background:#fff;display:block;cursor:crosshair;touch-action:none}
+.sc-canvas.signed{border-color:#1D9E75}
+.sc-actions{display:flex;justify-content:flex-end;margin-top:4px}
+.clr-btn{font-size:12px;color:#888;background:transparent;border:none;cursor:pointer;padding:4px 8px;font-family:inherit}
+.cl-item{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid #eee}
+.cl-item:last-child{border-bottom:none}
+.cl-check{width:26px;height:26px;border-radius:6px;border:1.5px solid #ccc;flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;margin-top:1px;background:#fff}
+.cl-check.on{background:#0F6E56;border-color:#0F6E56}
+.cl-text{font-size:14px;line-height:1.6;flex:1;color:#222}
+.cl-text strong{font-weight:600}
+.date-display{font-size:14px;color:#555;padding:12px 14px;border:1px solid #eee;border-radius:10px;background:#f8f8f8}
+.doc-card{border:1px solid #ddd;border-radius:12px;overflow:hidden;margin-bottom:14px}
+.doc-row{display:flex;align-items:center;gap:12px;padding:14px;border-bottom:1px solid #eee;background:#fff}
+.doc-row:last-child{border-bottom:none}
+.dcb{width:26px;height:26px;border-radius:6px;border:1.5px solid #ccc;flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;background:#fff}
+.dcb.on{background:#854F0B;border-color:#854F0B}
+.dck{width:12px;height:8px;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(-45deg);margin-top:-2px;display:none}
+.dcb.on .dck{display:block}
+.dl{flex:1;font-size:14px;color:#222}
+.ds{font-size:12px;padding:3px 8px;border-radius:4px;background:#f0f0f0;color:#888}
+.ds.ok{background:#eafaf1;color:#1a5c32;font-weight:600}
+.p1-info{background:#f8f8f8;border-radius:12px;padding:14px;margin-bottom:16px;border:1px solid #e0e0e0}
+.p1-row{display:flex;padding:6px 0;border-bottom:1px solid #eee;font-size:14px}
+.p1-row:last-child{border-bottom:none}
+.p1-label{color:#888;width:100px;flex-shrink:0}
+.p1-val{color:#222;font-weight:500;flex:1}
+.cs2{background:#f8f8f8;border-radius:12px;padding:14px;margin-bottom:14px}
+.ct{font-size:11px;font-weight:600;color:#888;margin-bottom:10px;letter-spacing:.05em}
+.cr{display:flex;padding:9px 0;border-bottom:1px solid #eee}
+.cr:last-child{border-bottom:none}
+.cla{font-size:14px;color:#888;width:120px;flex-shrink:0}
+.cva{font-size:14px;color:#222;flex:1;font-weight:500}
+.rent-detail{background:#f8f8f8;border-radius:12px;padding:14px;margin-bottom:16px}
+.rent-row{display:flex;align-items:center;padding:8px 0;border-bottom:1px solid #eee;font-size:14px}
+.rent-row:last-child{border-bottom:none}
+.rent-label{color:#888;width:100px;flex-shrink:0}
+.rent-val{color:#222;font-weight:500;flex:1}
+.fuyou-card{background:#f8f8f8;border-radius:12px;padding:14px;margin-bottom:10px;border:1px solid #e0e0e0}
+.add-btn{width:100%;padding:12px;border:1.5px dashed #ccc;border-radius:12px;background:transparent;color:#888;font-size:14px;cursor:pointer;text-align:center;font-family:inherit;margin-bottom:12px}
+.bn{position:fixed;bottom:0;left:0;right:0;display:flex;gap:8px;padding:14px 16px;background:#fff;border-top:1px solid #eee;z-index:10;max-width:480px;margin:0 auto}
+.bbk{flex:1;padding:14px;border:1px solid #ccc;border-radius:12px;background:#fff;color:#555;font-size:15px;cursor:pointer;font-family:inherit}
+.bsk{flex:1;padding:14px;border:1px solid #2e86c1;border-radius:12px;background:#fff;color:#2e86c1;font-size:14px;cursor:pointer;font-family:inherit}
+.bnx{flex:2;padding:14px;border:none;border-radius:12px;background:#0F6E56;color:#fff;font-size:16px;font-weight:600;cursor:pointer;font-family:inherit}
+.bnx:active{background:#085041}
+.succ{display:flex;flex-direction:column;align-items:center;padding:64px 24px;text-align:center;gap:20px}
+.si{width:72px;height:72px;border-radius:50%;background:#E1F5EE;display:flex;align-items:center;justify-content:center}
+.bck{width:30px;height:20px;border-left:3px solid #0F6E56;border-bottom:3px solid #0F6E56;transform:rotate(-45deg);margin-top:-6px}
+.done-box{background:#eafaf1;border-radius:12px;padding:16px;width:100%;text-align:left}
+.reg-input-screen{display:flex;flex-direction:column;align-items:center;padding:48px 24px;gap:20px;text-align:center}
+.reg-input-screen h2{font-size:20px;font-weight:600;color:#0F6E56}
+.reg-input-screen p{font-size:14px;color:#888;line-height:1.6}
+.reg-input-box{width:100%;padding:16px 14px;font-size:20px;border:2px solid #1D9E75;border-radius:12px;text-align:center;letter-spacing:4px;font-weight:600;color:#0F6E56;font-family:inherit}
+.reg-input-box:focus{outline:none;box-shadow:0 0 0 3px rgba(29,158,117,.2)}
+.reg-start-btn{width:100%;padding:16px;border:none;border-radius:12px;background:#0F6E56;color:#fff;font-size:16px;font-weight:600;cursor:pointer;font-family:inherit}
+.phase-badge{font-size:11px;font-weight:600;padding:2px 8px;border-radius:10px;color:#fff;display:inline-block;margin-right:6px}
+</style>
+</head>
+<body>
+
+<!-- 登録番号入力画面 -->
+<div id="reg-input-screen" class="reg-input-screen">
+  <div class="si"><div style="font-size:28px">📋</div></div>
+  <h2>契約・書類登録</h2>
+  <p>作業員の登録番号を入力して<br>PHASE 2・3 を開始してください</p>
+  <input type="text" class="reg-input-box" id="reg-no-input" placeholder="SHN-0001" maxlength="8">
+  <div class="hint">登録番号はスプレッドシートで確認できます</div>
+  <button class="reg-start-btn" onclick="startPhase23()">開始する</button>
+</div>
+
+<!-- メインフォーム -->
+<div id="main-form" style="display:none">
+  <div class="top-bar" id="top-bar" style="background:#0F6E56">
+    <div class="tb-title">契約・書類登録</div>
+    <div class="tb-sub" id="slabel">C01 / 11 — 契約書</div>
+  </div>
+  <div class="pw">
+    <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
+      <span class="phase-badge" id="phase-badge" style="background:#0F6E56">PHASE 2</span>
+      <span class="pl" id="plabel" style="margin-bottom:0">契約書（日雇就労）</span>
+    </div>
+    <div class="pb" id="pbar"></div>
+  </div>
+
+  <div class="content" id="main-content">
+
+    <!-- C01 契約書 -->
+    <div class="screen active" id="sc0">
+      <div class="info-box" id="p1-summary-box">
+        <strong id="p1-name-display">—</strong> 様（登録番号：<span id="p1-reg-display">—</span>）
+      </div>
+      <div class="contract-text">
+        <p>神明株式会社（以下「甲」）と就労者（以下「乙」）は、下記のとおり日雇就労契約を締結します。</p>
+        <p><strong>第2条</strong>　日当単価は職種・技術により異なり、話し合いにより決定します。</p>
+        <p><strong>第4条</strong>　労働時間は原則 8:00〜17:00（休憩60分）。</p>
+        <p><strong>第6条</strong>　賃金は就業当日に支払います。</p>
+        <p><strong>第8条</strong>　乙は記入した氏名・生年月日・連絡先に偽りのないことを誓います。</p>
+        <p><strong>第10条</strong>　乙は日当から寮費・前借金・備品代等を相殺することに同意します。</p>
+      </div>
+      <div class="agree-box">
+        <div class="agree-row"><div class="agree-check" id="ag0" onclick="toggleAg(0)"><div class="ck"></div></div><div class="agree-text">上記の内容を確認し、同意します</div></div>
+        <div class="fg" style="margin-bottom:0"><div class="fl">日付</div><div class="date-display" id="date0"></div></div>
+      </div>
+    </div>
+
+    <!-- C02 誓約書 -->
+    <div class="screen" id="sc1">
+      <div class="contract-text">
+        <p>この度、私は貴社に勤務するにあたり、以下の事項を遵守することを誓約します。</p>
+        <p>1. 作業所の規律・注意事項を厳守し、安全作業を行います。<br>
+        2. 負傷した時は小さなケガでも必ず報告します。<br>
+        3. 暴力・罵倒・恐喝を行わないことを約束します。<br>
+        4. 違法賭博・違法薬物など違法行為をしないことを約束します。<br>
+        5. 在職中・退職後も機密情報を漏洩しないことを約束します。<br>
+        6. 故意・過失により会社に損害を与えた場合は賠償します。</p>
+      </div>
+      <div class="agree-box">
+        <div class="agree-row"><div class="agree-check" id="ag1" onclick="toggleAg(1)"><div class="ck"></div></div><div class="agree-text">上記の内容を確認し、誓約します</div></div>
+        <div class="fg" style="margin-bottom:0">
+          <div class="fl">署名（手書き） <span class="req">必須</span></div>
+          <canvas class="sc-canvas" id="cv1" width="440" height="90"></canvas>
+          <div class="sc-actions"><button class="clr-btn" onclick="clrC('cv1')">クリア</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- C03 道具レンタル -->
+    <div class="screen" id="sc2">
+      <div class="contract-text">
+        <p>本日より2週間の間、以下の道具一式（ヘルメット・安全帯・安全靴・安全長靴・作業着上下）をレンタルします。</p>
+        <p>1. レンタル期間終了後は事務所窓口へ返却してください。<br>
+        2. 返却がない場合、<strong>違約金として¥15,000</strong>を寮費より引かせていただきます。<br>
+        3. 破損・紛失は速やかに事務所へ報告してください。</p>
+      </div>
+      <div class="agree-box">
+        <div class="agree-row"><div class="agree-check" id="ag2" onclick="toggleAg(2)"><div class="ck"></div></div><div class="agree-text">上記の内容を確認し、同意します</div></div>
+      </div>
+    </div>
+
+    <!-- C04 現場指示確認書 -->
+    <div class="screen" id="sc3">
+      <div class="contract-text">
+        <p>工事指示書の内容を確認し、神明の現場管理者以外から指示書に含まれない作業の指示を受けた場合は、<strong>必ず現場管理者に連絡</strong>してから従ってください。</p>
+        <p>現場管理者不在の場合：大阪営業部（0120-06-0505）</p>
+      </div>
+      <div class="agree-box">
+        <div class="agree-row"><div class="agree-check" id="ag3" onclick="toggleAg(3)"><div class="ck"></div></div><div class="agree-text">上記の内容を確認しました</div></div>
+        <div class="fg">
+          <div class="fl">登録支店・営業所 <span class="req">必須</span></div>
+          <select id="branch-sel">
+            <option value="">支店・営業所を選択</option>
+            <option>大阪本社</option><option>名古屋支店</option><option>横浜支店</option>
+            <option>浦和支店</option><option>高田馬場支店</option><option>仙台支店</option><option>福岡営業所</option>
+          </select>
+        </div>
+        <div class="fg" style="margin-bottom:0"><div class="fl">確認日</div><div class="date-display" id="date3"></div></div>
+      </div>
+    </div>
+
+    <!-- C05 安全教育 -->
+    <div class="screen" id="sc4">
+      <div style="background:#fff;border:1px solid #ddd;border-radius:12px;padding:14px;margin-bottom:16px">
+        <div class="cl-item"><div class="cl-check" onclick="toggleCL(this)"><div class="ck"></div></div><div class="cl-text"><strong>1. 日々の作業サイクル</strong><br>新規入場者教育 / 朝礼・KYK / 休憩時間 / 後片付け</div></div>
+        <div class="cl-item"><div class="cl-check" onclick="toggleCL(this)"><div class="ck"></div></div><div class="cl-text"><strong>2. 健康診断の実施</strong><br>3ヶ月以内の診断書 / 年1回定期 / 特定有害業務（6ヶ月毎）</div></div>
+        <div class="cl-item"><div class="cl-check" onclick="toggleCL(this)"><div class="ck"></div></div><div class="cl-text"><strong>3. 防護具の携帯・使用</strong><br>ヘルメット / 安全帯 / 安全靴 / 防じんマスク / 防護メガネ</div></div>
+        <div class="cl-item"><div class="cl-check" onclick="toggleCL(this)"><div class="ck"></div></div><div class="cl-text"><strong>4. 当社の災害事例</strong><br>事例集から3件ほど確認</div></div>
+        <div class="cl-item"><div class="cl-check" onclick="toggleCL(this)"><div class="ck"></div></div><div class="cl-text"><strong>5. 社内ルール</strong><br>毎月安全大会 / 5S徹底 / 安全声かけ・指差呼称 / カッターナイフ持込禁止</div></div>
+        <div class="cl-item"><div class="cl-check" onclick="toggleCL(this)"><div class="ck"></div></div><div class="cl-text"><strong>6. 質疑・応答</strong></div></div>
+      </div>
+    </div>
+
+    <!-- C06 賃貸借契約 -->
+    <div class="screen" id="sc5">
+      <div class="skip-box">入寮者のみ対象です。通勤の方はスキップしてください。</div>
+      <div class="contract-text">
+        <p>貸主 神明株式会社（甲）と、借主（乙）の間で下記物件の賃貸借契約を締結します。</p>
+        <p><strong>第3条</strong>　契約期間は締結日より6ヶ月間（申し出なき場合は自動更新）。</p>
+        <p><strong>第5条</strong>　賃料は1日 金
+          <select id="rent-price-select" onchange="syncRentPrice(this.value)" style="display:inline-block;width:auto;font-size:13px;padding:4px 28px 4px 8px;border:1px solid #ccc;border-radius:6px;background:#fff;color:#222;-webkit-appearance:none;appearance:none;background-image:url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'10\' height=\'6\' viewBox=\'0 0 10 6\'%3E%3Cpath d=\'M1 1l4 4 4-4\' stroke=\'%23888\' stroke-width=\'1.5\' fill=\'none\'/%3E%3C/svg%3E');background-repeat:no-repeat;background-position:right 8px center;margin:0 4px">
+            <option value="">選択</option><option value="1550">1,550円</option><option value="2150">2,150円</option><option value="3150">3,150円</option><option value="3750">3,750円</option>
+          </select>
+          とし、毎月末日までに当月分を甲に対して支払う。家賃には共益費含む。</p>
+        <p><strong>第12条</strong>　<span style="color:#c0392b;font-weight:600">乙が無断で部屋を2日間以上空けた場合は無断退出とみなします。</span></p>
+      </div>
+      <div class="rent-detail">
+        <div class="rent-row"><div class="rent-label">物件所在地</div><div class="rent-val">大阪市西成区北津守4丁目3番6号</div></div>
+        <div class="rent-row"><div class="rent-label">賃料（日額）</div><div class="rent-val" style="display:flex;align-items:center;gap:8px">
+          <select id="rent-price-detail" onchange="syncRentPrice(this.value)" style="font-size:14px;padding:6px 28px 6px 10px;border:1px solid #ccc;border-radius:8px;background:#fff;color:#222;-webkit-appearance:none;appearance:none;background-image:url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'10\' height=\'6\' viewBox=\'0 0 10 6\'%3E%3Cpath d=\'M1 1l4 4 4-4\' stroke=\'%23888\' stroke-width=\'1.5\' fill=\'none\'/%3E%3C/svg%3E');background-repeat:no-repeat;background-position:right 8px center">
+            <option value="">選択</option><option value="1550">1,550円</option><option value="2150">2,150円</option><option value="3150">3,150円</option><option value="3750">3,750円</option>
+          </select>
+          <span style="color:#888">/ 日</span>
+        </div></div>
+        <div class="rent-row"><div class="rent-label">契約期間</div><div class="rent-val">6ヶ月（自動更新）</div></div>
+      </div>
+      <div class="agree-box">
+        <div class="agree-row"><div class="agree-check" id="ag5" onclick="toggleAg(5)"><div class="ck"></div></div><div class="agree-text">上記の内容を確認し、同意します（乙）</div></div>
+        <div class="fg" style="margin-bottom:0">
+          <div class="fl">氏名（キー入力） <span class="req">必須</span></div>
+          <input type="text" id="rent-name" placeholder="氏名を入力してください">
+        </div>
+      </div>
+    </div>
+
+    <!-- I01 社保書類チェック -->
+    <div class="screen" id="sc6">
+      <div class="skip-box">社保加入希望の方のみ対象です。希望しない方はスキップしてください。</div>
+      <div class="fg">
+        <div class="fl">必要書類の確認 <span class="req">必須</span></div>
+        <div class="doc-card">
+          <div class="doc-row"><div class="dcb" onclick="td(this,0)"><div class="dck"></div></div><div class="dl">① マイナンバー</div><div class="ds" id="ds0">未</div></div>
+          <div class="doc-row"><div class="dcb" onclick="td(this,1)"><div class="dck"></div></div><div class="dl">② 緊急連絡先（保証人）</div><div class="ds" id="ds1">未</div></div>
+          <div class="doc-row"><div class="dcb" onclick="td(this,2)"><div class="dck"></div></div><div class="dl">③ 通帳コピー</div><div class="ds" id="ds2">未</div></div>
+          <div class="doc-row"><div class="dcb" onclick="td(this,3)"><div class="dck"></div></div><div class="dl">④ 印鑑</div><div class="ds" id="ds3">未</div></div>
+          <div class="doc-row"><div class="dcb" onclick="td(this,4)"><div class="dck"></div></div><div class="dl">⑤ 免許・資格証等</div><div class="ds" id="ds4">未</div></div>
+          <div class="doc-row"><div class="dcb" onclick="td(this,5)"><div class="dck"></div></div><div class="dl">⑥ 健康診断書</div><div class="ds" id="ds5">未</div></div>
+        </div>
+      </div>
+      <div class="fg"><div class="fl">回収日 <span class="req">必須</span></div><input type="date" id="doc-date"></div>
+    </div>
+
+    <!-- I02 税金・年金 -->
+    <div class="screen" id="sc7">
+      <div class="skip-box">社保加入希望の方のみ対象です。希望しない方はスキップしてください。</div>
+      <div class="fg"><div class="fl">住民税 <span class="req">必須</span></div><div class="cg"><div class="chip" data-g="t1" onclick="cs(this)">滞納なし</div><div class="chip" data-g="t1" onclick="cs(this)">滞納あり</div></div></div>
+      <div class="fg"><div class="fl">国民健康保険税 <span class="req">必須</span></div><div class="cg"><div class="chip" data-g="t2" onclick="cs(this)">滞納なし</div><div class="chip" data-g="t2" onclick="cs(this)">滞納あり</div></div></div>
+      <div class="fg"><div class="fl">国民年金 <span class="req">必須</span></div><div class="cg"><div class="chip" data-g="nen" onclick="cs(this)">支払い済み</div><div class="chip" data-g="nen" onclick="cs(this)">未払い</div></div></div>
+      <div class="fg"><div class="fl">他借金 <span class="req">必須</span></div><div class="cg"><div class="chip" data-g="dbt" onclick="cs(this)">滞納なし</div><div class="chip" data-g="dbt" onclick="cs(this)">滞納あり</div></div></div>
+    </div>
+
+    <!-- I03 身元保証書＋社員登録票 -->
+    <div class="screen" id="sc8">
+      <div class="skip-box">社保加入希望の方のみ対象です。希望しない方はスキップしてください。</div>
+      <div style="font-size:15px;font-weight:600;margin-bottom:14px;color:#854F0B">■ 身元保証書 — 本人情報</div>
+      <div class="fg"><div class="fl">氏名 <span class="req">必須</span></div><input type="text" id="honin-name" placeholder="氏名を入力"></div>
+      <div class="fg"><div class="fl">郵便番号 <span class="req">必須</span></div><input type="text" placeholder="例：5500012" maxlength="7"></div>
+      <div class="fg"><div class="fl">住所 <span class="req">必須</span></div><input type="text" placeholder="現住所を入力"></div>
+      <div class="fg"><div class="fl">電話番号 <span class="req">必須</span></div><input type="tel" placeholder="電話番号を入力"></div>
+      <div class="divider"></div>
+      <div style="font-size:15px;font-weight:600;margin-bottom:14px;color:#854F0B">■ 身元保証人</div>
+      <div class="fg"><div class="fl">氏名 <span class="req">必須</span></div><input type="text" placeholder="保証人の氏名"></div>
+      <div class="fg"><div class="fl">本籍 <span class="opt">任意</span></div><input type="text" placeholder="保証人の本籍地"></div>
+      <div class="fg"><div class="fl">郵便番号 <span class="req">必須</span></div><input type="text" placeholder="例：5500012" maxlength="7"></div>
+      <div class="fg"><div class="fl">住所 <span class="req">必須</span></div><input type="text" placeholder="保証人の住所"></div>
+      <div class="fg"><div class="fl">電話番号 <span class="req">必須</span></div><input type="tel" placeholder="保証人の電話番号"></div>
+      <div class="fg"><div class="fl">本人との関係 <span class="req">必須</span></div><select><option value="">続柄を選択</option><option>父</option><option>母</option><option>配偶者</option><option>兄弟・姉妹</option><option>子</option><option>友人・知人</option><option>その他</option></select></div>
+      <div class="divider"></div>
+      <div style="font-size:15px;font-weight:600;margin-bottom:14px;color:#854F0B">■ 振込口座</div>
+      <div class="fg"><div class="fl">銀行口座 <span class="req">必須</span></div>
+        <div class="cg" style="margin-bottom:10px">
+          <div class="chip" data-g="bank-has" onclick="cs(this);document.getElementById('bank-form').style.display='block';document.getElementById('bank-none-msg').style.display='none'">あり</div>
+          <div class="chip" data-g="bank-has" onclick="cs(this);document.getElementById('bank-form').style.display='none';document.getElementById('bank-none-msg').style.display='block'">なし</div>
+        </div>
+        <div id="bank-none-msg" style="display:none;background:#fff8e6;border:1px solid #f0d080;border-radius:10px;padding:14px;font-size:14px;color:#7d4e00">後日銀行口座を開設してもらいます。</div>
+        <div id="bank-form" style="display:none">
+          <div class="fg" style="margin-bottom:10px"><div class="fl">銀行名 <span class="req">必須</span></div><input type="text" id="bank-name" placeholder="例：ゆうちょ銀行"></div>
+          <div class="fg" style="margin-bottom:10px"><div class="fl">支店名 <span class="req">必須</span></div><input type="text" placeholder="支店名を入力"></div>
+          <div class="fg" style="margin-bottom:10px"><div class="fl">口座種別 <span class="req">必須</span></div><div class="cg"><div class="chip" data-g="acct" onclick="cs(this)">普通</div><div class="chip" data-g="acct" onclick="cs(this)">当座</div></div></div>
+          <div class="fg" style="margin-bottom:10px"><div class="fl">口座番号 <span class="req">必須</span></div><input type="number" placeholder="口座番号を入力"></div>
+          <div class="fg" style="margin-bottom:0"><div class="fl">口座名義（フリガナ） <span class="req">必須</span></div><input type="text" placeholder="カタカナで入力"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- I04 扶養控除申告書 -->
+    <div class="screen" id="sc9">
+      <div class="skip-box">社保加入希望の方のみ対象です。希望しない方はスキップしてください。</div>
+      <div class="fg"><div class="fl">給与の支払者（会社名） <span class="req">必須</span></div><input type="text" value="神明株式会社"></div>
+      <div class="fg"><div class="fl">給与の支払者（所在地） <span class="req">必須</span></div><input type="text" value="大阪市西成区北津守4-3-6"></div>
+      <div class="fg"><div class="fl">氏名 <span class="req">必須</span></div><input type="text" placeholder="氏名を入力"></div>
+      <div class="fg"><div class="fl">住所 <span class="req">必須</span></div><input type="text" placeholder="現住所を入力"></div>
+      <div class="fg"><div class="fl">配偶者の有無 <span class="req">必須</span></div><div class="cg"><div class="chip" data-g="spouse" onclick="cs(this)">あり</div><div class="chip" data-g="spouse" onclick="cs(this)">なし</div></div></div>
+      <div class="fg"><div class="fl">16歳以上の扶養親族 <span class="req">必須</span></div><div class="cg"><div class="chip" data-g="fyt" onclick="cs(this)">いない</div><div class="chip" data-g="fyt" onclick="cs(this)">いる</div></div></div>
+      <div class="fg" style="margin-bottom:0"><div class="fl">障害者・寡婦・ひとり親・勤労学生 <span class="req">必須</span></div><div class="cg"><div class="chip" data-g="tokubetsu" onclick="cs(this)">該当なし</div><div class="chip" data-g="tokubetsu" onclick="cs(this)">該当あり</div></div></div>
+    </div>
+
+    <!-- 最終確認 -->
+    <div class="screen" id="sc10">
+      <div style="font-size:14px;color:#888;margin-bottom:14px">PHASE 2・3 の入力内容をご確認ください</div>
+      <div class="cs2">
+        <div class="ct">対象者</div>
+        <div class="cr"><div class="cla">登録番号</div><div class="cva" id="cv-reg">—</div></div>
+        <div class="cr"><div class="cla">氏名</div><div class="cva" id="cv-name">—</div></div>
+      </div>
+      <div class="cs2">
+        <div class="ct">PHASE 2 — 契約書類</div>
+        <div class="cr"><div class="cla">契約書</div><div class="cva" id="cv-c01">—</div></div>
+        <div class="cr"><div class="cla">誓約書</div><div class="cva" id="cv-c02">—</div></div>
+        <div class="cr"><div class="cla">道具レンタル</div><div class="cva" id="cv-c03">—</div></div>
+        <div class="cr"><div class="cla">現場指示確認</div><div class="cva" id="cv-c04">—</div></div>
+        <div class="cr"><div class="cla">安全教育</div><div class="cva" id="cv-c05">—</div></div>
+        <div class="cr"><div class="cla">登録支店</div><div class="cva" id="cv-branch">—</div></div>
+        <div class="cr"><div class="cla">賃貸借契約</div><div class="cva" id="cv-rent">—</div></div>
+      </div>
+      <div class="cs2">
+        <div class="ct">PHASE 3 — 書類・保険</div>
+        <div class="cr"><div class="cla">社保書類</div><div class="cva" id="cv-docs">—</div></div>
+        <div class="cr"><div class="cla">住民税</div><div class="cva" id="cv-t1">—</div></div>
+        <div class="cr"><div class="cla">身元保証人</div><div class="cva" id="cv-honin">—</div></div>
+        <div class="cr"><div class="cla">銀行口座</div><div class="cva" id="cv-bank">—</div></div>
+        <div class="cr"><div class="cla">配偶者</div><div class="cva" id="cv-spouse">—</div></div>
+      </div>
+    </div>
+
+  </div><!-- end main-content -->
+
+  <div class="bn" id="nav">
+    <button class="bbk" id="bbtn" onclick="goBack()" style="display:none">戻る</button>
+    <button class="bsk" id="skbtn" onclick="goSkip()" style="display:none">スキップ</button>
+    <button class="bnx" id="nbtn" onclick="goNext()">次へ</button>
+  </div>
+</div><!-- end main-form -->
+
+<script>
+var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby4RsbpyKVvi9iS-9OXYQL6TIJctM6r3KeARn-SRYXcpohBl5bTlnBlcoNMcPfQHLCRsg/exec';
+
+var cur = 0, total = 11;
+var agreed = {};
+var cvs = {};
+var regNo = '';
+var p1Name = '';
+
+var stepNames = [
+  '契約書（日雇就労）','誓約書','道具レンタル同意','現場指示確認書','安全衛生教育',
+  '賃貸借契約（入寮者）','社保書類チェック','税金・年金状況','身元保証書＋社員登録票',
+  '扶養控除申告書','最終確認・完了'
+];
+var phaseLabels = [
+  2,2,2,2,2,2,3,3,3,3,3
+];
+var skippable = [false,false,false,false,false,true,true,true,true,true,false];
+var phaseColors = {2:'#0F6E56',3:'#854F0B'};
+
+function startPhase23(){
+  var val = document.getElementById('reg-no-input').value.trim().toUpperCase();
+  if(!val){alert('登録番号を入力してください');return;}
+  // SHN-のプレフィックスを自動付与
+  if(!val.startsWith('SHN-')) val = 'SHN-' + val.replace(/[^0-9]/g,'').padStart(4,'0');
+  regNo = val;
+  p1Name = '';
+  document.getElementById('p1-reg-display').textContent = regNo;
+  document.getElementById('p1-name-display').textContent = regNo;
+  document.getElementById('reg-input-screen').style.display = 'none';
+  document.getElementById('main-form').style.display = 'block';
+  setToday();
+  buildPbar();
+  updateUI();
+}
+
+function setToday(){
+  var now=new Date(),y=now.getFullYear(),m=now.getMonth()+1,d=now.getDate();
+  var str=y+'年'+m+'月'+d+'日';
+  var ids=['date0','date3'];
+  ids.forEach(function(id){var el=document.getElementById(id);if(el)el.textContent=str;});
+  var dd=document.getElementById('doc-date');
+  if(dd)dd.value=y+'-'+(m<10?'0':'')+m+'-'+(d<10?'0':'')+d;
+}
+
+function buildPbar(){
+  var b=document.getElementById('pbar');b.innerHTML='';
+  for(var i=0;i<total;i++){
+    var ps=document.createElement('div');
+    ps.className='ps'+(i<cur?' done':i===cur?' active':'');
+    b.appendChild(ps);
+  }
+}
+
+function updateUI(){
+  var phase = phaseLabels[cur];
+  var color = phaseColors[phase];
+  document.getElementById('top-bar').style.background = color;
+  document.getElementById('slabel').textContent = (cur<=5?'C0'+(cur+1)+'/6':'I0'+(cur-5)+'/5')+' — '+stepNames[cur];
+  document.getElementById('plabel').textContent = stepNames[cur];
+  var badge = document.getElementById('phase-badge');
+  badge.textContent = 'PHASE ' + phase;
+  badge.style.background = color;
+  document.getElementById('bnx').style.background = color;
+  buildPbar();
+  document.getElementById('bbtn').style.display = cur>0?'block':'none';
+  document.getElementById('skbtn').style.display = skippable[cur]?'block':'none';
+  var nb = document.getElementById('nbtn');
+  nb.textContent = cur===total-1?'完了・送信':'次へ';
+}
+
+function cs(el){
+  var g=el.dataset.g;if(!g)return;
+  document.querySelectorAll('[data-g="'+g+'"]').forEach(function(c){c.classList.remove('sel');});
+  el.classList.add('sel');
+}
+function cf(el){
+  var g=el.dataset.g;
+  document.querySelectorAll('[data-g="'+g+'"]').forEach(function(c){c.classList.remove('sel');c.querySelector('.ck').style.display='none';});
+  el.classList.add('sel');el.querySelector('.ck').style.display='block';
+}
+function toggleAg(idx){
+  agreed[idx]=!agreed[idx];
+  var el=document.getElementById('ag'+idx);if(!el)return;
+  el.className='agree-check'+(agreed[idx]?' on':'');
+  el.querySelector('.ck').style.display=agreed[idx]?'block':'none';
+}
+function toggleCL(el){
+  var on=el.classList.contains('on');
+  el.className='cl-check'+(on?'':' on');
+  el.querySelector('.ck').style.display=on?'none':'block';
+}
+function td(el,i){
+  var on=el.classList.contains('on');
+  el.className='dcb'+(on?'':' on');
+  el.querySelector('.dck').style.display=on?'none':'block';
+  var ds=document.getElementById('ds'+i);
+  if(ds){ds.textContent=on?'未':'済';ds.className='ds'+(on?'':' ok');}
+}
+function syncRentPrice(val){
+  var s1=document.getElementById('rent-price-select');
+  var s2=document.getElementById('rent-price-detail');
+  if(s1)s1.value=val;
+  if(s2)s2.value=val;
+}
+function gc(g){var e=document.querySelector('[data-g="'+g+'"].sel');return e?e.textContent.trim():'—';}
+function initC(id){
+  var c=document.getElementById(id);
+  if(!c||cvs[id])return;
+  cvs[id]=true;
+  var ctx=c.getContext('2d'),drw=false;
+  ctx.strokeStyle='#085041';ctx.lineWidth=2;ctx.lineCap='round';ctx.lineJoin='round';
+  function gp(e){var r=c.getBoundingClientRect();if(e.touches)return{x:(e.touches[0].clientX-r.left)*(c.width/r.width),y:(e.touches[0].clientY-r.top)*(c.height/r.height)};return{x:(e.clientX-r.left)*(c.width/r.width),y:(e.clientY-r.top)*(c.height/r.height)};}
+  c.addEventListener('mousedown',function(e){drw=true;var p=gp(e);ctx.beginPath();ctx.moveTo(p.x,p.y);});
+  c.addEventListener('mousemove',function(e){if(!drw)return;var p=gp(e);ctx.lineTo(p.x,p.y);ctx.stroke();});
+  c.addEventListener('mouseup',function(){drw=false;c.classList.add('signed');});
+  c.addEventListener('touchstart',function(e){e.preventDefault();drw=true;var p=gp(e);ctx.beginPath();ctx.moveTo(p.x,p.y);},{passive:false});
+  c.addEventListener('touchmove',function(e){e.preventDefault();if(!drw)return;var p=gp(e);ctx.lineTo(p.x,p.y);ctx.stroke();},{passive:false});
+  c.addEventListener('touchend',function(){drw=false;c.classList.add('signed');});
+}
+function clrC(id){var c=document.getElementById(id);if(c){c.getContext('2d').clearRect(0,0,c.width,c.height);c.classList.remove('signed');}}
+
+function fillConfirm(){
+  var gv=function(id){var el=document.getElementById(id);return el&&el.value?el.value:'—';};
+  document.getElementById('cv-reg').textContent=regNo;
+  document.getElementById('cv-name').textContent=gv('honin-name');
+  document.getElementById('cv-c01').textContent=agreed[0]?'✓ 同意済':'—';
+  document.getElementById('cv-c02').textContent=agreed[1]?'✓ 誓約済':'—';
+  document.getElementById('cv-c03').textContent=agreed[2]?'✓ 同意済':'—';
+  document.getElementById('cv-c04').textContent=agreed[3]?'✓ 確認済':'—';
+  document.getElementById('cv-c05').textContent='チェック完了';
+  var br=document.getElementById('branch-sel');
+  document.getElementById('cv-branch').textContent=br&&br.value?br.value:'—';
+  document.getElementById('cv-rent').textContent=agreed[5]?'✓ 同意済':'スキップ';
+  var dc=document.querySelectorAll('.dcb.on').length;
+  document.getElementById('cv-docs').textContent=dc>0?dc+'件 確認済':'スキップ';
+  document.getElementById('cv-t1').textContent=gc('t1');
+  document.getElementById('cv-honin').textContent=gv('honin-name');
+  var bankHasEl=document.querySelector('[data-g="bank-has"].sel');
+  document.getElementById('cv-bank').textContent=bankHasEl?bankHasEl.textContent.trim():'—';
+  document.getElementById('cv-spouse').textContent=gc('spouse');
+}
+
+async function sendToSheet(data){
+  if(!APPS_SCRIPT_URL||APPS_SCRIPT_URL==='https://script.google.com/macros/s/AKfycby4RsbpyKVvi9iS-9OXYQL6TIJctM6r3KeARn-SRYXcpohBl5bTlnBlcoNMcPfQHLCRsg/exec'){
+    return {status:'skip'};
+  }
+  try{
+    var res=await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify(data)});
+    return await res.json();
+  }catch(e){return{status:'error',message:e.toString()};}
+}
+
+function goNext(){
+  try{
+    if(cur===total-1){
+      fillConfirm();
+      submit();
+      return;
+    }
+    if(cur===total-2)fillConfirm();
+    document.getElementById('sc'+cur).classList.remove('active');
+    cur++;
+    document.getElementById('sc'+cur).classList.add('active');
+    updateUI();
+    setTimeout(function(){initC('cv1');},100);
+    window.scrollTo(0,0);
+  }catch(e){console.log('goNext error:',e);}
+}
+function goBack(){
+  document.getElementById('sc'+cur).classList.remove('active');
+  cur--;
+  document.getElementById('sc'+cur).classList.add('active');
+  updateUI();
+  window.scrollTo(0,0);
+}
+function goSkip(){
+  document.getElementById('sc'+cur).classList.remove('active');
+  cur++;
+  document.getElementById('sc'+cur).classList.add('active');
+  updateUI();
+  window.scrollTo(0,0);
+}
+
+function submit(){
+  var gv=function(id){var el=document.getElementById(id);return el&&el.value?el.value:'';};
+  var data={
+    registrationNo: regNo,
+    phase: 'PHASE2-3',
+    agree_c01: agreed[0]||false,
+    agree_c02: agreed[1]||false,
+    agree_c03: agreed[2]||false,
+    agree_c04: agreed[3]||false,
+    agree_c06: agreed[5]||false,
+    branch: gv('branch-sel'),
+    rentPrice: gv('rent-price-detail'),
+    rentName: gv('rent-name'),
+    docCount: document.querySelectorAll('.dcb.on').length,
+    docDate: gv('doc-date'),
+    tax1: gc('t1'), tax2: gc('t2'), nenkin: gc('nen'), debt: gc('dbt'),
+    hoshounin: gv('honin-name'),
+    bankHas: gc('bank-has'),
+    bankName: gv('bank-name'),
+    spouse: gc('spouse'), fyt: gc('fyt'), tokubetsu: gc('tokubetsu'),
+  };
+
+  var mc=document.getElementById('main-content');
+  mc.innerHTML='<div class="succ" style="display:flex"><div class="si" style="background:#e8f4fd"><div style="width:30px;height:30px;border:3px solid #0F6E56;border-top-color:transparent;border-radius:50%;animation:spin 1s linear infinite"></div></div><div style="font-size:16px;color:#888">送信中...</div></div>';
+  document.getElementById('nav').style.display='none';
+  var style=document.createElement('style');
+  style.textContent='@keyframes spin{to{transform:rotate(360deg)}}';
+  document.head.appendChild(style);
+
+  sendToSheet(data).then(function(){
+    mc.innerHTML='<div class="succ" style="display:flex">'
+      +'<div class="si"><div class="bck"></div></div>'
+      +'<div style="font-size:20px;font-weight:600;color:#222">PHASE 2・3 完了！</div>'
+      +'<div style="font-size:13px;color:#0F6E56;font-weight:600;background:#E1F5EE;padding:8px 16px;border-radius:8px;width:100%;text-align:center">登録番号：'+regNo+'</div>'
+      +'<div style="font-size:15px;color:#888;line-height:1.7">契約・書類登録が完了しました。<br>スプレッドシートに記録されました。</div>'
+      +'<div class="done-box"><div style="font-size:12px;font-weight:600;color:#1a5c32;margin-bottom:8px">完了した書類</div>'
+      +'<div style="font-size:14px;color:#1a5c32;line-height:2.2">✓ 契約書（日雇就労）<br>✓ 誓約書<br>✓ 道具レンタル同意<br>✓ 現場指示確認書<br>✓ 安全衛生教育<br>✓ 書類・保険登録</div></div>'
+      +'<button onclick="location.reload()" style="width:100%;padding:14px;border:1px solid #0F6E56;border-radius:12px;background:#fff;color:#0F6E56;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit">次の作業員を登録する</button>'
+      +'</div>';
+  });
+}
+</script>
+</body>
+</html>
