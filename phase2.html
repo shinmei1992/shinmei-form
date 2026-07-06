@@ -227,13 +227,14 @@ textarea{resize:none;line-height:1.6}
         <p><strong>第3条</strong>　契約期間は締結日より6ヶ月間（申し出なき場合は自動更新）。</p>
         <p><strong>第5条</strong>　賃料は1日 金
           <select id="rent-price-select" onchange="syncRentPrice(this.value)" style="display:inline-block;width:auto;font-size:13px;padding:4px 28px 4px 8px;border:1px solid #ccc;border-radius:6px;background:#fff;color:#222;-webkit-appearance:none;appearance:none;background-image:url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'10\' height=\'6\' viewBox=\'0 0 10 6\'%3E%3Cpath d=\'M1 1l4 4 4-4\' stroke=\'%23888\' stroke-width=\'1.5\' fill=\'none\'/%3E%3C/svg%3E');background-repeat:no-repeat;background-position:right 8px center;margin:0 4px">
-            <option value="">選択</option><option value="1550">1,550円</option><option value="2150">2,150円</option><option value="3150">3,150円</option><option value="3750">3,750円</option>
+            <option value="">選択</option><option value="1550">1,550円</option><option value="2150">2,150円</option><option value="3150">3,150円</option><option value="3750">3,750円</option><option value="other">その他</option>
           </select>
+          <input type="number" id="rent-other-1" placeholder="金額を入力" style="display:none;width:120px;font-size:13px;padding:4px 8px;border:1px solid #ccc;border-radius:6px;margin:0 4px">円
           とし、毎月末日までに当月分を甲に対して支払う。家賃には共益費含む。</p>
         <p><strong>第12条</strong>　<span style="color:#c0392b;font-weight:600">乙が無断で部屋を2日間以上空けた場合は無断退出とみなします。</span></p>
       </div>
       <div class="rent-detail">
-        <div class="rent-row"><div class="rent-label">物件所在地</div><div class="rent-val">大阪市西成区北津守4丁目3番6号</div></div>
+        <div class="rent-row"><div class="rent-label">物件所在地</div><div class="rent-val"><input type="text" id="rent-addr" value="大阪市西成区北津守4丁目3番6号" style="font-size:14px;padding:6px 10px;border:1px solid #ccc;border-radius:8px;background:#fff;color:#222;width:100%"></div></div>
         <div class="rent-row"><div class="rent-label">賃料（日額）</div><div class="rent-val" style="display:flex;align-items:center;gap:8px">
           <select id="rent-price-detail" onchange="syncRentPrice(this.value)" style="font-size:14px;padding:6px 28px 6px 10px;border:1px solid #ccc;border-radius:8px;background:#fff;color:#222;-webkit-appearance:none;appearance:none;background-image:url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'10\' height=\'6\' viewBox=\'0 0 10 6\'%3E%3Cpath d=\'M1 1l4 4 4-4\' stroke=\'%23888\' stroke-width=\'1.5\' fill=\'none\'/%3E%3C/svg%3E');background-repeat:no-repeat;background-position:right 8px center">
             <option value="">選択</option><option value="1550">1,550円</option><option value="2150">2,150円</option><option value="3150">3,150円</option><option value="3750">3,750円</option>
@@ -462,8 +463,13 @@ function td(el,i){
 function syncRentPrice(val){
   var s1=document.getElementById('rent-price-select');
   var s2=document.getElementById('rent-price-detail');
+  var o1=document.getElementById('rent-other-1');
+  var o2=document.getElementById('rent-other-2');
   if(s1)s1.value=val;
   if(s2)s2.value=val;
+  var isOther=val==='other';
+  if(o1)o1.style.display=isOther?'inline-block':'none';
+  if(o2)o2.style.display=isOther?'inline-block':'none';
 }
 function gc(g){var e=document.querySelector('[data-g="'+g+'"].sel');return e?e.textContent.trim():'—';}
 function initC(id){
