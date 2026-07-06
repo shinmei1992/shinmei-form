@@ -237,8 +237,9 @@ textarea{resize:none;line-height:1.6}
         <div class="rent-row"><div class="rent-label">物件所在地</div><div class="rent-val"><input type="text" id="rent-addr" value="大阪市西成区北津守4丁目3番6号" style="font-size:14px;padding:6px 10px;border:1px solid #ccc;border-radius:8px;background:#fff;color:#222;width:100%"></div></div>
         <div class="rent-row"><div class="rent-label">賃料（日額）</div><div class="rent-val" style="display:flex;align-items:center;gap:8px">
           <select id="rent-price-detail" onchange="syncRentPrice(this.value)" style="font-size:14px;padding:6px 28px 6px 10px;border:1px solid #ccc;border-radius:8px;background:#fff;color:#222;-webkit-appearance:none;appearance:none;background-image:url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'10\' height=\'6\' viewBox=\'0 0 10 6\'%3E%3Cpath d=\'M1 1l4 4 4-4\' stroke=\'%23888\' stroke-width=\'1.5\' fill=\'none\'/%3E%3C/svg%3E');background-repeat:no-repeat;background-position:right 8px center">
-            <option value="">選択</option><option value="1550">1,550円</option><option value="2150">2,150円</option><option value="3150">3,150円</option><option value="3750">3,750円</option>
+            <option value="">選択</option><option value="1550">1,550円</option><option value="2150">2,150円</option><option value="3150">3,150円</option><option value="3300">3,300円</option><option value="3750">3,750円</option><option value="other">その他</option>
           </select>
+          <input type="number" id="rent-other-2" placeholder="金額を入力" style="display:none;width:120px;font-size:14px;padding:6px 10px;border:1px solid #ccc;border-radius:8px">
           <span style="color:#888">/ 日</span>
         </div></div>
         <div class="rent-row"><div class="rent-label">契約期間</div><div class="rent-val">6ヶ月（自動更新）</div></div>
