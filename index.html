@@ -153,6 +153,14 @@ textarea{resize:none;line-height:1.6}
     <div class="hint" id="age-out"></div>
   </div>
   <div class="fg">
+    <div class="fl">年齢 <span class="req">必須</span></div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <input type="number" id="age-input" placeholder="自動計算されます" style="flex:1">
+      <span style="font-size:15px;color:#888">歳</span>
+    </div>
+    <div class="hint">生年月日を入力すると自動計算されます</div>
+  </div>
+  <div class="fg">
     <div class="fl">写真 <span class="req">必須</span></div>
     <input type="file" id="photo-input" accept="image/*" capture="user" style="display:none" onchange="onPhotoSelected(this)">
     <div id="photo-area">
@@ -187,6 +195,7 @@ textarea{resize:none;line-height:1.6}
       <div class="ec-num">緊急連絡先 1件目</div>
       <div class="fg" style="margin-bottom:10px"><div class="fl">氏名 <span class="req">必須</span></div><input type="text" placeholder="氏名を入力"></div>
       <div class="fg" style="margin-bottom:10px"><div class="fl">続柄 <span class="req">必須</span></div><select><option value="">続柄を選択</option><option>父</option><option>母</option><option>配偶者</option><option>兄弟・姉妹</option><option>子</option><option>友人・知人</option><option>その他</option></select></div>
+      <div class="fg" style="margin-bottom:10px"><div class="fl">住所 <span class="req">必須</span></div><input type="text" placeholder="住所を入力"></div>
       <div class="fg" style="margin-bottom:0"><div class="fl">電話番号 <span class="req">必須</span></div><input type="tel" placeholder="電話番号を入力"></div>
     </div>
   </div>
@@ -582,7 +591,7 @@ textarea{resize:none;line-height:1.6}
 
 <script>
 // ===== Apps Script URL（デプロイ後に変更） =====
-var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxiMZO0O8e2JroSL_QevqE2S00DqvY9xfKFoL2wbZoKfVQwpb5WxP-Sr3rXC82qvCTHbA/exec';
+var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxxd9KCSXljjz9nQBYmL8rqLhLWvU10LtOQM4q6NmWWkueFW_LoCD2GkJ6Gly6YnvsEnQ/exec';
 var savedFormData = {}; // 送信前にデータを保存
 
 // ===== フロー定義 =====
@@ -635,8 +644,15 @@ function buildYears(){
 
 function calcAge(){
   var y=document.getElementById('by').value,m=document.getElementById('bm').value,d=document.getElementById('bd').value;
-  if(y&&m&&d){var t=new Date(),a=t.getFullYear()-y;if(t.getMonth()+1<m||(t.getMonth()+1==m&&t.getDate()<d))a--;document.getElementById('age-out').textContent='年齢：'+a+'歳';}
-  else document.getElementById('age-out').textContent='';
+  if(y&&m&&d){
+    var t=new Date(),a=t.getFullYear()-y;
+    if(t.getMonth()+1<m||(t.getMonth()+1==m&&t.getDate()<d))a--;
+    document.getElementById('age-out').textContent='年齢：'+a+'歳';
+    var ai=document.getElementById('age-input');
+    if(ai)ai.value=a;
+  } else {
+    document.getElementById('age-out').textContent='';
+  }
 }
 
 function setToday(){
@@ -831,7 +847,7 @@ function addEC(){
   ecCnt++;
   var l=document.getElementById('ec-list');
   var d=document.createElement('div');d.className='ec-card';
-  d.innerHTML='<div class="ec-num">緊急連絡先 '+(ecCnt+1)+'件目</div><div class="fg" style="margin-bottom:10px"><div class="fl">氏名 <span class="req">必須</span></div><input type="text" placeholder="氏名を入力"></div><div class="fg" style="margin-bottom:10px"><div class="fl">続柄 <span class="req">必須</span></div><select><option value="">続柄を選択</option><option>父</option><option>母</option><option>配偶者</option><option>兄弟・姉妹</option><option>子</option><option>友人・知人</option><option>その他</option></select></div><div class="fg" style="margin-bottom:0"><div class="fl">電話番号 <span class="req">必須</span></div><input type="tel" placeholder="電話番号を入力"></div>';
+  d.innerHTML='<div class="ec-num">緊急連絡先 '+(ecCnt+1)+'件目</div><div class="fg" style="margin-bottom:10px"><div class="fl">氏名 <span class="req">必須</span></div><input type="text" placeholder="氏名を入力"></div><div class="fg" style="margin-bottom:10px"><div class="fl">続柄 <span class="req">必須</span></div><select><option value="">続柄を選択</option><option>父</option><option>母</option><option>配偶者</option><option>兄弟・姉妹</option><option>子</option><option>友人・知人</option><option>その他</option></select></div><div class="fg" style="margin-bottom:10px"><div class="fl">住所 <span class="req">必須</span></div><input type="text" placeholder="住所を入力"></div><div class="fg" style="margin-bottom:0"><div class="fl">電話番号 <span class="req">必須</span></div><input type="tel" placeholder="電話番号を入力"></div>';
   l.appendChild(d);
 }
 function toggleAg(id){
