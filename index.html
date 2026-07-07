@@ -591,7 +591,7 @@ textarea{resize:none;line-height:1.6}
 
 <script>
 // ===== Apps Script URL（デプロイ後に変更） =====
-var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxxd9KCSXljjz9nQBYmL8rqLhLWvU10LtOQM4q6NmWWkueFW_LoCD2GkJ6Gly6YnvsEnQ/exec';
+var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby4RsbpyKVvi9iS-9OXYQL6TIJctM6r3KeARn-SRYXcpohBl5bTlnBlcoNMcPfQHLCRsg/exec';
 var savedFormData = {}; // 送信前にデータを保存
 
 // ===== フロー定義 =====
@@ -963,51 +963,188 @@ function fillFinalConfirm(){
 
 // ===== PDF出力 =====
 function generatePDF(){
+  var today=new Date();
+  var dateStr=today.getFullYear()+'年'+(today.getMonth()+1)+'月'+today.getDate()+'日';
+  // 保存済みデータから取得
   var d=savedFormData;
-  if(!d||!d.nameK){alert('データがありません。再度送信後にお試しください。');return;}
-  // URLパラメータにデータを付けてconfirm.htmlを開く
-  var params=new URLSearchParams();
-  params.set('reg',d.registrationNo||'—');
-  params.set('seiK',d.seiK||'');
-  params.set('seiF',d.seiF||'');
-  params.set('meiK',d.meiK||'');
-  params.set('meiF',d.meiF||'');
-  params.set('birth',d.birth||'');
-  params.set('age',d.age||'');
-  params.set('zip',d.zip||'');
-  params.set('addr',d.addr||'');
-  params.set('phone',d.phone||'');
-  params.set('live',d.live||'');
-  params.set('ins',d.ins||'');
-  params.set('nation',d.nation||'');
-  params.set('works',d.works||'');
-  params.set('term',d.term||'');
-  params.set('days',d.days||'');
-  params.set('weekdays',d.weekdays||'');
-  params.set('trip',d.trip||'');
-  params.set('height',d.height||'');
-  params.set('weight',d.weight||'');
-  params.set('bpHi',d.bpHi||'');
-  params.set('bpLo',d.bpLo||'');
-  params.set('visionL',d.visionL||'');
-  params.set('visionR',d.visionR||'');
-  params.set('eye',d.eye||'');
-  params.set('health',d.health||'');
-  params.set('sick',d.sick||'');
-  params.set('sickType',d.sickType||'');
-  params.set('symp',d.symp||'');
-  params.set('sympType',d.sympType||'');
-  params.set('lic',d.lic||'');
-  params.set('cert',d.cert||'');
-  params.set('inj',d.inj||'');
-  params.set('injType',d.injType||'');
-  params.set('clothes',d.clothes||'');
-  params.set('wsSize',d.wsSize||'');
-  params.set('shoes',d.shoes||'');
-  params.set('shoeSize',d.shoeSize||'');
-  params.set('bootSize',d.bootSize||'');
-  var url='https://shinmei1992.github.io/shinmei-form/confirm.html?'+params.toString();
-  window.location.href=url;
+  var sd=function(key){return d[key]||'—';};
+  var birth=sd('birth');
+  var works=sd('works');
+  var branch=sd('branch');
+  var rentPrice=d.rentPrice||'';
+  var rentMap={'1550':'1,550円','2050':'2,050円','3150':'3,150円','3750':'3,750円'};
+  var docCount=d.docCount||0;
+  var bankHas=sd('bankHas');
+  var regNoEl=document.querySelector('.reg-no');
+  var regNo=regNoEl?regNoEl.textContent.trim():'—';
+
+  function makeRow(label,val){
+    var tr=document.createElement('tr');
+    var td1=document.createElement('td');
+    td1.style.cssText='padding:7px 10px;border:1px solid #ddd;background:#f8f8f8;font-weight:600;width:38%;font-size:12px;color:#555;vertical-align:top';
+    td1.textContent=label;
+    var td2=document.createElement('td');
+    td2.style.cssText='padding:7px 10px;border:1px solid #ddd;font-size:13px;color:#222';
+    td2.textContent=val;
+    tr.appendChild(td1);tr.appendChild(td2);
+    return tr;
+  }
+  function makeSection(title,color,rows){
+    var wrap=document.createElement('div');
+    wrap.style.marginBottom='18px';
+    var header=document.createElement('div');
+    header.style.cssText='background:'+color+';color:#fff;padding:7px 12px;font-size:13px;font-weight:600';
+    header.textContent=title;
+    var table=document.createElement('table');
+    table.style.cssText='width:100%;border-collapse:collapse';
+    rows.forEach(function(r){table.appendChild(r);});
+    wrap.appendChild(header);wrap.appendChild(table);
+    return wrap;
+  }
+
+  // オーバーレイ作成
+  var overlay=document.createElement('div');
+  overlay.id='pdf-overlay';
+  overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);z-index:9999;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px;box-sizing:border-box';
+
+  var inner=document.createElement('div');
+  inner.style.cssText='background:#fff;border-radius:12px;overflow:hidden;max-width:700px;margin:0 auto 60px auto;position:relative';
+
+  // ボタンバー
+  var btnBar=document.createElement('div');
+  btnBar.style.cssText='position:sticky;top:0;background:#fff;padding:12px 16px;border-bottom:1px solid #eee;display:flex;gap:10px;z-index:10;-webkit-position:sticky';
+
+  var printBtn=document.createElement('button');
+  printBtn.textContent='印刷 / PDF保存';
+  printBtn.style.cssText='flex:2;padding:12px;background:#185FA5;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit';
+  printBtn.onclick=function(){
+    // 印刷用スタイルを追加
+    var printStyle=document.getElementById('print-style');
+    if(!printStyle){
+      printStyle=document.createElement('style');
+      printStyle.id='print-style';
+      printStyle.textContent='@media print{#pdf-overlay{position:static!important;background:none!important;padding:0!important;overflow:visible!important}#pdf-overlay>div{border-radius:0!important;box-shadow:none!important}#pdf-overlay button{display:none!important}.bn{display:none!important}.top-bar,.pw{display:none!important}}';
+      document.head.appendChild(printStyle);
+    }
+    window.print();
+  };
+
+  var closeBtn=document.createElement('button');
+  closeBtn.textContent='閉じる';
+  closeBtn.style.cssText='flex:1;padding:12px;background:#f0f0f0;color:#555;border:none;border-radius:10px;font-size:15px;cursor:pointer;font-family:inherit';
+  closeBtn.onclick=function(){var el=document.getElementById('pdf-overlay');if(el)el.remove();};
+
+  btnBar.appendChild(printBtn);btnBar.appendChild(closeBtn);
+
+  // コンテンツ
+  var bodyDiv=document.createElement('div');
+  bodyDiv.style.cssText='font-family:-apple-system,sans-serif;padding:16px;background:#fff;max-width:700px;margin:0 auto';
+
+  // ヘッダー
+  var hdr=document.createElement('div');
+  hdr.style.cssText='margin-bottom:20px;padding-bottom:14px;border-bottom:2px solid #185FA5;display:flex;align-items:center;gap:16px';
+
+  // 写真
+  var photoWrap=document.createElement('div');
+  photoWrap.style.cssText='flex-shrink:0';
+  if(d.photoData){
+    var photoEl=document.createElement('img');
+    photoEl.src=d.photoData;
+    photoEl.style.cssText='width:80px;height:100px;object-fit:cover;border-radius:6px;border:1px solid #ddd';
+    photoWrap.appendChild(photoEl);
+  } else {
+    var noPhoto=document.createElement('div');
+    noPhoto.style.cssText='width:80px;height:100px;border-radius:6px;border:1px solid #ddd;background:#f8f8f8;display:flex;align-items:center;justify-content:center;font-size:11px;color:#aaa;text-align:center';
+    noPhoto.textContent='写真なし';
+    photoWrap.appendChild(noPhoto);
+  }
+  hdr.appendChild(photoWrap);
+
+  // テキスト情報
+  var hdrText=document.createElement('div');
+  hdrText.style.cssText='flex:1;text-align:left';
+  hdrText.innerHTML='<div style="font-size:17px;font-weight:600;color:#185FA5">神明株式会社 作業員登録確認書</div>'
+    +'<div style="font-size:14px;font-weight:600;color:#222;margin-top:6px">'+sd('nameK')+(sd('nameF')!=='—'?' （'+sd('nameF')+'）':'')+'</div>'
+    +'<div style="font-size:12px;color:#888;margin-top:4px">登録日：'+dateStr+'</div>'
+    +'<div style="display:inline-block;background:#185FA5;color:#fff;padding:3px 14px;border-radius:20px;font-size:12px;font-weight:600;margin-top:6px">'+regNo+'</div>';
+  hdr.appendChild(hdrText);
+  bodyDiv.appendChild(hdr);
+
+  // PHASE1
+  bodyDiv.appendChild(makeSection('PHASE 1 — 基本情報','#185FA5',[
+    makeRow('苗字（漢字）',sd('seiK')),
+    makeRow('苗字（フリガナ）',sd('seiF')),
+    makeRow('名前（漢字）',sd('meiK')),
+    makeRow('名前（フリガナ）',sd('meiF')),
+    makeRow('氏名（フリガナ）',sd('nameF')),
+    makeRow('生年月日',birth),
+    makeRow('郵便番号',sd('zip')),
+    makeRow('現住所',sd('addr')),
+    makeRow('電話番号',sd('phone')),
+    makeRow('住まい',sd('live')),
+    makeRow('社会保険',sd('ins')),
+    makeRow('国籍',sd('nation'))
+  ]));
+  bodyDiv.appendChild(makeSection('PHASE 1 — 就労希望','#185FA5',[
+    makeRow('勤務希望期間',sd('term')),
+    makeRow('週出勤希望',sd('days')),
+    makeRow('出張可否',sd('trip')),
+    makeRow('出勤可能曜日',sd('weekdays')),
+    makeRow('希望職種',works)
+  ]));
+  bodyDiv.appendChild(makeSection('PHASE 1 — 身体・健康','#185FA5',[
+    makeRow('身長',d.height?d.height+'cm':'—'),
+    makeRow('体重',d.weight?d.weight+'kg':'—'),
+    makeRow('視力（左/右）',(d.visionL||'—')+' / '+(d.visionR||'—')),
+    makeRow('眼鏡・コンタクト',sd('eye')),
+    makeRow('健康状態',sd('health')),
+    makeRow('治療中の病気',sd('sick')),
+    makeRow('自覚症状',sd('symp')),
+    makeRow('免許',sd('lic')),
+    makeRow('資格',sd('cert')),
+    makeRow('負傷経験',sd('inj')),
+    makeRow('負傷種別',d.injType&&d.inj==='あり'?d.injType:'—')
+  ]));
+  bodyDiv.appendChild(makeSection('PHASE 1 — 作業服・靴','#185FA5',[
+    makeRow('作業服の持参',sd('clothes')),
+    makeRow('安全靴・長靴の持参',sd('shoes'))
+  ]));
+  bodyDiv.appendChild(makeSection('PHASE 2 — 契約書類','#0F6E56',[
+    makeRow('契約書（日雇就労）',d.agree_c01?'✓ 同意済':'—'),
+    makeRow('誓約書',d.agree_c02?'✓ 誓約済':'—'),
+    makeRow('道具レンタル',d.agree_c03?'✓ 同意済':'—'),
+    makeRow('現場指示確認書',d.agree_c04?'✓ 確認済':'—'),
+    makeRow('安全衛生教育','✓ チェック完了'),
+    makeRow('賃貸借契約',d.agree_c06?'✓ 同意済':'スキップ'),
+    makeRow('賃料（日額）',rentPrice&&rentMap[rentPrice]?rentMap[rentPrice]:'—'),
+    makeRow('登録支店・営業所',branch)
+  ]));
+  bodyDiv.appendChild(makeSection('PHASE 3 — 書類・保険登録','#854F0B',[
+    makeRow('社保書類チェック数',docCount+'件'),
+    makeRow('書類回収日',sd('docDate')),
+    makeRow('住民税',sd('tax1')),
+    makeRow('国民健康保険税',sd('tax2')),
+    makeRow('国民年金',sd('nenkin')),
+    makeRow('他借金',sd('debt')),
+    makeRow('身元保証人氏名',sd('hoshounin')),
+    makeRow('銀行口座',bankHas),
+    makeRow('銀行名',bankHas==='あり'?sd('bankName'):'—')
+  ]));
+  bodyDiv.appendChild(makeSection('PHASE 3 — 扶養控除申告書','#854F0B',[
+    makeRow('配偶者',sd('spouse')),
+    makeRow('16歳以上の扶養親族',sd('fyt')),
+    makeRow('障害者・寡婦・ひとり親・勤労学生',sd('tokubetsu'))
+  ]));
+
+  // フッター
+  var footer=document.createElement('div');
+  footer.style.cssText='margin-top:16px;padding-top:12px;border-top:1px solid #ddd;font-size:10px;color:#aaa;text-align:center';
+  footer.textContent='本書類は神明株式会社の作業員登録確認書です。個人情報は登録管理・安全衛生管理・緊急時連絡のみに使用します。';
+  bodyDiv.appendChild(footer);
+
+  inner.appendChild(btnBar);inner.appendChild(bodyDiv);
+  overlay.appendChild(inner);
+  document.body.appendChild(overlay);
 }
 
 function printForm(){
@@ -1091,7 +1228,6 @@ async function sendToSheet(data) {
 function submit(){
   var data = collectData();
   savedFormData = data; // グローバルに保存
-  savedFormData.registrationNo = '—'; // 送信後に更新
   var mc = document.getElementById('main-content');
   mc.innerHTML = '<div class="succ" style="display:flex"><div class="si" style="background:#e8f4fd"><div style="width:30px;height:30px;border:3px solid #185FA5;border-top-color:transparent;border-radius:50%;animation:spin 1s linear infinite"></div></div><div style="font-size:16px;color:#888">送信中...</div></div>';
   document.getElementById('nav').style.display='none';
@@ -1103,7 +1239,6 @@ function submit(){
 
   sendToSheet(data).then(function(result) {
     var regNo = result.registrationNo || '—';
-    savedFormData.registrationNo = regNo;
     mc.innerHTML = '<div class="succ" style="display:flex">'
       + '<div class="si"><div class="bck"></div></div>'
       + '<div style="font-size:22px;font-weight:600;color:#222">PHASE 1 完了！</div>'
@@ -1111,8 +1246,8 @@ function submit(){
       + '<div style="font-size:15px;color:#888;line-height:1.7">面接登録が完了しました。<br>PHASE 2・3は当日契約の際に行います。</div>'
       + '<div class="done-box"><div style="font-size:12px;font-weight:600;color:#1a5c32;margin-bottom:8px">完了した書類</div>'
       + '<div style="font-size:14px;color:#1a5c32;line-height:2.2">✓ PHASE 1 — 面接登録</div></div>'
-
-      + '<button class="pdf-btn" onclick="generatePDF()" style="background:#185FA5;margin-bottom:10px">神明株式会社 作業員登録確認書</button>'
+      + '<button class="pdf-btn" onclick="generatePDF()">'
+      + '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="width:20px;height:20px"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z" stroke="#fff" stroke-width="1.5"/><path d="M14 2v6h6M12 18v-6M9 15l3 3 3-3" stroke="#fff" stroke-width="1.5"/></svg>PDFを保存する</button>'
       + '<button class="print-btn" onclick="printForm()">'
       + '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="width:20px;height:20px"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2" stroke="#185FA5" stroke-width="1.5"/><path d="M6 14h12v8H6z" stroke="#185FA5" stroke-width="1.5"/></svg>印刷する</button>'
       + '</div>';
