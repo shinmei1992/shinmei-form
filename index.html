@@ -100,7 +100,17 @@ textarea{resize:none;line-height:1.6}
 .done-box{background:#eafaf1;border-radius:12px;padding:16px;width:100%;text-align:left}
 .pdf-btn{width:100%;padding:16px;border:none;border-radius:12px;background:#185FA5;color:#fff;font-size:16px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px}
 .print-btn{width:100%;padding:16px;border:1px solid #185FA5;border-radius:12px;background:#fff;color:#185FA5;font-size:16px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px}
-@media print{.top-bar,.pw,.bn{display:none!important}.content{padding:10px!important}.screen{display:block!important}}
+@media print{
+  .top-bar,.pw,.bn{display:none!important}
+  .content{padding:10px!important}
+  .screen{display:block!important}
+  #pdf-overlay{position:static!important;background:none!important;padding:0!important;overflow:visible!important}
+  #pdf-overlay>div{border-radius:0!important;box-shadow:none!important}
+  #pdf-overlay button{display:none!important}
+  /* 完了画面（確認書以外）を印刷時に非表示 */
+  .succ{display:none!important}
+  #main-content .succ{display:none!important}
+}
 </style>
 </head>
 <body>
@@ -1246,8 +1256,7 @@ function submit(){
       + '<div style="font-size:15px;color:#888;line-height:1.7">面接登録が完了しました。<br>PHASE 2・3は当日契約の際に行います。</div>'
       + '<div class="done-box"><div style="font-size:12px;font-weight:600;color:#1a5c32;margin-bottom:8px">完了した書類</div>'
       + '<div style="font-size:14px;color:#1a5c32;line-height:2.2">✓ PHASE 1 — 面接登録</div></div>'
-      + '<button class="pdf-btn" onclick="generatePDF()">'
-      + '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="width:20px;height:20px"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z" stroke="#fff" stroke-width="1.5"/><path d="M14 2v6h6M12 18v-6M9 15l3 3 3-3" stroke="#fff" stroke-width="1.5"/></svg>PDFを保存する</button>'
+
       + '<button class="print-btn" onclick="printForm()">'
       + '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="width:20px;height:20px"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2" stroke="#185FA5" stroke-width="1.5"/><path d="M6 14h12v8H6z" stroke="#185FA5" stroke-width="1.5"/></svg>印刷する</button>'
       + '</div>';
