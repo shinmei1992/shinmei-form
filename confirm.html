@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>神明株式会社 作業員登録確認書</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;background:#fff;padding:16px;max-width:700px;margin:0 auto}
+.header{display:flex;align-items:center;gap:16px;margin-bottom:20px;padding-bottom:14px;border-bottom:2px solid #185FA5}
+.header-text{flex:1}
+.header-title{font-size:17px;font-weight:600;color:#185FA5}
+.header-name{font-size:14px;font-weight:600;color:#222;margin-top:4px}
+.header-date{font-size:12px;color:#888;margin-top:2px}
+.reg-badge{display:inline-block;background:#185FA5;color:#fff;padding:3px 14px;border-radius:20px;font-size:12px;font-weight:600;margin-top:6px}
+.photo-box{width:80px;height:100px;object-fit:cover;border-radius:6px;border:1px solid #ddd;flex-shrink:0}
+.no-photo{width:80px;height:100px;border-radius:6px;border:1px solid #ddd;background:#f8f8f8;display:flex;align-items:center;justify-content:center;font-size:11px;color:#aaa;text-align:center;flex-shrink:0}
+.section{margin-bottom:18px}
+.section-title{background:#185FA5;color:#fff;padding:7px 12px;font-size:13px;font-weight:600}
+.section-title.green{background:#0F6E56}
+.section-title.brown{background:#854F0B}
+table{width:100%;border-collapse:collapse}
+td{padding:7px 10px;border:1px solid #ddd;font-size:13px;vertical-align:top}
+td:first-child{background:#f8f8f8;font-weight:600;font-size:12px;color:#555;width:38%}
+.footer{margin-top:16px;padding-top:12px;border-top:1px solid #ddd;font-size:10px;color:#aaa;text-align:center}
+.print-btn{width:100%;padding:14px;background:#185FA5;color:#fff;border:none;border-radius:10px;font-size:16px;font-weight:600;cursor:pointer;font-family:inherit;margin-bottom:10px}
+.no-print{margin-bottom:20px}
+@media print{.no-print{display:none!important}body{padding:8px}}
+</style>
+</head>
+<body>
+
+<div class="no-print">
+  <button class="print-btn" onclick="window.print()">印刷 / PDF保存</button>
+</div>
+
+<div class="header">
+  <div id="photo-area" class="no-photo">写真なし</div>
+  <div class="header-text">
+    <div class="header-title">神明株式会社 作業員登録確認書</div>
+    <div class="header-name" id="h-name">—</div>
+    <div class="header-date" id="h-date">—</div>
+    <div class="reg-badge" id="h-reg">—</div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">PHASE 1 — 基本情報</div>
+  <table>
+    <tr><td>苗字（漢字）</td><td id="d-seiK">—</td></tr>
+    <tr><td>苗字（フリガナ）</td><td id="d-seiF">—</td></tr>
+    <tr><td>名前（漢字）</td><td id="d-meiK">—</td></tr>
+    <tr><td>名前（フリガナ）</td><td id="d-meiF">—</td></tr>
+    <tr><td>生年月日</td><td id="d-birth">—</td></tr>
+    <tr><td>年齢</td><td id="d-age">—</td></tr>
+    <tr><td>郵便番号</td><td id="d-zip">—</td></tr>
+    <tr><td>現住所</td><td id="d-addr">—</td></tr>
+    <tr><td>電話番号</td><td id="d-phone">—</td></tr>
+    <tr><td>住まい</td><td id="d-live">—</td></tr>
+    <tr><td>社会保険</td><td id="d-ins">—</td></tr>
+    <tr><td>国籍</td><td id="d-nation">—</td></tr>
+  </table>
+</div>
+
+<div class="section">
+  <div class="section-title">PHASE 1 — 就労希望</div>
+  <table>
+    <tr><td>希望職種</td><td id="d-works">—</td></tr>
+    <tr><td>勤務希望期間</td><td id="d-term">—</td></tr>
+    <tr><td>週出勤希望</td><td id="d-days">—</td></tr>
+    <tr><td>出勤可能曜日</td><td id="d-weekdays">—</td></tr>
+    <tr><td>出張可否</td><td id="d-trip">—</td></tr>
+  </table>
+</div>
+
+<div class="section">
+  <div class="section-title">PHASE 1 — 身体・健康</div>
+  <table>
+    <tr><td>身長</td><td id="d-height">—</td></tr>
+    <tr><td>体重</td><td id="d-weight">—</td></tr>
+    <tr><td>血圧（上/下）</td><td id="d-bp">—</td></tr>
+    <tr><td>視力（左/右）</td><td id="d-vision">—</td></tr>
+    <tr><td>眼鏡・コンタクト</td><td id="d-eye">—</td></tr>
+    <tr><td>健康状態</td><td id="d-health">—</td></tr>
+    <tr><td>治療中の病気</td><td id="d-sick">—</td></tr>
+    <tr><td>病気種別</td><td id="d-sickType">—</td></tr>
+    <tr><td>自覚症状</td><td id="d-symp">—</td></tr>
+    <tr><td>自覚症状種別</td><td id="d-sympType">—</td></tr>
+    <tr><td>免許</td><td id="d-lic">—</td></tr>
+    <tr><td>資格</td><td id="d-cert">—</td></tr>
+    <tr><td>負傷経験</td><td id="d-inj">—</td></tr>
+    <tr><td>負傷種別</td><td id="d-injType">—</td></tr>
+  </table>
+</div>
+
+<div class="section">
+  <div class="section-title">PHASE 1 — 作業服・靴</div>
+  <table>
+    <tr><td>作業服の持参</td><td id="d-clothes">—</td></tr>
+    <tr><td>作業服サイズ</td><td id="d-wsSize">—</td></tr>
+    <tr><td>安全靴・長靴の持参</td><td id="d-shoes">—</td></tr>
+    <tr><td>安全靴サイズ</td><td id="d-shoeSize">—</td></tr>
+    <tr><td>長靴サイズ</td><td id="d-bootSize">—</td></tr>
+  </table>
+</div>
+
+<div class="footer">本書類は神明株式会社の作業員登録確認書です。個人情報は登録管理・安全衛生管理・緊急時連絡のみに使用します。</div>
+
+<script>
+// URLパラメータからデータを取得
+function getParam(key){
+  var params=new URLSearchParams(window.location.search);
+  return params.get(key)||'—';
+}
+
+function sv(id,val){
+  var el=document.getElementById(id);
+  if(el)el.textContent=val||'—';
+}
+
+// データを表示
+var today=new Date();
+var dateStr=today.getFullYear()+'年'+(today.getMonth()+1)+'月'+today.getDate()+'日';
+
+sv('h-date','登録日：'+dateStr);
+sv('h-reg',getParam('reg'));
+sv('h-name',getParam('seiK')+' '+getParam('meiK')+'（'+getParam('seiF')+' '+getParam('meiF')+'）');
+
+sv('d-seiK',getParam('seiK'));
+sv('d-seiF',getParam('seiF'));
+sv('d-meiK',getParam('meiK'));
+sv('d-meiF',getParam('meiF'));
+sv('d-birth',getParam('birth'));
+sv('d-age',getParam('age')!=='—'?getParam('age')+'歳':'—');
+sv('d-zip',getParam('zip'));
+sv('d-addr',getParam('addr'));
+sv('d-phone',getParam('phone'));
+sv('d-live',getParam('live'));
+sv('d-ins',getParam('ins'));
+sv('d-nation',getParam('nation'));
+sv('d-works',getParam('works'));
+sv('d-term',getParam('term'));
+sv('d-days',getParam('days'));
+sv('d-weekdays',getParam('weekdays'));
+sv('d-trip',getParam('trip'));
+sv('d-height',getParam('height')!=='—'?getParam('height')+'cm':'—');
+sv('d-weight',getParam('weight')!=='—'?getParam('weight')+'kg':'—');
+sv('d-bp',getParam('bpHi')+' / '+getParam('bpLo'));
+sv('d-vision',getParam('visionL')+' / '+getParam('visionR'));
+sv('d-eye',getParam('eye'));
+sv('d-health',getParam('health'));
+sv('d-sick',getParam('sick'));
+sv('d-sickType',getParam('sickType'));
+sv('d-symp',getParam('symp'));
+sv('d-sympType',getParam('sympType'));
+sv('d-lic',getParam('lic'));
+sv('d-cert',getParam('cert'));
+sv('d-inj',getParam('inj'));
+sv('d-injType',getParam('injType'));
+sv('d-clothes',getParam('clothes'));
+sv('d-wsSize',getParam('wsSize')!=='—'?getParam('wsSize'):'（持参あり）');
+sv('d-shoes',getParam('shoes'));
+sv('d-shoeSize',getParam('shoeSize')!=='—'?getParam('shoeSize')+'cm':'（持参あり）');
+sv('d-bootSize',getParam('bootSize')!=='—'?getParam('bootSize')+'cm':'（持参あり）');
+
+// 写真データ
+var photo=getParam('photo');
+if(photo&&photo!=='—'){
+  var img=document.createElement('img');
+  img.src=decodeURIComponent(photo);
+  img.className='photo-box';
+  var area=document.getElementById('photo-area');
+  area.parentNode.replaceChild(img,area);
+}
+</script>
+</body>
+</html>
