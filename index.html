@@ -101,15 +101,17 @@ textarea{resize:none;line-height:1.6}
 .pdf-btn{width:100%;padding:16px;border:none;border-radius:12px;background:#185FA5;color:#fff;font-size:16px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px}
 .print-btn{width:100%;padding:16px;border:1px solid #185FA5;border-radius:12px;background:#fff;color:#185FA5;font-size:16px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px}
 @media print{
-  .top-bar,.pw,.bn{display:none!important}
-  .content{padding:10px!important}
-  .screen{display:block!important}
-  #pdf-overlay{position:static!important;background:none!important;padding:0!important;overflow:visible!important}
-  #pdf-overlay>div{border-radius:0!important;box-shadow:none!important}
+  /* 確認書オーバーレイ以外を全て非表示 */
+  body > *{display:none!important}
+  #pdf-overlay{display:block!important;position:static!important;background:none!important;padding:0!important;overflow:visible!important}
+  #pdf-overlay>div{display:block!important;border-radius:0!important;box-shadow:none!important}
   #pdf-overlay button{display:none!important}
-  /* 完了画面（確認書以外）を印刷時に非表示 */
-  .succ{display:none!important}
-  #main-content .succ{display:none!important}
+  #pdf-overlay *{display:block!important}
+  #pdf-overlay table{display:table!important}
+  #pdf-overlay tr{display:table-row!important}
+  #pdf-overlay td{display:table-cell!important}
+  #pdf-overlay div[style*="display:flex"]{display:flex!important}
+  #pdf-overlay div[style*="display:inline"]{display:inline-block!important}
 }
 </style>
 </head>
