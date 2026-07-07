@@ -1018,36 +1018,34 @@ function generatePDF(){
   printBtn.textContent='印刷 / PDF保存';
   printBtn.style.cssText='flex:2;padding:12px;background:#185FA5;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit';
   printBtn.onclick=function(){
-    // 確認書コンテンツを取得
     var printContent=document.querySelector('#pdf-overlay .print-content');
-    if(!printContent){
-      alert('確認書が見つかりません。再度お試しください。');
-      return;
+    if(!printContent){alert('確認書が見つかりません');return;}
+    // オーバーレイを一時的にfullscreenスタイルに変更して印刷
+    var overlay=document.getElementById('pdf-overlay');
+    var origStyle=overlay.style.cssText;
+    // 他の全要素を非表示
+    var allChildren=document.body.children;
+    var hiddenEls=[];
+    for(var i=0;i<allChildren.length;i++){
+      if(allChildren[i].id!=='pdf-overlay'){
+        hiddenEls.push({el:allChildren[i],display:allChildren[i].style.display});
+        allChildren[i].style.display='none';
+      }
     }
-    var html=printContent.outerHTML;
-    // 印刷専用スタイルを動的に追加
-    var style=document.createElement('style');
-    style.id='temp-print-style';
-    style.textContent='@media print{'
-      +'body>*:not(#temp-print-wrap){display:none!important}'
-      +'#temp-print-wrap{display:block!important}'
-      +'#temp-print-wrap button{display:none!important}'
-      +'}';
-    document.head.appendChild(style);
-    // 印刷用ラッパーを追加
-    var wrap=document.createElement('div');
-    wrap.id='temp-print-wrap';
-    wrap.style.display='none';
-    wrap.innerHTML=html;
-    document.body.appendChild(wrap);
+    // オーバーレイをフルページに
+    overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:#fff;z-index:9999;overflow-y:auto;padding:0';
+    // ボタンバーを非表示
+    var btnBar=overlay.querySelector('div:first-child');
+    var origBtnDisplay=btnBar?btnBar.style.display:'';
+    if(btnBar)btnBar.style.display='none';
+    // 印刷実行
     window.print();
-    // 印刷後にクリーンアップ
+    // 元に戻す
     setTimeout(function(){
-      var s=document.getElementById('temp-print-style');
-      var w=document.getElementById('temp-print-wrap');
-      if(s)s.remove();
-      if(w)w.remove();
-    },1000);
+      overlay.style.cssText=origStyle;
+      if(btnBar)btnBar.style.display=origBtnDisplay;
+      hiddenEls.forEach(function(item){item.el.style.display=item.display;});
+    },500);
   };
 
   var closeBtn=document.createElement('button');
