@@ -100,19 +100,7 @@ textarea{resize:none;line-height:1.6}
 .done-box{background:#eafaf1;border-radius:12px;padding:16px;width:100%;text-align:left}
 .pdf-btn{width:100%;padding:16px;border:none;border-radius:12px;background:#185FA5;color:#fff;font-size:16px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px}
 .print-btn{width:100%;padding:16px;border:1px solid #185FA5;border-radius:12px;background:#fff;color:#185FA5;font-size:16px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px}
-@media print{
-  /* 確認書オーバーレイ以外を全て非表示 */
-  body > *{display:none!important}
-  #pdf-overlay{display:block!important;position:static!important;background:none!important;padding:0!important;overflow:visible!important}
-  #pdf-overlay>div{display:block!important;border-radius:0!important;box-shadow:none!important}
-  #pdf-overlay button{display:none!important}
-  #pdf-overlay *{display:block!important}
-  #pdf-overlay table{display:table!important}
-  #pdf-overlay tr{display:table-row!important}
-  #pdf-overlay td{display:table-cell!important}
-  #pdf-overlay div[style*="display:flex"]{display:flex!important}
-  #pdf-overlay div[style*="display:inline"]{display:inline-block!important}
-}
+@media print{.top-bar,.pw,.bn{display:none!important}.content{padding:10px!important}.screen{display:block!important}}
 </style>
 </head>
 <body>
@@ -1030,15 +1018,18 @@ function generatePDF(){
   printBtn.textContent='印刷 / PDF保存';
   printBtn.style.cssText='flex:2;padding:12px;background:#185FA5;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit';
   printBtn.onclick=function(){
-    // 印刷用スタイルを追加
-    var printStyle=document.getElementById('print-style');
-    if(!printStyle){
-      printStyle=document.createElement('style');
-      printStyle.id='print-style';
-      printStyle.textContent='@media print{#pdf-overlay{position:static!important;background:none!important;padding:0!important;overflow:visible!important}#pdf-overlay>div{border-radius:0!important;box-shadow:none!important}#pdf-overlay button{display:none!important}.bn{display:none!important}.top-bar,.pw{display:none!important}}';
-      document.head.appendChild(printStyle);
+    // 確認書の内容だけ新しいウィンドウで開いて印刷
+    var bodyDiv=document.querySelector('#pdf-overlay .print-content');
+    var bodyHtml=bodyDiv?bodyDiv.innerHTML:'';
+    var printWin=window.open('','_blank');
+    if(printWin){
+      printWin.document.write('<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><style>body{font-family:-apple-system,sans-serif;margin:0;padding:16px;background:#fff}table{width:100%;border-collapse:collapse}td{padding:7px 10px;border:1px solid #ddd;font-size:12px}button{display:none}</style></head><body>'+bodyHtml+'</body></html>');
+      printWin.document.close();
+      printWin.focus();
+      setTimeout(function(){printWin.print();},500);
+    } else {
+      window.print();
     }
-    window.print();
   };
 
   var closeBtn=document.createElement('button');
@@ -1050,6 +1041,7 @@ function generatePDF(){
 
   // コンテンツ
   var bodyDiv=document.createElement('div');
+  bodyDiv.className='print-content';
   bodyDiv.style.cssText='font-family:-apple-system,sans-serif;padding:16px;background:#fff;max-width:700px;margin:0 auto';
 
   // ヘッダー
