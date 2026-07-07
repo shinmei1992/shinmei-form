@@ -1020,15 +1020,34 @@ function generatePDF(){
   printBtn.onclick=function(){
     // 確認書コンテンツを取得
     var printContent=document.querySelector('#pdf-overlay .print-content');
-    if(!printContent)return;
-    var html=printContent.innerHTML;
-    // 元のbodyを保存してコンテンツを差し替え
-    var origBody=document.body.innerHTML;
-    document.body.innerHTML='<div style="font-family:-apple-system,sans-serif;padding:16px;background:#fff">'+html+'</div>';
+    if(!printContent){
+      alert('確認書が見つかりません。再度お試しください。');
+      return;
+    }
+    var html=printContent.outerHTML;
+    // 印刷専用スタイルを動的に追加
+    var style=document.createElement('style');
+    style.id='temp-print-style';
+    style.textContent='@media print{'
+      +'body>*:not(#temp-print-wrap){display:none!important}'
+      +'#temp-print-wrap{display:block!important}'
+      +'#temp-print-wrap button{display:none!important}'
+      +'}';
+    document.head.appendChild(style);
+    // 印刷用ラッパーを追加
+    var wrap=document.createElement('div');
+    wrap.id='temp-print-wrap';
+    wrap.style.display='none';
+    wrap.innerHTML=html;
+    document.body.appendChild(wrap);
     window.print();
-    // 印刷後に元に戻す
-    document.body.innerHTML=origBody;
-    location.reload();
+    // 印刷後にクリーンアップ
+    setTimeout(function(){
+      var s=document.getElementById('temp-print-style');
+      var w=document.getElementById('temp-print-wrap');
+      if(s)s.remove();
+      if(w)w.remove();
+    },1000);
   };
 
   var closeBtn=document.createElement('button');
