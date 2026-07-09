@@ -1031,10 +1031,15 @@ function generatePDF(){
   // 写真
   var photoWrap=document.createElement('div');
   photoWrap.style.cssText='flex-shrink:0';
-  var photoImg=document.getElementById('photo-preview-img');
-  if(photoImg&&photoImg.src&&photoImg.src.startsWith('data:')){
+  // 写真はsavedFormDataから取得（完了画面遷移後もDOMが消えないため）
+  var photoSrc=d.photoData||'';
+  if(!photoSrc){
+    var photoImg=document.getElementById('photo-preview-img');
+    if(photoImg&&photoImg.src&&photoImg.src.startsWith('data:'))photoSrc=photoImg.src;
+  }
+  if(photoSrc){
     var photoEl=document.createElement('img');
-    photoEl.src=photoImg.src;
+    photoEl.src=photoSrc;
     photoEl.style.cssText='width:80px;height:100px;object-fit:cover;border-radius:6px;border:1px solid #ddd';
     photoWrap.appendChild(photoEl);
   } else {
@@ -1110,6 +1115,7 @@ function collectData() {
     var photoImg=document.getElementById('photo-preview-img');
     var photoData=photoImg&&photoImg.src&&photoImg.src.startsWith('data:')?photoImg.src:'';
     return {
+      photoData:photoData,
       seiK:gv('name-sei-k'), seiF:gv('name-sei-f'),
       meiK:gv('name-mei-k'), meiF:gv('name-mei-f'),
       nameK:(gv('name-sei-k')+' '+gv('name-mei-k')).trim(),
