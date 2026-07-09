@@ -100,7 +100,16 @@ textarea{resize:none;line-height:1.6}
 .done-box{background:#eafaf1;border-radius:12px;padding:16px;width:100%;text-align:left}
 .pdf-btn{width:100%;padding:16px;border:none;border-radius:12px;background:#185FA5;color:#fff;font-size:16px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px}
 .print-btn{width:100%;padding:16px;border:1px solid #185FA5;border-radius:12px;background:#fff;color:#185FA5;font-size:16px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px}
-@media print{.top-bar,.pw,.bn{display:none!important}.content{padding:10px!important}.screen{display:block!important}}
+@media print{
+  body>*:not(#pdf-overlay){display:none!important}
+  #pdf-overlay{display:block!important;position:static!important;background:none!important;padding:0!important;overflow:visible!important}
+  #pdf-overlay>div{display:block!important;border-radius:0!important;box-shadow:none!important}
+  #pdf-overlay button{display:none!important}
+  #pdf-content{display:block!important}
+  #pdf-content table{display:table!important}
+  #pdf-content tr{display:table-row!important}
+  #pdf-content td{display:table-cell!important}
+}
 </style>
 </head>
 <body>
