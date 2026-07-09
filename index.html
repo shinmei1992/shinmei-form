@@ -964,59 +964,131 @@ function fillFinalConfirm(){
 // ===== PDF出力 =====
 function generatePDF(){
   var d=savedFormData;
-  if(!d){alert('データがありません。再度送信後にお試しください。');return;}
-  // URLパラメータにデータを付けてconfirm.htmlを開く
-  var params=new URLSearchParams();
-  params.set('reg',d.registrationNo||'—');
-  params.set('seiK',d.seiK||'');
-  params.set('seiF',d.seiF||'');
-  params.set('meiK',d.meiK||'');
-  params.set('meiF',d.meiF||'');
-  params.set('birth',d.birth||'');
-  params.set('age',d.age||'');
-  params.set('zip',d.zip||'');
-  params.set('addr',d.addr||'');
-  params.set('phone',d.phone||'');
-  params.set('live',d.live||'');
-  params.set('ins',d.ins||'');
-  params.set('nation',d.nation||'');
-  params.set('works',d.works||'');
-  params.set('term',d.term||'');
-  params.set('days',d.days||'');
-  params.set('weekdays',d.weekdays||'');
-  params.set('trip',d.trip||'');
-  params.set('height',d.height||'');
-  params.set('weight',d.weight||'');
-  params.set('bpHi',d.bpHi||'');
-  params.set('bpLo',d.bpLo||'');
-  params.set('visionL',d.visionL||'');
-  params.set('visionR',d.visionR||'');
-  params.set('eye',d.eye||'');
-  params.set('health',d.health||'');
-  params.set('sick',d.sick||'');
-  params.set('sickType',d.sickType||'');
-  params.set('symp',d.symp||'');
-  params.set('sympType',d.sympType||'');
-  params.set('lic',d.lic||'');
-  params.set('cert',d.cert||'');
-  params.set('inj',d.inj||'');
-  params.set('injType',d.injType||'');
-  params.set('clothes',d.clothes||'');
-  params.set('wsSize',d.wsSize||'');
-  params.set('shoes',d.shoes||'');
-  params.set('shoeSize',d.shoeSize||'');
-  params.set('bootSize',d.bootSize||'');
-  // 写真データはlocalStorageに保存
-  try{
-    var photoImg=document.getElementById('photo-preview-img');
-    if(photoImg&&photoImg.src&&photoImg.src.startsWith('data:')){
-      localStorage.setItem('shinmei_photo',photoImg.src);
-    } else {
-      localStorage.removeItem('shinmei_photo');
-    }
-  }catch(e){}
-  var url='https://shinmei1992.github.io/shinmei-form/confirm.html?'+params.toString();
-  window.location.href=url;
+  if(!d){alert('データがありません');return;}
+  var sd=function(key){return d[key]||'—';};
+  var today=new Date();
+  var dateStr=today.getFullYear()+'年'+(today.getMonth()+1)+'月'+today.getDate()+'日';
+  var regNoEl=document.querySelector('.reg-no');
+  var regNo=regNoEl?regNoEl.textContent.trim():sd('registrationNo');
+
+  function makeRow(label,val){
+    var tr=document.createElement('tr');
+    var td1=document.createElement('td');
+    td1.style.cssText='padding:7px 10px;border:1px solid #ddd;background:#f8f8f8;font-weight:600;width:38%;font-size:12px;color:#555;vertical-align:top';
+    td1.textContent=label;
+    var td2=document.createElement('td');
+    td2.style.cssText='padding:7px 10px;border:1px solid #ddd;font-size:13px;color:#222';
+    td2.textContent=val;
+    tr.appendChild(td1);tr.appendChild(td2);
+    return tr;
+  }
+  function makeSection(title,color,rows){
+    var wrap=document.createElement('div');
+    wrap.style.marginBottom='18px';
+    var header=document.createElement('div');
+    header.style.cssText='background:'+color+';color:#fff;padding:7px 12px;font-size:13px;font-weight:600';
+    header.textContent=title;
+    var table=document.createElement('table');
+    table.style.cssText='width:100%;border-collapse:collapse';
+    rows.forEach(function(r){table.appendChild(r);});
+    wrap.appendChild(header);wrap.appendChild(table);
+    return wrap;
+  }
+
+  // オーバーレイ作成
+  var overlay=document.createElement('div');
+  overlay.id='pdf-overlay';
+  overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);z-index:9999;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px';
+
+  var inner=document.createElement('div');
+  inner.style.cssText='background:#fff;border-radius:12px;overflow:hidden;max-width:700px;margin:0 auto 60px auto';
+
+  // ボタンバー
+  var btnBar=document.createElement('div');
+  btnBar.style.cssText='position:sticky;top:0;background:#fff;padding:12px 16px;border-bottom:1px solid #eee;display:flex;gap:10px;z-index:10';
+
+  var printBtn=document.createElement('button');
+  printBtn.textContent='印刷 / PDF保存';
+  printBtn.style.cssText='flex:2;padding:12px;background:#185FA5;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit';
+  printBtn.onclick=function(){window.print();};
+
+  var closeBtn=document.createElement('button');
+  closeBtn.textContent='閉じる';
+  closeBtn.style.cssText='flex:1;padding:12px;background:#f0f0f0;color:#555;border:none;border-radius:10px;font-size:15px;cursor:pointer;font-family:inherit';
+  closeBtn.onclick=function(){var el=document.getElementById('pdf-overlay');if(el)el.remove();};
+
+  btnBar.appendChild(printBtn);btnBar.appendChild(closeBtn);
+
+  // コンテンツ
+  var bodyDiv=document.createElement('div');
+  bodyDiv.id='pdf-content';
+  bodyDiv.style.cssText='font-family:-apple-system,sans-serif;padding:16px;background:#fff;max-width:700px;margin:0 auto';
+
+  // ヘッダー（写真付き）
+  var hdr=document.createElement('div');
+  hdr.style.cssText='margin-bottom:20px;padding-bottom:14px;border-bottom:2px solid #185FA5;display:flex;align-items:center;gap:16px';
+
+  // 写真
+  var photoWrap=document.createElement('div');
+  photoWrap.style.cssText='flex-shrink:0';
+  var photoImg=document.getElementById('photo-preview-img');
+  if(photoImg&&photoImg.src&&photoImg.src.startsWith('data:')){
+    var photoEl=document.createElement('img');
+    photoEl.src=photoImg.src;
+    photoEl.style.cssText='width:80px;height:100px;object-fit:cover;border-radius:6px;border:1px solid #ddd';
+    photoWrap.appendChild(photoEl);
+  } else {
+    var noPhoto=document.createElement('div');
+    noPhoto.style.cssText='width:80px;height:100px;border-radius:6px;border:1px solid #ddd;background:#f8f8f8;display:flex;align-items:center;justify-content:center;font-size:11px;color:#aaa;text-align:center';
+    noPhoto.textContent='写真なし';
+    photoWrap.appendChild(noPhoto);
+  }
+  hdr.appendChild(photoWrap);
+
+  var hdrText=document.createElement('div');
+  hdrText.style.cssText='flex:1;text-align:left';
+  hdrText.innerHTML='<div style="font-size:17px;font-weight:600;color:#185FA5">神明株式会社 作業員登録確認書</div>'
+    +'<div style="font-size:14px;font-weight:600;color:#222;margin-top:6px">'+(sd('seiK')+' '+sd('meiK')).trim()+(sd('seiF')!=='—'?' （'+sd('seiF')+' '+sd('meiF')+'）':'')+'</div>'
+    +'<div style="font-size:12px;color:#888;margin-top:4px">登録日：'+dateStr+'</div>'
+    +'<div style="display:inline-block;background:#185FA5;color:#fff;padding:3px 14px;border-radius:20px;font-size:12px;font-weight:600;margin-top:6px">'+regNo+'</div>';
+  hdr.appendChild(hdrText);
+  bodyDiv.appendChild(hdr);
+
+  bodyDiv.appendChild(makeSection('PHASE 1 — 基本情報','#185FA5',[
+    makeRow('苗字（漢字）',sd('seiK')),makeRow('苗字（フリガナ）',sd('seiF')),
+    makeRow('名前（漢字）',sd('meiK')),makeRow('名前（フリガナ）',sd('meiF')),
+    makeRow('生年月日',sd('birth')),makeRow('年齢',d.age?d.age+'歳':'—'),
+    makeRow('郵便番号',sd('zip')),makeRow('現住所',sd('addr')),
+    makeRow('電話番号',sd('phone')),makeRow('住まい',sd('live')),
+    makeRow('社会保険',sd('ins')),makeRow('国籍',sd('nation'))
+  ]));
+  bodyDiv.appendChild(makeSection('PHASE 1 — 就労希望','#185FA5',[
+    makeRow('希望職種',sd('works')),makeRow('勤務希望期間',sd('term')),
+    makeRow('週出勤希望',sd('days')),makeRow('出勤可能曜日',sd('weekdays')),
+    makeRow('出張可否',sd('trip'))
+  ]));
+  bodyDiv.appendChild(makeSection('PHASE 1 — 身体・健康','#185FA5',[
+    makeRow('身長',d.height?d.height+'cm':'—'),makeRow('体重',d.weight?d.weight+'kg':'—'),
+    makeRow('血圧（上/下）',(d.bpHi||'—')+'/'+(d.bpLo||'—')),
+    makeRow('視力（左/右）',(d.visionL||'—')+'/'+(d.visionR||'—')),
+    makeRow('眼鏡・コンタクト',sd('eye')),makeRow('健康状態',sd('health')),
+    makeRow('治療中の病気',sd('sick')),makeRow('病気種別',sd('sickType')),
+    makeRow('自覚症状',sd('symp')),makeRow('自覚症状種別',sd('sympType')),
+    makeRow('免許',sd('lic')),makeRow('資格',sd('cert')),
+    makeRow('負傷経験',sd('inj')),makeRow('負傷種別',sd('injType'))
+  ]));
+  bodyDiv.appendChild(makeSection('PHASE 1 — 作業服・靴','#185FA5',[
+    makeRow('作業服の持参',sd('clothes')),makeRow('安全靴・長靴の持参',sd('shoes'))
+  ]));
+
+  var footer=document.createElement('div');
+  footer.style.cssText='margin-top:16px;padding-top:12px;border-top:1px solid #ddd;font-size:10px;color:#aaa;text-align:center';
+  footer.textContent='本書類は神明株式会社の作業員登録確認書です。個人情報は登録管理・安全衛生管理・緊急時連絡のみに使用します。';
+  bodyDiv.appendChild(footer);
+
+  inner.appendChild(btnBar);inner.appendChild(bodyDiv);
+  overlay.appendChild(inner);
+  document.body.appendChild(overlay);
 }
 
 function printForm(){
