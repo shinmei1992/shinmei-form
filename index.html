@@ -1006,6 +1006,15 @@ function generatePDF(){
   params.set('shoes',d.shoes||'');
   params.set('shoeSize',d.shoeSize||'');
   params.set('bootSize',d.bootSize||'');
+  // 写真データはsessionStorageに保存（URLパラメータには大きすぎるため）
+  try{
+    var photoImg=document.getElementById('photo-preview-img');
+    if(photoImg&&photoImg.src&&photoImg.src.startsWith('data:')){
+      sessionStorage.setItem('shinmei_photo',photoImg.src);
+    } else {
+      sessionStorage.removeItem('shinmei_photo');
+    }
+  }catch(e){}
   var url='https://shinmei1992.github.io/shinmei-form/confirm.html?'+params.toString();
   window.location.href=url;
 }
