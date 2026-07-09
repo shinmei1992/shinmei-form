@@ -163,16 +163,16 @@ sv('d-shoes',getParam('shoes'));
 sv('d-shoeSize',getParam('shoeSize')!=='—'?getParam('shoeSize')+'cm':'（持参あり）');
 sv('d-bootSize',getParam('bootSize')!=='—'?getParam('bootSize')+'cm':'（持参あり）');
 
-// 写真データはsessionStorageから取得
+// 写真データはlocalStorageから取得
 try{
-  var photoData=sessionStorage.getItem('shinmei_photo');
+  var photoData=localStorage.getItem('shinmei_photo');
   if(photoData){
     var img=document.createElement('img');
     img.src=photoData;
     img.className='photo-box';
     var area=document.getElementById('photo-area');
     area.parentNode.replaceChild(img,area);
-    sessionStorage.removeItem('shinmei_photo');
+    localStorage.removeItem('shinmei_photo');
   }
 }catch(e){}
 </script>
