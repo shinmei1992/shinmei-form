@@ -782,12 +782,14 @@ function resetPhoto(){
   document.getElementById('photo-input').value='';
 }
 function fakeUp(sid,did){document.getElementById(sid).textContent='アップロード済';document.getElementById(did).style.display='block';}
+var docPhotos={}; // 免許・資格証の写真を保存
 function onDocSelected(input, wrapId, imgId){
   if(!input.files||!input.files[0])return;
   var reader=new FileReader();
   reader.onload=function(e){
     document.getElementById(imgId).src=e.target.result;
     document.getElementById(wrapId).style.display='block';
+    docPhotos[imgId]=e.target.result; // グローバルに保存
   };
   reader.readAsDataURL(input.files[0]);
 }
@@ -795,6 +797,7 @@ function resetDoc(inputId, wrapId, imgId){
   document.getElementById(inputId).value='';
   document.getElementById(imgId).src='';
   document.getElementById(wrapId).style.display='none';
+  delete docPhotos[imgId]; // グローバルからも削除
 }
 function addCertUpload(){
   certCount++;
@@ -1159,17 +1162,17 @@ function collectData() {
     var photoData=photoImg&&photoImg.src&&photoImg.src.startsWith('data:')?photoImg.src:'';
     return {
       photoData:photoData,
-      licPhotoF:(function(){var el=document.getElementById('lic-preview-img-f');return el&&el.src&&el.src.startsWith('data:')?el.src:'';}()),
-      licPhotoB:(function(){var el=document.getElementById('lic-preview-img-b');return el&&el.src&&el.src.startsWith('data:')?el.src:'';}()),
-      certPhoto1:(function(){var el=document.getElementById('cert-preview-img-1');return el&&el.src&&el.src.startsWith('data:')?el.src:'';}()),
+      licPhotoF:docPhotos['lic-preview-img-f']||'',
+      licPhotoB:docPhotos['lic-preview-img-b']||'',
+      certPhoto1:docPhotos['cert-preview-img-1']||'',
       seiK:gv('name-sei-k'), seiF:gv('name-sei-f'),
       meiK:gv('name-mei-k'), meiF:gv('name-mei-f'),
       nameK:(gv('name-sei-k')+' '+gv('name-mei-k')).trim(),
       nameF:(gv('name-sei-f')+' '+gv('name-mei-f')).trim(),
       photoData:photoData,
-      licPhotoF:(function(){var el=document.getElementById('lic-preview-img-f');return el&&el.src&&el.src.startsWith('data:')?el.src:'';}()),
-      licPhotoB:(function(){var el=document.getElementById('lic-preview-img-b');return el&&el.src&&el.src.startsWith('data:')?el.src:'';}()),
-      certPhoto1:(function(){var el=document.getElementById('cert-preview-img-1');return el&&el.src&&el.src.startsWith('data:')?el.src:'';}()),
+      licPhotoF:docPhotos['lic-preview-img-f']||'',
+      licPhotoB:docPhotos['lic-preview-img-b']||'',
+      certPhoto1:docPhotos['cert-preview-img-1']||'',
       birth:(y&&m&&d)?y+'年'+m+'月'+d+'日':'', age:ageStr,
       zip:gv('zipcode'), addr:gv('addr'), phone:gv('phone'),
       live:st.live||'', ins:st.ins||'', nation:st.nation||'',
