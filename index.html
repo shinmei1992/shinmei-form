@@ -1004,6 +1004,10 @@ function generatePDF(){
     return wrap;
   }
 
+  // 既存のオーバーレイを削除
+  var existing=document.getElementById('pdf-overlay');
+  if(existing)existing.remove();
+
   // オーバーレイ作成
   var overlay=document.createElement('div');
   overlay.id='pdf-overlay';
