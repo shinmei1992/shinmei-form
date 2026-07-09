@@ -1095,6 +1095,36 @@ function generatePDF(){
     makeRow('免許',sd('lic')),makeRow('資格',sd('cert')),
     makeRow('負傷経験',sd('inj')),makeRow('負傷種別',sd('injType'))
   ]));
+  // 免許・資格写真セクション
+  var docSection=document.createElement('div');
+  docSection.style.marginBottom='18px';
+  var docHeader=document.createElement('div');
+  docHeader.style.cssText='background:#185FA5;color:#fff;padding:7px 12px;font-size:13px;font-weight:600';
+  docHeader.textContent='PHASE 1 — 免許・資格証';
+  docSection.appendChild(docHeader);
+  var docBody=document.createElement('div');
+  docBody.style.cssText='padding:12px;border:1px solid #ddd;display:flex;flex-wrap:wrap;gap:10px';
+  function addDocPhoto(label,src){
+    if(!src)return;
+    var wrap=document.createElement('div');
+    wrap.style.cssText='text-align:center;flex:1;min-width:120px';
+    var lbl=document.createElement('div');
+    lbl.style.cssText='font-size:11px;color:#555;font-weight:600;margin-bottom:4px';
+    lbl.textContent=label;
+    var img=document.createElement('img');
+    img.src=src;
+    img.style.cssText='width:100%;max-width:160px;border-radius:6px;border:1px solid #ddd;object-fit:cover';
+    wrap.appendChild(lbl);wrap.appendChild(img);
+    docBody.appendChild(wrap);
+  }
+  addDocPhoto('免許証（表面）',d.licPhotoF);
+  addDocPhoto('免許証（裏面）',d.licPhotoB);
+  addDocPhoto('資格証 1枚目',d.certPhoto1);
+  if(docBody.children.length>0){
+    docSection.appendChild(docBody);
+    bodyDiv.appendChild(docSection);
+  }
+
   bodyDiv.appendChild(makeSection('PHASE 1 — 作業服・靴','#185FA5',[
     makeRow('作業服の持参',sd('clothes')),makeRow('安全靴・長靴の持参',sd('shoes'))
   ]));
@@ -1129,11 +1159,17 @@ function collectData() {
     var photoData=photoImg&&photoImg.src&&photoImg.src.startsWith('data:')?photoImg.src:'';
     return {
       photoData:photoData,
+      licPhotoF:(function(){var el=document.getElementById('lic-preview-img-f');return el&&el.src&&el.src.startsWith('data:')?el.src:'';}()),
+      licPhotoB:(function(){var el=document.getElementById('lic-preview-img-b');return el&&el.src&&el.src.startsWith('data:')?el.src:'';}()),
+      certPhoto1:(function(){var el=document.getElementById('cert-preview-img-1');return el&&el.src&&el.src.startsWith('data:')?el.src:'';}()),
       seiK:gv('name-sei-k'), seiF:gv('name-sei-f'),
       meiK:gv('name-mei-k'), meiF:gv('name-mei-f'),
       nameK:(gv('name-sei-k')+' '+gv('name-mei-k')).trim(),
       nameF:(gv('name-sei-f')+' '+gv('name-mei-f')).trim(),
       photoData:photoData,
+      licPhotoF:(function(){var el=document.getElementById('lic-preview-img-f');return el&&el.src&&el.src.startsWith('data:')?el.src:'';}()),
+      licPhotoB:(function(){var el=document.getElementById('lic-preview-img-b');return el&&el.src&&el.src.startsWith('data:')?el.src:'';}()),
+      certPhoto1:(function(){var el=document.getElementById('cert-preview-img-1');return el&&el.src&&el.src.startsWith('data:')?el.src:'';}()),
       birth:(y&&m&&d)?y+'年'+m+'月'+d+'日':'', age:ageStr,
       zip:gv('zipcode'), addr:gv('addr'), phone:gv('phone'),
       live:st.live||'', ins:st.ins||'', nation:st.nation||'',
