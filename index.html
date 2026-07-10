@@ -101,17 +101,16 @@ textarea{resize:none;line-height:1.6}
 .pdf-btn{width:100%;padding:16px;border:none;border-radius:12px;background:#185FA5;color:#fff;font-size:16px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px}
 .print-btn{width:100%;padding:16px;border:1px solid #185FA5;border-radius:12px;background:#fff;color:#185FA5;font-size:16px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px}
 @media print{
-  body>*:not(#pdf-overlay){display:none!important}
-  #pdf-overlay{display:block!important;position:static!important;background:none!important;padding:0!important;overflow:visible!important}
-  #pdf-overlay>div{display:block!important;border-radius:0!important;box-shadow:none!important}
-  #pdf-overlay button{display:none!important}
-  #pdf-content{display:block!important}
+  body>*:not(#pdf-overlay):not(#photo-overlay){display:none!important}
+  #pdf-overlay,#photo-overlay{display:block!important;position:static!important;background:none!important;padding:0!important;overflow:visible!important}
+  #pdf-overlay>div,#photo-overlay>div{display:block!important;border-radius:0!important;box-shadow:none!important}
+  #pdf-overlay button,#photo-overlay button{display:none!important}
+  #pdf-content,#photo-content{display:block!important}
   #pdf-content table{display:table!important}
   #pdf-content tr{display:table-row!important}
   #pdf-content td{display:table-cell!important}
-  #pdf-content img{display:block!important;max-width:100%!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
-  #pdf-content div{display:block!important}
-  #pdf-content .header-photo{display:block!important}
+  #pdf-content img,#photo-content img{display:block!important;max-width:100%!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+  #pdf-content div,#photo-content div{display:block!important}
 }
 </style>
 </head>
@@ -986,7 +985,7 @@ function generatePhotoSheet(){
   if(!hasPhoto){alert('写真が登録されていません');return;}
 
   var overlay=document.createElement('div');
-  overlay.id='pdf-overlay';
+  overlay.id='photo-overlay';
   overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);z-index:9999;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px';
 
   var inner=document.createElement('div');
@@ -1003,12 +1002,12 @@ function generatePhotoSheet(){
   var closeBtn=document.createElement('button');
   closeBtn.textContent='閉じる';
   closeBtn.style.cssText='flex:1;padding:12px;background:#f0f0f0;color:#555;border:none;border-radius:10px;font-size:15px;cursor:pointer;font-family:inherit';
-  closeBtn.onclick=function(){var el=document.getElementById('pdf-overlay');if(el)el.remove();};
+  closeBtn.onclick=function(){var el=document.getElementById('photo-overlay');if(el)el.remove();};
 
   btnBar.appendChild(printBtn);btnBar.appendChild(closeBtn);
 
   var bodyDiv=document.createElement('div');
-  bodyDiv.id='pdf-content';
+  bodyDiv.id='photo-content';
   bodyDiv.style.cssText='font-family:-apple-system,sans-serif;padding:16px;background:#fff';
 
   var hdr=document.createElement('div');
