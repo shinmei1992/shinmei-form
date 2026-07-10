@@ -977,6 +977,81 @@ function fillFinalConfirm(){
 }
 
 // ===== PDF出力 =====
+function generatePhotoSheet(){
+  var d=savedFormData;
+  if(!d){alert('データがありません');return;}
+  var existing=document.getElementById('pdf-overlay');
+  if(existing)existing.remove();
+  var hasPhoto=d.photoData||d.licPhotoF||d.licPhotoB||d.certPhoto1;
+  if(!hasPhoto){alert('写真が登録されていません');return;}
+
+  var overlay=document.createElement('div');
+  overlay.id='pdf-overlay';
+  overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);z-index:9999;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px';
+
+  var inner=document.createElement('div');
+  inner.style.cssText='background:#fff;border-radius:12px;overflow:hidden;max-width:700px;margin:0 auto 60px auto';
+
+  var btnBar=document.createElement('div');
+  btnBar.style.cssText='position:sticky;top:0;background:#fff;padding:12px 16px;border-bottom:1px solid #eee;display:flex;gap:10px;z-index:10';
+
+  var printBtn=document.createElement('button');
+  printBtn.textContent='印刷 / PDF保存';
+  printBtn.style.cssText='flex:2;padding:12px;background:#0F6E56;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit';
+  printBtn.onclick=function(){window.print();};
+
+  var closeBtn=document.createElement('button');
+  closeBtn.textContent='閉じる';
+  closeBtn.style.cssText='flex:1;padding:12px;background:#f0f0f0;color:#555;border:none;border-radius:10px;font-size:15px;cursor:pointer;font-family:inherit';
+  closeBtn.onclick=function(){var el=document.getElementById('pdf-overlay');if(el)el.remove();};
+
+  btnBar.appendChild(printBtn);btnBar.appendChild(closeBtn);
+
+  var bodyDiv=document.createElement('div');
+  bodyDiv.id='pdf-content';
+  bodyDiv.style.cssText='font-family:-apple-system,sans-serif;padding:16px;background:#fff';
+
+  var hdr=document.createElement('div');
+  hdr.style.cssText='text-align:center;margin-bottom:16px;padding-bottom:12px;border-bottom:2px solid #0F6E56';
+  hdr.innerHTML='<div style="font-size:16px;font-weight:600;color:#0F6E56">神明株式会社 作業員写真シート</div>'
+    +'<div style="font-size:13px;color:#222;margin-top:4px;font-weight:600">'+(d.seiK||'')+' '+(d.meiK||'')+'</div>'
+    +'<div style="display:inline-block;background:#0F6E56;color:#fff;padding:2px 12px;border-radius:20px;font-size:12px;margin-top:4px">'+(d.registrationNo||'—')+'</div>';
+  bodyDiv.appendChild(hdr);
+
+  var grid=document.createElement('div');
+  grid.style.cssText='display:grid;grid-template-columns:1fr 1fr;gap:12px';
+
+  function addPhoto(label,src,fullWidth){
+    if(!src)return;
+    var wrap=document.createElement('div');
+    if(fullWidth)wrap.style.cssText='grid-column:1/-1';
+    var lbl=document.createElement('div');
+    lbl.style.cssText='font-size:12px;font-weight:600;color:#555;margin-bottom:6px;padding:4px 8px;background:#f0f0f0;border-radius:4px';
+    lbl.textContent=label;
+    var img=document.createElement('img');
+    img.src=src;
+    img.style.cssText='width:100%;border-radius:8px;border:1px solid #ddd;object-fit:cover';
+    wrap.appendChild(lbl);wrap.appendChild(img);
+    grid.appendChild(wrap);
+  }
+
+  addPhoto('顔写真',d.photoData,true);
+  addPhoto('免許証（表面）',d.licPhotoF,false);
+  addPhoto('免許証（裏面）',d.licPhotoB,false);
+  addPhoto('資格証 1枚目',d.certPhoto1,true);
+
+  bodyDiv.appendChild(grid);
+
+  var footer=document.createElement('div');
+  footer.style.cssText='margin-top:16px;padding-top:12px;border-top:1px solid #ddd;font-size:10px;color:#aaa;text-align:center';
+  footer.textContent='神明株式会社 — 個人情報は登録管理・安全衛生管理・緊急時連絡のみに使用します。';
+  bodyDiv.appendChild(footer);
+
+  inner.appendChild(btnBar);inner.appendChild(bodyDiv);
+  overlay.appendChild(inner);
+  document.body.appendChild(overlay);
+}
+
 function generatePDF(){
   var d=savedFormData;
   if(!d){alert('データがありません');return;}
