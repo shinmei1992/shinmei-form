@@ -976,34 +976,76 @@ function fillFinalConfirm(){
 }
 
 // ===== PDF出力 =====
+var branchEmails={
+  '大阪本社':'honsha_eigyo@shinmei-grp.co.jp',
+  '名古屋支店':'nagoya_eigyochotatu@shinmei-grp.co.jp',
+  '横浜支店':'yokohama_eigyochotatu@shinmei-grp.co.jp',
+  '浦和支店':'urawa_eigyochotatu@shinmei-grp.co.jp',
+  '高田馬場支店':'shutoken_eigyochotatu@shinmei-grp.co.jp',
+  '仙台支店':'sendai_eigyochotatu@shinmei-grp.co.jp',
+  '福岡営業所':'hukuoka_eigyochotatu@shinmei-grp.co.jp'
+};
+
 function copyPhase2Link(){
   var d=savedFormData;
   var regNo=d&&d.registrationNo?d.registrationNo:'—';
+  var name=(d.seiK||'')+(d.meiK?' '+d.meiK:'');
   var url='https://shinmei1992.github.io/shinmei-form/phase2.html?reg='+encodeURIComponent(regNo);
-  var text='【神明株式会社】PHASE2・3登録リンク
-登録番号：'+regNo+'
-'+url;
 
-  // スマホの共有メニューを使用（LINE・Gmail・Slack等が選べる）
-  if(navigator.share){
-    navigator.share({
-      title:'神明株式会社 PHASE2・3登録',
-      text:'登録番号：'+regNo,
-      url:url
-    }).catch(function(){});
-  } else {
-    // PCやWebShareAPI非対応の場合はクリップボードにコピー
-    if(navigator.clipboard&&navigator.clipboard.writeText){
-      navigator.clipboard.writeText(text).then(function(){
-        var btn=document.getElementById('copy-link-btn');
-        if(btn){btn.textContent='✓ コピーしました！';btn.style.background='#27ae60';}
-      }).catch(function(){
-        prompt('下記URLをコピーしてください',url);
-      });
-    } else {
-      prompt('下記URLをコピーしてください',url);
-    }
-  }
+  var existing=document.getElementById('branch-select-overlay');
+  if(existing)existing.remove();
+
+  var overlay=document.createElement('div');
+  overlay.id='branch-select-overlay';
+  overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px';
+
+  var box=document.createElement('div');
+  box.style.cssText='background:#fff;border-radius:16px;padding:24px;width:100%;max-width:360px';
+
+  var title=document.createElement('div');
+  title.style.cssText='font-size:16px;font-weight:600;color:#222;margin-bottom:6px;text-align:center';
+  title.textContent='送信先拠点を選択';
+
+  var sub=document.createElement('div');
+  sub.style.cssText='font-size:13px;color:#888;margin-bottom:16px;text-align:center';
+  sub.textContent='登録番号：'+regNo+' '+name;
+
+  box.appendChild(title);
+  box.appendChild(sub);
+
+  var branches=['大阪本社','名古屋支店','横浜支店','浦和支店','高田馬場支店','仙台支店','福岡営業所'];
+  branches.forEach(function(branch){
+    var btn=document.createElement('button');
+    btn.textContent=branch;
+    btn.style.cssText='width:100%;padding:12px;margin-bottom:8px;border:1px solid #ddd;border-radius:10px;background:#f8f8f8;font-size:15px;cursor:pointer;font-family:inherit;text-align:left';
+    btn.onclick=function(){
+      var email=branchEmails[branch];
+      var subject=encodeURIComponent('【神明株式会社】PHASE2・3登録 '+regNo);
+      var body=encodeURIComponent('お疲れ様です。
+
+以下の作業員のPHASE2・3登録をお願いします。
+
+登録番号：'+regNo+'
+氏名：'+name+'
+
+PHASE2・3登録リンク：
+'+url+'
+
+上記リンクをタップして登録手続きを進めてください。');
+      window.location.href='mailto:'+email+'?subject='+subject+'&body='+body;
+      overlay.remove();
+    };
+    box.appendChild(btn);
+  });
+
+  var cancelBtn=document.createElement('button');
+  cancelBtn.textContent='キャンセル';
+  cancelBtn.style.cssText='width:100%;padding:12px;border:none;border-radius:10px;background:#f0f0f0;color:#888;font-size:15px;cursor:pointer;font-family:inherit;margin-top:4px';
+  cancelBtn.onclick=function(){overlay.remove();};
+  box.appendChild(cancelBtn);
+
+  overlay.appendChild(box);
+  document.body.appendChild(overlay);
 }
 
 function generatePhotoSheet(){
