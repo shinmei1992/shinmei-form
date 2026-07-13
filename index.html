@@ -1021,17 +1021,7 @@ function copyPhase2Link(){
     btn.onclick=function(){
       var email=branchEmails[branch];
       var subject=encodeURIComponent('【神明株式会社】PHASE2・3登録 '+regNo);
-      var body=encodeURIComponent('お疲れ様です。
-
-以下の作業員のPHASE2・3登録をお願いします。
-
-登録番号：'+regNo+'
-氏名：'+name+'
-
-PHASE2・3登録リンク：
-'+url+'
-
-上記リンクをタップして登録手続きを進めてください。');
+      var body=encodeURIComponent('お疲れ様です。\n\n以下の作業員のPHASE2・3登録をお願いします。\n\n登録番号：'+regNo+'\n氏名：'+name+'\n\nPHASE2・3登録リンク：\n'+url+'\n\n上記リンクをタップして登録手続きを進めてください。');
       window.location.href='mailto:'+email+'?subject='+subject+'&body='+body;
       overlay.remove();
     };
