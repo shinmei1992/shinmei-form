@@ -139,59 +139,114 @@ textarea{resize:none;line-height:1.6}
       <div class="info-box" id="p1-summary-box">
         <strong id="p1-name-display">—</strong> 様（登録番号：<span id="p1-reg-display">—</span>）
       </div>
-      <div class="contract-text">
-        <p>神明株式会社（以下「甲」）と就労者（以下「乙」）は、下記のとおり日雇就労契約を締結します。</p>
-        <p><strong>第2条</strong>　日当単価は職種・技術により異なり、話し合いにより決定します。</p>
-        <p><strong>第4条</strong>　労働時間は原則 8:00〜17:00（休憩60分）。</p>
-        <p><strong>第6条</strong>　賃金は就業当日に支払います。</p>
-        <p><strong>第8条</strong>　乙は記入した氏名・生年月日・連絡先に偽りのないことを誓います。</p>
-        <p><strong>第10条</strong>　乙は日当から寮費・前借金・備品代等を相殺することに同意します。</p>
+      <div id="scroll-c01" onscroll="checkScroll('scroll-c01','ag0')" style="max-height:380px;overflow-y:auto;-webkit-overflow-scrolling:touch;border:1px solid #ddd;border-radius:10px;padding:14px;background:#fff;font-size:13px;color:#444;line-height:1.8;margin-bottom:10px">
+        <p style="font-weight:600;text-align:center;margin-bottom:12px">契 約 書【調2】</p>
+        <p>神明株式会社（以下「甲」という。）と就労者（以下「乙」という。）とは、下記のとおり日雇就労契約を締結する。</p>
+        <p><strong>第1条</strong>　乙は甲の指揮並びに規則（掲示板）及び下記事項を厳守し、雇用日に生じた一切の義務は確実に履行し、違反した場合は直ちに契約を終了することに何ら異議を唱えません。</p>
+        <p><strong>第2条</strong>　日当については職種、技術により異なり、契約時の話し合いにより甲乙双方同意し、乙は甲に一切異議を唱えません。<br>日当単価 ¥10,000－円 で</p>
+        <p><strong>第3条</strong>　新規就労にあたり乙は甲による安全教育を十分に理解し、各作業所の安全衛生に関する規則及び指示を守ります。</p>
+        <p><strong>第4条</strong>　現場での作業開始時刻をもって労働時間の開始とします。作業道具の貸出、若しくは他の作業員の待ち合わせ等の事情により会社、置き場（お客様の置き場）、最寄駅等に立寄る場合、これらの行為は個人的な事情とみなし労働時間に算入しません。また、帰社時における賃金の受取り等で会社等に立寄る場合も労働時間に算入しません。労働時間は、原則として、始業時刻8時00分〜終業時刻17:00（内、休憩60分）とする。ただし、業務上必要がある場合には、同条に定める労働時間を変更することなく、始業及び終業時刻を繰り上げ、又は繰り下げることがある。</p>
+        <p><strong>第5条</strong>　甲は、業務の都合により、所定労働時間を超え、又は所定休日及び深夜（22:00〜5:00）に業務を命ずることがある。</p>
+        <p><strong>第6条</strong>　賃金は、就業当日に支払う。</p>
+        <p><strong>第7条</strong>　乙の就業の場所及び従事すべき業務に関する事項については、別途交付する作業員就労証明書に示すとおりとする。</p>
+        <p><strong>第8条</strong>　乙は、本契約書並びに添付書類に記入した氏名、生年月日及び連絡先に偽りのないことをここに誓います。</p>
+        <p><strong>第9条</strong>　甲は上記第8条の乙による記入事項については現場での事故等、緊急連絡以外には使用しないこととする。</p>
+        <p><strong>第10条</strong>　乙は甲から支払いを受ける日当から寮費、前借金及び乙が負担すべき備品代等を相殺することに同意します。</p>
+        <p><strong>第11条</strong>　甲と乙は、その合意により本契約を引き続いて日雇い契約を継続することがある。この場合における契約内容は本契約内容と同じものとし、異なるものとする場合は、新たに契約書を作成する。</p>
+        <p style="margin-top:16px">令和　　年　　月　　日</p>
+        <p>雇用者住所　大阪市西成区北津守4-3-6<br>（甲）社名　神明株式会社　大阪本社</p>
+        <p style="margin-top:8px">就労者住所　＿＿＿＿＿＿＿＿＿＿＿＿＿<br>（乙）氏名　＿＿＿＿＿＿＿＿＿＿＿　印</p>
       </div>
+      <div class="hint" id="hint-c01" style="color:#c0392b;font-size:12px;margin-bottom:8px">↓ 最後までスクロールしてから同意できます</div>
       <div class="agree-box">
         <div class="agree-row"><div class="agree-check" id="ag0" onclick="toggleAg(0)"><div class="ck"></div></div><div class="agree-text">上記の内容を確認し、同意します</div></div>
         <div class="fg" style="margin-bottom:0"><div class="fl">日付</div><div class="date-display" id="date0"></div></div>
       </div>
     </div>
-
     <!-- C02 誓約書 -->
     <div class="screen" id="sc1">
-      <div class="contract-text">
-        <p>この度、私は貴社に勤務するにあたり、以下の事項を遵守することを誓約します。</p>
-        <p>1. 作業所の規律・注意事項を厳守し、安全作業を行います。<br>
-        2. 負傷した時は小さなケガでも必ず報告します。<br>
-        3. 暴力・罵倒・恐喝を行わないことを約束します。<br>
-        4. 違法賭博・違法薬物など違法行為をしないことを約束します。<br>
-        5. 在職中・退職後も機密情報を漏洩しないことを約束します。<br>
-        6. 故意・過失により会社に損害を与えた場合は賠償します。</p>
+      <div id="scroll-c02" onscroll="checkScroll('scroll-c02','ag1')" style="max-height:380px;overflow-y:auto;-webkit-overflow-scrolling:touch;border:1px solid #ddd;border-radius:10px;padding:14px;background:#fff;font-size:13px;color:#444;line-height:1.8;margin-bottom:10px">
+        <p style="font-weight:600;text-align:center;margin-bottom:4px">誓 約 書【調22】</p>
+        <p>神明株式会社<br>安全衛生管理委員会　御中　　　　　　　　　　　　　　　　　　　　　　　　　　　　　【正】</p>
+        <p>この度、私は貴社に勤務するにあたり、以下の事項を遵守することを誓約致します。</p>
+        <p style="font-weight:600">（服務規程の順守）</p>
+        <p>□ 1. 作業所の規律及び注意事項を厳守し、快適な職場環境を維持し、向上させます。<br>
+        □ 2. 作業所の災害防止活動を行い、自分の安全と周囲の人々の安全も気配りして、安全作業を行います。<br>
+        □ 3. 負傷した時は、どんな小さなケガでも、その時に必ず報告します。<br>
+        □ 4. 会社・取引先及びその関係者等へ、暴行及び罵倒・恐喝を行わない事を約束します。<br>
+        □ 5. 会社・取引先及びその関係者等に関する、名誉及び信用（誹謗・中傷など）を毀損する情報をインターネット等を利用しての情報発信を行いません。<br>
+        □ 6. 暴力団、暴力団関係企業これに準ずる団体（反社会的勢力）との関係を持たず、将来も一切関係を持たないことを約束します。<br>
+        □ 7. 違法賭博への関与、違法薬物の摂取を始めとする違法行為をしないことを約束します。<br>
+        □ 8. 入社に際して、健康、学歴その他採用考慮時に選考条件として考慮された事項に一切の虚偽がないことを約束します。<br>
+        □ 9. 作業就労証明書における、虚偽の申告を行いません。<br>
+        □ 10. 会社の施設、車両、事務機器、道具などの物品をみだりに使用したり、または許可なく私用に用いらない。破損・事故（自動車事故など）を発生させないを約束します。<br>
+        □ 11. 会社と利害関係のある取引先との間に私事の事由で貸借関係を結んだり、または金品並びに飲食などのもてなしを受けないことを約束します。<br>
+        □ 12. 業務上において、飲酒又は酒気帯びの状態での就労を行わない事を約束します。<br>
+        □ 13. 就業時間中に、事業場内・職務に関わる場所での宗教勧誘や政治活動を行いません。<br>
+        □ 14. 就業中に故意または過失による物損・事故（自動車事故等）を起こさない事を約束します。<br>
+        □ 15. 車両運転をする場合、道路交通法、及び関係法令を誠実に守り、常に安全な運転につとめます。</p>
+        <p style="font-weight:600">（秘密保持）</p>
+        <p>□ 在職中または退職した後も貴社従業員として知り得た以下に定める事項（以下、「秘密情報」）に関する情報を漏洩、開示又は業務以外の目的で使用しないことを約束します。また、SNSその他のインターネットを利用した情報発信を行うにあたっても秘密情報の内容を投稿しません。<br>
+        　①役員・従業員の個人情報及びプライバシーに関する情報<br>
+        　②取引先及び業務取引に関する情報<br>
+        　③就労時に得た、機密情報（著作物・物品・ノウハウ・アイデア・その他情報）<br>
+        　④その他、貴社が秘密保持対象として取り扱う一切の情報</p>
+        <p style="font-weight:600">（損害賠償）</p>
+        <p>□ 上記に違反して、故意または過失によって、会社に損害を与えた場合には、法的な責任を負担するものであることを認識し、これにより会社が被った全部または一部を賠償します。また、個人によるトラブル等の損害賠償については会社に迷惑を掛けない事を約束します。</p>
+        <p style="margin-top:16px">　　　　　　　　　　　　　　　　　　　　　年　　月　　日</p>
+        <p>生年月日：＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</p>
+        <p>氏名：＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿　印</p>
       </div>
+      <div class="hint" id="hint-c02" style="color:#c0392b;font-size:12px;margin-bottom:8px">↓ 最後までスクロールしてから同意できます</div>
       <div class="agree-box">
         <div class="agree-row"><div class="agree-check" id="ag1" onclick="toggleAg(1)"><div class="ck"></div></div><div class="agree-text">上記の内容を確認し、誓約します</div></div>
         <div class="fg" style="margin-bottom:0">
-          <div class="fl">署名（手書き） <span class="req">必須</span></div>
-          <canvas class="sc-canvas" id="cv1" width="440" height="90"></canvas>
-          <div class="sc-actions"><button class="clr-btn" onclick="clrC('cv1')">クリア</button></div>
+          <div class="fl">氏名（入力） <span class="req">必須</span></div>
+          <input type="text" id="sign-name" placeholder="氏名を入力してください">
         </div>
       </div>
     </div>
-
     <!-- C03 道具レンタル -->
     <div class="screen" id="sc2">
-      <div class="contract-text">
-        <p>本日より2週間の間、以下の道具一式（ヘルメット・安全帯・安全靴・安全長靴・作業着上下）をレンタルします。</p>
-        <p>1. レンタル期間終了後は事務所窓口へ返却してください。<br>
-        2. 返却がない場合、<strong>違約金として¥15,000</strong>を寮費より引かせていただきます。<br>
-        3. 破損・紛失は速やかに事務所へ報告してください。</p>
+      <div id="scroll-c03" onscroll="checkScroll('scroll-c03','ag2')" style="max-height:380px;overflow-y:auto;-webkit-overflow-scrolling:touch;border:1px solid #ddd;border-radius:10px;padding:14px;background:#fff;font-size:13px;color:#444;line-height:1.8;margin-bottom:10px">
+        <p>神明株式会社</p>
+        <p style="font-weight:600;text-align:center;margin-bottom:12px">道具レンタル契約書</p>
+        <p>下記作業員は、本日より２週間の間、必要最低限道具一式（ヘルメット・安全帯・安全靴・安全長靴・作業着上下）のレンタル期間に入るにあたり、以下の内容に同意します。</p>
+        <p>1. 本日より２週間の間、現場道具を揃える為のレンタル期間に入ります。<br>
+        2. 上記期間が終了しましたら、事務所窓口に返却して頂きます。<br>
+        3. 返却がない場合、違約金として寮費より¥15,000を引かせて頂きます。<br>
+        4. 道具の破損、紛失は速やかに事務所窓口に報告して頂くようお願いします。<br>
+        5. 神明で道具を購入する場合は、レンタル道具を返却後、事務所窓口に連絡して頂くよう、宜しくお願いします。（外部のお店で購入して頂いても構いません）</p>
+        <p>以上、上記内容を守って頂くよう、宜しくお願い致します。</p>
+        <p style="margin-top:16px">令和　　年　　月　　日</p>
+        <p>住所　＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</p>
+        <p>氏名　＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</p>
       </div>
+      <div class="hint" id="hint-c03" style="color:#c0392b;font-size:12px;margin-bottom:8px">↓ 最後までスクロールしてから同意できます</div>
       <div class="agree-box">
         <div class="agree-row"><div class="agree-check" id="ag2" onclick="toggleAg(2)"><div class="ck"></div></div><div class="agree-text">上記の内容を確認し、同意します</div></div>
       </div>
     </div>
-
     <!-- C04 現場指示確認書 -->
     <div class="screen" id="sc3">
-      <div class="contract-text">
-        <p>工事指示書の内容を確認し、神明の現場管理者以外から指示書に含まれない作業の指示を受けた場合は、<strong>必ず現場管理者に連絡</strong>してから従ってください。</p>
-        <p>現場管理者不在の場合：大阪営業部（0120-06-0505）</p>
+      <div style="font-size:12px;color:#888;text-align:right;margin-bottom:4px">改定日：2021年4月13日</div>
+      <div style="border:1px solid #ddd;border-radius:10px;padding:14px;background:#fff;font-size:13px;color:#444;line-height:1.8;margin-bottom:10px">
+        <p style="font-weight:600;margin-bottom:8px">現場指示についての確認書</p>
+        <p style="text-align:right">神明株式会社</p>
+        <p>工事指示書にて示す内容について確認し、不明の点がないようにしてください。特に施工概要及び指揮命令系統に留意し、神明の現場管理者以外の者から、工事指示書に示されている施工内容に含まれない作業のほか作業の手順・方法や残業の指示などを現場で受けた場合は、工事指示書の「現場管理者」に連絡し、その指示に従って下さい。</p>
+        <p style="font-weight:600;margin-top:10px">（例）</p>
+        <p>・お客様から、工事指示書の施工内容欄に記されていない工事や作業を行うよう指示された場合<br>
+        ・お客様から、事前に神明の現場管理者から受けていたものと異なる内容の作業を現場で指示された場合<br>
+        ・思ったより作業が早く終了した場合、または残業する可能性がある場合<br>
+        ・工期延長があった場合<br>
+        ・他、工事指示書と異なる内容の指示を受けた場合<br>
+        ・危険な作業がある場合、現場管理者に相談報告する</p>
+        <p style="margin-top:10px">※ 現場管理者は職長資格を保有しているもの、及び神明が現場責任者として認めた者 ※</p>
+        <p>現場管理者不在など連絡が取れない場合、下記まで連絡をください<br>
+        大阪 営業部（0120-06-0505）</p>
+        <p style="margin-top:16px">上記、内容について確認しました。</p>
+        <p>確認日付　　年　　月　　日　　　登録支店・営業所　＿＿＿＿＿＿＿＿</p>
+        <p>氏名　＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</p>
       </div>
       <div class="agree-box">
         <div class="agree-row"><div class="agree-check" id="ag3" onclick="toggleAg(3)"><div class="ck"></div></div><div class="agree-text">上記の内容を確認しました</div></div>
@@ -206,7 +261,6 @@ textarea{resize:none;line-height:1.6}
         <div class="fg" style="margin-bottom:0"><div class="fl">確認日</div><div class="date-display" id="date3"></div></div>
       </div>
     </div>
-
     <!-- C05 安全教育 -->
     <div class="screen" id="sc4">
       <div style="background:#fff;border:1px solid #ddd;border-radius:12px;padding:14px;margin-bottom:16px">
@@ -222,20 +276,34 @@ textarea{resize:none;line-height:1.6}
     <!-- C06 賃貸借契約 -->
     <div class="screen" id="sc5">
       <div class="skip-box">入寮者のみ対象です。通勤の方はスキップしてください。</div>
-      <div class="contract-text">
-        <p>貸主 神明株式会社（甲）と、借主（乙）の間で下記物件の賃貸借契約を締結します。</p>
-        <p><strong>第3条</strong>　契約期間は締結日より6ヶ月間（申し出なき場合は自動更新）。</p>
+      <div id="scroll-c06" onscroll="checkScroll('scroll-c06','ag5')" style="max-height:380px;overflow-y:auto;-webkit-overflow-scrolling:touch;border:1px solid #ddd;border-radius:10px;padding:14px;background:#fff;font-size:13px;color:#444;line-height:1.8;margin-bottom:10px">
+        <p style="font-weight:600;text-align:center;margin-bottom:8px">賃貸借契約証書【調3】</p>
+        <p>貸主　神明株式会社（以下甲とする）と、借主＿＿＿＿＿＿＿＿＿＿＿＿（以下乙とする）の間に末尾記載物件明細（以下本物件という）の賃貸借に関し、下記要項を双方、承諾の上賃貸借契約を締結する。</p>
+        <p><strong>第1条</strong>　甲は本物件を乙に賃貸し、乙はこれを借り受け、賃料を支払う事を約する。</p>
+        <p><strong>第2条</strong>　乙は、本物件を住居としてのみ使用する。</p>
+        <p><strong>第3条</strong>　本契約は、令和　　年　　月　　日より、令和　　年　　月　　日までの6ヶ月間とする。尚、申し出なき場合は、本契約を更に6ヶ月の自動更新とする。</p>
+        <p><strong>第4条</strong>　甲、乙、双方の都合により本契約を解除する場合は、その1ヶ月前に互いに通告して、契約を解除する事が出来る。</p>
         <p><strong>第5条</strong>　賃料は1日 金
           <select id="rent-price-select" onchange="syncRentPrice(this.value)" style="display:inline-block;width:auto;font-size:13px;padding:4px 28px 4px 8px;border:1px solid #ccc;border-radius:6px;background:#fff;color:#222;-webkit-appearance:none;appearance:none;background-image:url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'10\' height=\'6\' viewBox=\'0 0 10 6\'%3E%3Cpath d=\'M1 1l4 4 4-4\' stroke=\'%23888\' stroke-width=\'1.5\' fill=\'none\'/%3E%3C/svg%3E');background-repeat:no-repeat;background-position:right 8px center;margin:0 4px">
             <option value="">選択</option><option value="1550">1,550円</option><option value="2050">2,050円</option><option value="3150">3,150円</option><option value="3300">3,300円</option><option value="3750">3,750円</option><option value="other">その他</option>
           </select>
-          <input type="number" id="rent-other-1" placeholder="金額を入力" style="display:none;width:120px;font-size:13px;padding:4px 8px;border:1px solid #ccc;border-radius:6px;margin:0 4px">円
-          とし、毎月末日までに当月分を甲に対して支払う。家賃には共益費含む。</p>
-        <p><strong>第12条</strong>　<span style="color:#c0392b;font-weight:600">乙が無断で部屋を2日間以上空けた場合は無断退出とみなします。</span></p>
+          <input type="number" id="rent-other-1" placeholder="金額" style="display:none;width:100px;font-size:13px;padding:4px 8px;border:1px solid #ccc;border-radius:6px;margin:0 4px">円
+          とし、毎月末日までに当月分の賃料を乙は甲に対して持参又は労務賃金と相殺して支払うものとする。尚、家賃には共益費含む。</p>
+        <p><strong>第6条</strong>　賃料は契約後、1ヵ年を経過すれば改定できるものとする。この場合、甲から乙に通知する事によって効力が生じるものとする。</p>
+        <p><strong>第7条</strong>　法律、命令、又は公共公共事業施行の為の本物件の取り払い、使用禁止事項等事由が生じた場合及び本物件が、老朽化、天災地変、火災等によって破損した場合は、当然に本契約は、消滅するものとする。</p>
+        <p><strong>第8条</strong>　乙は、本物件を現状のまま使用し、改造、模様替え等の必要が生じた場合、甲の承諾を得た上で行い、本物件契約終了と同時に乙の負担にて原状に回復をして、明け渡さなければならない。</p>
+        <p><strong>第9条</strong>　乙は、故意過失を問わず本物件に損害を与えた場合は、その状況により損害賠償をしなければならない。</p>
+        <p><strong>第10条</strong>　乙は賃料を2回以上滞納した時、契約書類等に虚偽の記載をした時、若しくは契約の各条に違背する事項、本契約における信頼関係を著しく害すると認められた場合は、甲は即時に本契約を解除する事が出来る。</p>
+        <p><strong>第11条</strong>　本契約の終了に伴い、乙が本物件を甲に返還する際に、乙は無償で返還する事を約し、甲に対して移転料その他これに類する金銭上の請求をしない。</p>
+        <p><strong>第12条</strong>　乙が無断で部屋を2日間以上空けた場合は無断退出とみなし、部屋内の荷物を甲に処分されても異議を申し出ないものとする。</p>
+        <p><strong>第13条</strong>　本契約の定めていない事項に関しては、関係法令並びに慣習に従うものとし、各々信義を重んじ誠意をもって協議解決するものとする。</p>
+        <p><strong>第14条</strong>　本契約に関し、甲乙間に紛争が生じた時は、甲の居住地の裁判所を管轄裁判所とする事を甲及び乙は予め合意するものとする。</p>
+        <p style="margin-top:12px">前記各条項承諾の上、確実に履行する事を誓約し、本契約書を作成し、甲乙各自記名捺印して保有する。</p>
       </div>
+      <div class="hint" style="color:#c0392b;font-size:12px;margin-bottom:8px">↓ 最後までスクロールしてから同意できます</div>
       <div class="rent-detail">
-        <div class="rent-row"><div class="rent-label">物件所在地</div><div class="rent-val"><input type="text" id="rent-addr" value="大阪市西成区北津守4丁目3番6号" style="font-size:14px;padding:6px 10px;border:1px solid #ccc;border-radius:8px;background:#fff;color:#222;width:100%"></div></div>
-        <div class="rent-row"><div class="rent-label">賃料（日額）</div><div class="rent-val" style="display:flex;align-items:center;gap:8px">
+        <div class="rent-row"><div class="rent-label">物件所在地</div><div class="rent-val"><input type="text" id="rent-addr" value="大阪市西成区北津守4丁目3番6号及び9号　鉄筋コンクリート造" style="font-size:13px;padding:6px 10px;border:1px solid #ccc;border-radius:8px;background:#fff;color:#222;width:100%"></div></div>
+        <div class="rent-row"><div class="rent-label">賃料（日額）</div><div class="rent-val" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
           <select id="rent-price-detail" onchange="syncRentPrice(this.value)" style="font-size:14px;padding:6px 28px 6px 10px;border:1px solid #ccc;border-radius:8px;background:#fff;color:#222;-webkit-appearance:none;appearance:none;background-image:url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'10\' height=\'6\' viewBox=\'0 0 10 6\'%3E%3Cpath d=\'M1 1l4 4 4-4\' stroke=\'%23888\' stroke-width=\'1.5\' fill=\'none\'/%3E%3C/svg%3E');background-repeat:no-repeat;background-position:right 8px center">
             <option value="">選択</option><option value="1550">1,550円</option><option value="2050">2,050円</option><option value="3150">3,150円</option><option value="3300">3,300円</option><option value="3750">3,750円</option><option value="other">その他</option>
           </select>
@@ -252,7 +320,6 @@ textarea{resize:none;line-height:1.6}
         </div>
       </div>
     </div>
-
     <!-- I01 社保書類チェック -->
     <div class="screen" id="sc6">
       <div class="skip-box">社保加入希望の方のみ対象です。希望しない方はスキップしてください。</div>
@@ -369,6 +436,23 @@ var cur = 0, total = 11;
 var agreed = {};
 var cvs = {};
 var regNo = '';
+var scrolledSections = {}; // スクロール完了を記録
+
+function checkScroll(scrollId, agId){
+  var el=document.getElementById(scrollId);
+  if(!el)return;
+  // 下まで90%以上スクロールしたら解除
+  if(el.scrollTop + el.clientHeight >= el.scrollHeight * 0.9){
+    scrolledSections[scrollId]=true;
+    var hint=document.getElementById('hint-'+scrollId.replace('scroll-',''));
+    if(hint)hint.style.display='none';
+    var ag=document.getElementById(agId);
+    if(ag)ag.style.opacity='1';
+  }
+}
+
+// 同意チェック時にスクロール確認
+var origToggleAg;
 var p1Name = '';
 
 var stepNames = [
@@ -444,6 +528,12 @@ function cf(el){
   el.classList.add('sel');el.querySelector('.ck').style.display='block';
 }
 function toggleAg(idx){
+  // スクロール確認が必要な書類
+  var scrollMap={0:'scroll-c01',1:'scroll-c02',2:'scroll-c03',5:'scroll-c06'};
+  if(scrollMap[idx]&&!scrolledSections[scrollMap[idx]]){
+    alert('最後までスクロールしてから同意してください');
+    return;
+  }
   agreed[idx]=!agreed[idx];
   var el=document.getElementById('ag'+idx);if(!el)return;
   el.className='agree-check'+(agreed[idx]?' on':'');
