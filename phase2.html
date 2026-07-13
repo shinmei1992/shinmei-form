@@ -430,18 +430,21 @@ var cvs = {};
 var regNo = '';
 
 // ページ読み込み時にURLパラメータから登録番号を自動入力
-window.addEventListener('DOMContentLoaded', function(){
+window.onload = function(){
+  setToday();
+  buildPbar();
+  updateUI();
+  // URLパラメータから登録番号を自動入力して開始
   var params = new URLSearchParams(window.location.search);
   var regParam = params.get('reg');
   if(regParam){
     var input = document.getElementById('reg-no-input');
     if(input){
       input.value = regParam;
-      // 自動的に開始
-      setTimeout(function(){startPhase23();}, 300);
+      setTimeout(function(){startPhase23();}, 500);
     }
   }
-});
+};
 var scrolledSections = {}; // スクロール完了を記録
 
 function checkScroll(scrollId, agId){
