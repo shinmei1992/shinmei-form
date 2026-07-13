@@ -980,15 +980,29 @@ function copyPhase2Link(){
   var d=savedFormData;
   var regNo=d&&d.registrationNo?d.registrationNo:'—';
   var url='https://shinmei1992.github.io/shinmei-form/phase2.html?reg='+encodeURIComponent(regNo);
-  if(navigator.clipboard&&navigator.clipboard.writeText){
-    navigator.clipboard.writeText(url).then(function(){
-      var btn=document.getElementById('copy-link-btn');
-      if(btn){btn.textContent='✓ コピーしました！';btn.style.background='#27ae60';}
-    }).catch(function(){
-      prompt('下記URLをコピーしてください',url);
-    });
+  var text='【神明株式会社】PHASE2・3登録リンク
+登録番号：'+regNo+'
+'+url;
+
+  // スマホの共有メニューを使用（LINE・Gmail・Slack等が選べる）
+  if(navigator.share){
+    navigator.share({
+      title:'神明株式会社 PHASE2・3登録',
+      text:'登録番号：'+regNo,
+      url:url
+    }).catch(function(){});
   } else {
-    prompt('下記URLをコピーしてください',url);
+    // PCやWebShareAPI非対応の場合はクリップボードにコピー
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(function(){
+        var btn=document.getElementById('copy-link-btn');
+        if(btn){btn.textContent='✓ コピーしました！';btn.style.background='#27ae60';}
+      }).catch(function(){
+        prompt('下記URLをコピーしてください',url);
+      });
+    } else {
+      prompt('下記URLをコピーしてください',url);
+    }
   }
 }
 
@@ -1347,7 +1361,7 @@ function submit(){
 
       + '<button class="pdf-btn" onclick="generatePDF()" style="background:#185FA5;margin-bottom:10px">神明株式会社 作業員登録確認書</button>'
       + '<button class="pdf-btn" onclick="generatePhotoSheet()" style="background:#0F6E56;margin-bottom:10px">写真を印刷する</button>'
-      + '<button class="pdf-btn" onclick="copyPhase2Link()" style="background:#854F0B;margin-bottom:10px" id="copy-link-btn">📋 担当者用リンクをコピー</button>'
+      + '<button class="pdf-btn" onclick="copyPhase2Link()" style="background:#854F0B;margin-bottom:10px" id="copy-link-btn">📧 担当者へ送信する</button>'
       + '<button class="print-btn" onclick="printForm()">'
       + '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="width:20px;height:20px"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2" stroke="#185FA5" stroke-width="1.5"/><path d="M6 14h12v8H6z" stroke="#185FA5" stroke-width="1.5"/></svg>印刷する</button>'
       + '</div>';
