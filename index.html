@@ -976,6 +976,22 @@ function fillFinalConfirm(){
 }
 
 // ===== PDF出力 =====
+function copyPhase2Link(){
+  var d=savedFormData;
+  var regNo=d&&d.registrationNo?d.registrationNo:'—';
+  var url='https://shinmei1992.github.io/shinmei-form/phase2.html?reg='+encodeURIComponent(regNo);
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(url).then(function(){
+      var btn=document.getElementById('copy-link-btn');
+      if(btn){btn.textContent='✓ コピーしました！';btn.style.background='#27ae60';}
+    }).catch(function(){
+      prompt('下記URLをコピーしてください',url);
+    });
+  } else {
+    prompt('下記URLをコピーしてください',url);
+  }
+}
+
 function generatePhotoSheet(){
   var d=savedFormData;
   if(!d){alert('データがありません');return;}
