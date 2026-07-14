@@ -389,6 +389,20 @@ textarea{resize:none;line-height:1.6}
       <div class="fg" style="margin-bottom:0"><div class="fl">障害者・寡婦・ひとり親・勤労学生 <span class="req">必須</span></div><div class="cg"><div class="chip" data-g="tokubetsu" onclick="cs(this)">該当なし</div><div class="chip" data-g="tokubetsu" onclick="cs(this)">該当あり</div></div></div>
     </div>
 
+    <!-- その他・備考 -->
+    <div class="screen" id="sc9b">
+      <div class="skip-box">質問事項がない場合はスキップしてください。</div>
+      <div class="fg">
+        <div class="fl">質問事項 <span class="opt">任意</span></div>
+        <div class="hint" style="margin-bottom:10px">ご不明な点・確認したい事項があれば入力してください</div>
+        <textarea id="questions-input" rows="5" placeholder="例：社会保険の加入手続きについて確認したい"></textarea>
+      </div>
+      <div class="fg" style="margin-bottom:0">
+        <div class="fl">備考（メモ） <span class="opt">任意</span></div>
+        <textarea id="memo-input" rows="4" placeholder="担当者へのメモ・その他連絡事項など"></textarea>
+      </div>
+    </div>
+
     <!-- 最終確認 -->
     <div class="screen" id="sc10">
       <div style="font-size:14px;color:#888;margin-bottom:14px">PHASE 2・3 の入力内容をご確認ください</div>
@@ -414,6 +428,10 @@ textarea{resize:none;line-height:1.6}
         <div class="cr"><div class="cla">身元保証人</div><div class="cva" id="cv-honin">—</div></div>
         <div class="cr"><div class="cla">銀行口座</div><div class="cva" id="cv-bank">—</div></div>
         <div class="cr"><div class="cla">配偶者</div><div class="cva" id="cv-spouse">—</div></div>
+      <div class="cs2">
+        <div class="ct">その他・備考</div>
+        <div class="cr"><div class="cla">質問事項</div><div class="cva" id="cv-questions">—</div></div>
+        <div class="cr"><div class="cla">備考（メモ）</div><div class="cva" id="cv-memo">—</div></div>
       </div>
     </div>
 
@@ -429,7 +447,7 @@ textarea{resize:none;line-height:1.6}
 <script>
 var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxxd9KCSXljjz9nQBYmL8rqLhLWvU10LtOQM4q6NmWWkueFW_LoCD2GkJ6Gly6YnvsEnQ/exec';
 
-var cur = 0, total = 11;
+var cur = 0, total = 12;
 var agreed = {};
 var cvs = {};
 var regNo = '';
@@ -486,12 +504,12 @@ var p1Name = '';
 var stepNames = [
   '契約書（日雇就労）','誓約書','道具レンタル同意','現場指示確認書','安全衛生教育',
   '賃貸借契約（入寮者）','社保書類チェック','税金・年金状況','身元保証書＋社員登録票',
-  '扶養控除申告書','最終確認・完了'
+  '扶養控除申告書','その他・備考','最終確認・完了'
 ];
 var phaseLabels = [
-  2,2,2,2,2,2,3,3,3,3,3
+  2,2,2,2,2,2,3,3,3,3,3,3
 ];
-var skippable = [false,false,false,false,false,true,true,true,true,true,false];
+var skippable = [false,false,false,false,false,true,true,true,true,true,true,false];
 var phaseColors = {2:'#0F6E56',3:'#854F0B'};
 
 function startPhase23(){
@@ -532,7 +550,8 @@ function updateUI(){
   var phase = phaseLabels[cur];
   var color = phaseColors[phase];
   document.getElementById('top-bar').style.background = color;
-  document.getElementById('slabel').textContent = (cur<=5?'C0'+(cur+1)+'/6':'I0'+(cur-5)+'/5')+' — '+stepNames[cur];
+  var stepCode = cur<=5 ? 'C0'+(cur+1)+'/6' : 'I0'+(cur-5)+'/6';
+  document.getElementById('slabel').textContent = stepCode+' — '+stepNames[cur];
   document.getElementById('plabel').textContent = stepNames[cur];
   var badge = document.getElementById('phase-badge');
   badge.textContent = 'PHASE ' + phase;
