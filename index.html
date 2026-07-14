@@ -230,6 +230,13 @@ textarea{resize:none;line-height:1.6}
   <div class="divider"></div>
   <div id="job-list"></div>
   <button class="add-btn" id="add-job-btn" onclick="addJob()">+ 経験を追加（最大4件）</button>
+  <div class="fg" style="margin-top:10px">
+    <div class="fl">トータル経験年数 <span class="opt">任意</span></div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <input type="number" id="total-exp" placeholder="例：5" style="width:120px" min="0" max="99">
+      <span style="font-size:16px;color:#555">年</span>
+    </div>
+  </div>
   <div class="divider"></div>
   <div class="fg"><div class="fl">勤務希望期間 <span class="req">必須</span></div><div class="cg"><div class="chip" data-g="term" onclick="cs(this)">1ヶ月</div><div class="chip" data-g="term" onclick="cs(this)">3ヶ月</div><div class="chip" data-g="term" onclick="cs(this)">6ヶ月</div><div class="chip" data-g="term" onclick="cs(this)">1年</div><div class="chip" data-g="term" onclick="cs(this)">長期希望</div></div></div>
   <div class="fg"><div class="fl">週出勤希望 <span class="req">必須</span></div><div class="cg"><div class="chip" data-g="days" onclick="cs(this)">1日</div><div class="chip" data-g="days" onclick="cs(this)">2日</div><div class="chip" data-g="days" onclick="cs(this)">3日</div><div class="chip" data-g="days" onclick="cs(this)">4日</div><div class="chip" data-g="days" onclick="cs(this)">5日</div><div class="chip" data-g="days" onclick="cs(this)">6日</div><div class="chip" data-g="days" onclick="cs(this)">7日</div></div></div>
@@ -1224,7 +1231,8 @@ function generatePDF(){
     makeRow('社会保険',sd('ins')),makeRow('国籍',sd('nation'))
   ]));
   bodyDiv.appendChild(makeSection('PHASE 1 — 就労希望','#185FA5',[
-    makeRow('希望職種',sd('works')),makeRow('勤務希望期間',sd('term')),
+    makeRow('希望職種',sd('works')),
+    makeRow('トータル経験年数',d.totalExp||'—'),makeRow('勤務希望期間',sd('term')),
     makeRow('週出勤希望',sd('days')),makeRow('出勤可能曜日',sd('weekdays')),
     makeRow('出張可否',sd('trip'))
   ]));
@@ -1318,6 +1326,7 @@ function collectData() {
       live:st.live||'', ins:st.ins||'', nation:st.nation||'',
       term:gcv('term'), days:gcv('days'), trip:gcv('trip'),
       works:works,
+      totalExp:(function(){var el=document.getElementById('total-exp');return el&&el.value?el.value+'年':'';}()),
       weekdays:Array.from(document.querySelectorAll('[data-g="weekday"].sel')).map(function(e){return e.textContent.trim();}).join('・')||'—',
       wifi:gcv('wifi'),
       sickType:Array.from(document.querySelectorAll('[data-g="sick-type"].sel')).map(function(e){return e.textContent.trim();}).join('、')||'',
