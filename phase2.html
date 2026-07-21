@@ -660,11 +660,11 @@ async function sendToSheet(data){
 function goNext(){
   try{
     if(cur===total-1){
-      fillConfirm();
+      try{fillConfirm();}catch(e){console.log('fillConfirm error:',e);}
       submit();
       return;
     }
-    if(cur===total-2)fillConfirm();
+    if(cur===total-2){try{fillConfirm();}catch(e){}}
     document.getElementById('sc'+cur).classList.remove('active');
     cur++;
     document.getElementById('sc'+cur).classList.add('active');
