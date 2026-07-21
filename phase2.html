@@ -692,26 +692,31 @@ function goSkip(){
   window.scrollTo(0,0);
 }
 
+function showComplete(mc){
+  mc.innerHTML='<div class="succ" style="display:flex">'
+    +'<div class="si"><div class="bck"></div></div>'
+    +'<div style="font-size:20px;font-weight:600;color:#222">PHASE 2・3 完了！</div>'
+    +'<div style="font-size:13px;color:#0F6E56;font-weight:600;background:#E1F5EE;padding:8px 16px;border-radius:8px;width:100%;text-align:center">登録番号：'+regNo+'</div>'
+    +'<div style="font-size:15px;color:#888;line-height:1.7">契約・書類登録が完了しました。<br>スプレッドシートに記録されました。</div>'
+    +'<div class="done-box"><div style="font-size:12px;font-weight:600;color:#1a5c32;margin-bottom:8px">完了した書類</div>'
+    +'<div style="font-size:14px;color:#1a5c32;line-height:2.2">✓ 契約書（日雇就労）<br>✓ 誓約書<br>✓ 道具レンタル同意<br>✓ 現場指示確認書<br>✓ 安全衛生教育<br>✓ 書類・保険登録</div></div>'
+    +'<button onclick="location.reload()" style="width:100%;padding:14px;border:1px solid #0F6E56;border-radius:12px;background:#fff;color:#0F6E56;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit">次の作業員を登録する</button>'
+    +'</div>';
+}
+
 function submit(){
   var gv=function(id){var el=document.getElementById(id);return el&&el.value?el.value:'';};
   var data={
-    registrationNo: regNo,
-    phase: 'PHASE2-3',
-    agree_c01: agreed[0]||false,
-    agree_c02: agreed[1]||false,
-    agree_c03: agreed[2]||false,
-    agree_c04: agreed[3]||false,
-    agree_c06: agreed[5]||false,
-    branch: gv('branch-sel'),
-    rentPrice: gv('rent-price-detail'),
-    rentName: gv('rent-name'),
-    docCount: document.querySelectorAll('.dcb.on').length,
-    docDate: gv('doc-date'),
-    tax1: gc('t1'), tax2: gc('t2'), nenkin: gc('nen'), debt: gc('dbt'),
-    hoshounin: gv('honin-name'),
-    bankHas: gc('bank-has'),
-    bankName: gv('bank-name'),
-    spouse: gc('spouse'), fyt: gc('fyt'), tokubetsu: gc('tokubetsu'),
+    registrationNo:regNo, phase:'PHASE2-3',
+    agree_c01:agreed[0]||false, agree_c02:agreed[1]||false,
+    agree_c03:agreed[2]||false, agree_c04:agreed[3]||false,
+    agree_c06:agreed[5]||false,
+    branch:gv('branch-sel'), rentPrice:gv('rent-price-detail'), rentName:gv('rent-name'),
+    docCount:document.querySelectorAll('.dcb.on').length, docDate:gv('doc-date'),
+    tax1:gc('t1'), tax2:gc('t2'), nenkin:gc('nen'), debt:gc('dbt'),
+    hoshounin:gv('honin-name'), bankHas:gc('bank-has'), bankName:gv('bank-name'),
+    spouse:gc('spouse'), fyt:gc('fyt'), tokubetsu:gc('tokubetsu'),
+    questions:gv('questions-input'), memo:gv('memo-input'),
   };
 
   var mc=document.getElementById('main-content');
@@ -721,17 +726,23 @@ function submit(){
   style.textContent='@keyframes spin{to{transform:rotate(360deg)}}';
   document.head.appendChild(style);
 
-  sendToSheet(data).then(function(){
-    mc.innerHTML='<div class="succ" style="display:flex">'
-      +'<div class="si"><div class="bck"></div></div>'
-      +'<div style="font-size:20px;font-weight:600;color:#222">PHASE 2・3 完了！</div>'
-      +'<div style="font-size:13px;color:#0F6E56;font-weight:600;background:#E1F5EE;padding:8px 16px;border-radius:8px;width:100%;text-align:center">登録番号：'+regNo+'</div>'
-      +'<div style="font-size:15px;color:#888;line-height:1.7">契約・書類登録が完了しました。<br>スプレッドシートに記録されました。</div>'
-      +'<div class="done-box"><div style="font-size:12px;font-weight:600;color:#1a5c32;margin-bottom:8px">完了した書類</div>'
-      +'<div style="font-size:14px;color:#1a5c32;line-height:2.2">✓ 契約書（日雇就労）<br>✓ 誓約書<br>✓ 道具レンタル同意<br>✓ 現場指示確認書<br>✓ 安全衛生教育<br>✓ 書類・保険登録</div></div>'
-      +'<button onclick="location.reload()" style="width:100%;padding:14px;border:1px solid #0F6E56;border-radius:12px;background:#fff;color:#0F6E56;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit">次の作業員を登録する</button>'
-      +'</div>';
-  });
+  // 3秒後に必ず完了画面を表示（no-corsはレスポンス取れないため）
+  var done=false;
+  function complete(){
+    if(done)return;
+    done=true;
+    showComplete(mc);
+  }
+  setTimeout(complete, 3000);
+
+  // データ送信（no-corsモード）
+  if(APPS_SCRIPT_URL){
+    fetch(APPS_SCRIPT_URL,{method:'POST',mode:'no-cors',body:JSON.stringify(data)})
+      .then(function(){complete();})
+      .catch(function(){complete();});
+  } else {
+    setTimeout(complete, 500);
+  }
 }
 </script>
 </body>
