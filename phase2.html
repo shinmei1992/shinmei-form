@@ -390,18 +390,14 @@ textarea{resize:none;line-height:1.6}
     </div>
 
     <!-- その他・備考 -->
-    <div class="screen" id="sc10">
-      <div class="skip-box">質問事項がない場合はスキップしてください。</div>
-      <div class="fg">
-        <div class="fl">質問事項 <span class="opt">任意</span></div>
-        <div class="hint" style="margin-bottom:10px">ご不明な点・確認したい事項があれば入力してください</div>
-        <textarea id="questions-input" rows="5" placeholder="例：社会保険の加入手続きについて確認したい"></textarea>
-      </div>
-      <div class="fg" style="margin-bottom:0">
-        <div class="fl">備考（メモ） <span class="opt">任意</span></div>
-        <textarea id="memo-input" rows="4" placeholder="担当者へのメモ・その他連絡事項など"></textarea>
-      </div>
-    </div>
+<div class="screen" id="sc10">
+  <div class="skip-box">記入事項がない場合はスキップしてください。</div>
+  <div class="fg" style="margin-bottom:0">
+    <div class="fl">質問事項・備考（メモ） <span class="opt">任意</span></div>
+    <div class="hint" style="margin-bottom:10px">ご不明な点・確認したい事項、担当者へのメモなどあれば入力してください</div>
+    <textarea id="memo-input" rows="7" placeholder="例：社会保険の加入手続きについて確認したい／担当者へのメモなど"></textarea>
+  </div>
+</div>
 
     <!-- 最終確認 -->
     <div class="screen" id="sc11">
@@ -430,11 +426,10 @@ textarea{resize:none;line-height:1.6}
         <div class="cr"><div class="cla">配偶者</div><div class="cva" id="cv-spouse">—</div></div>
      </div>
       <div class="cs2">
-        <div class="ct">その他・備考</div>
-        <div class="cr"><div class="cla">質問事項</div><div class="cva" id="cv-questions">—</div></div>
-        <div class="cr"><div class="cla">備考（メモ）</div><div class="cva" id="cv-memo">—</div></div>
-      </div>
-    </div>
+<div class="cs2">
+  <div class="ct">質問事項・備考</div>
+  <div class="cr"><div class="cla">質問事項・備考</div><div class="cva" id="cv-memo">—</div></div>
+</div>
 
   </div><!-- end main-content -->
 
@@ -452,6 +447,7 @@ var cur = 0, total = 12;
 var agreed = {};
 var cvs = {};
 var regNo = '';
+var summaryHTML = '';
 
 function printSection(sectionId, title){
   var el=document.getElementById(sectionId);
@@ -504,13 +500,14 @@ var p1Name = '';
 
 var stepNames = [
   '契約書（日雇就労）','誓約書','道具レンタル同意','現場指示確認書','安全衛生教育',
-  '賃貸借契約（入寮者）','社保書類チェック','税金・年金状況','身元保証書＋社員登録票',
-  '扶養控除申告書','その他・備考','最終確認・完了'
+  '賃貸借契約（入寮者）','質問事項・備考',
+  '社保書類チェック','税金・年金状況','身元保証書＋社員登録票','扶養控除申告書','最終確認・完了'
 ];
 var phaseLabels = [
-  2,2,2,2,2,2,3,3,3,3,3,3
+  2,2,2,2,2,2,2,3,3,3,3,3
 ];
 var skippable = [false,false,false,false,false,true,true,true,true,true,true,false];
+var screenOrder = ['sc0','sc1','sc2','sc3','sc4','sc5','sc10','sc6','sc7','sc8','sc9','sc11'];
 var phaseColors = {2:'#0F6E56',3:'#854F0B'};
 
 function startPhase23(){
@@ -551,7 +548,7 @@ function updateUI(){
   var phase = phaseLabels[cur];
   var color = phaseColors[phase];
   document.getElementById('top-bar').style.background = color;
-  var stepCode = cur<=5 ? 'C0'+(cur+1)+'/6' : 'I0'+(cur-5)+'/6';
+  var stepCode = cur<=6 ? 'C0'+(cur+1)+'/7' : 'I0'+(cur-6)+'/5';
   document.getElementById('slabel').textContent = stepCode+' — '+stepNames[cur];
   document.getElementById('plabel').textContent = stepNames[cur];
   var badge = document.getElementById('phase-badge');
@@ -646,6 +643,7 @@ function fillConfirm(){
   var bankHasEl=document.querySelector('[data-g="bank-has"].sel');
   document.getElementById('cv-bank').textContent=bankHasEl?bankHasEl.textContent.trim():'—';
   document.getElementById('cv-spouse').textContent=gc('spouse');
+  document.getElementById('cv-memo').textContent=gv('memo-input');
 }
 
 async function sendToSheet(data){
@@ -670,27 +668,38 @@ function goNext(){
       return;
     }
     if(cur===total-2){try{fillConfirm();}catch(e){}}
-    document.getElementById('sc'+cur).classList.remove('active');
+    document.getElementById(screenOrder[cur]).classList.remove('active');
     cur++;
-    document.getElementById('sc'+cur).classList.add('active');
+    document.getElementById(screenOrder[cur]).classList.add('active');
     updateUI();
     setTimeout(function(){initC('cv1');},100);
     window.scrollTo(0,0);
   }catch(e){console.log('goNext error:',e);}
 }
 function goBack(){
-  document.getElementById('sc'+cur).classList.remove('active');
+  document.getElementById(screenOrder[cur]).classList.remove('active');
   cur--;
-  document.getElementById('sc'+cur).classList.add('active');
+  document.getElementById(screenOrder[cur]).classList.add('active');
   updateUI();
   window.scrollTo(0,0);
 }
 function goSkip(){
-  document.getElementById('sc'+cur).classList.remove('active');
+  document.getElementById(screenOrder[cur]).classList.remove('active');
   cur++;
-  document.getElementById('sc'+cur).classList.add('active');
+  document.getElementById(screenOrder[cur]).classList.add('active');
   updateUI();
   window.scrollTo(0,0);
+}
+
+  function printSummary(){
+  var printWin=window.open('','_blank','width=800,height=900');
+  if(printWin){
+    printWin.document.write('<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><title>登録内容 '+regNo+'</title><style>body{font-family:-apple-system,sans-serif;padding:24px;font-size:13px;line-height:1.8;color:#333;max-width:600px;margin:0 auto}h2{text-align:center;margin-bottom:20px;font-size:16px}.cs2{background:#f8f8f8;border-radius:12px;padding:14px;margin-bottom:14px}.ct{font-size:12px;font-weight:600;color:#888;margin-bottom:8px}.cr{display:flex;padding:6px 0;border-bottom:1px solid #eee}.cr:last-child{border-bottom:none}.cla{width:130px;color:#888;flex-shrink:0}.cva{flex:1;font-weight:600;color:#222}@media print{body{padding:10px}}</style></head><body><h2>契約・書類登録内容（登録番号：'+regNo+'）</h2>'+summaryHTML+'</body></html>');
+    printWin.document.close();
+    setTimeout(function(){printWin.print();},500);
+  } else {
+    alert('ポップアップがブロックされています。ブラウザの設定でポップアップを許可してください。');
+  }
 }
 
 function showComplete(mc){
@@ -701,8 +710,9 @@ function showComplete(mc){
     +'<div style="font-size:15px;color:#888;line-height:1.7">契約・書類登録が完了しました。<br>スプレッドシートに記録されました。</div>'
     +'<div class="done-box"><div style="font-size:12px;font-weight:600;color:#1a5c32;margin-bottom:8px">完了した書類</div>'
     +'<div style="font-size:14px;color:#1a5c32;line-height:2.2">✓ 契約書（日雇就労）<br>✓ 誓約書<br>✓ 道具レンタル同意<br>✓ 現場指示確認書<br>✓ 安全衛生教育<br>✓ 書類・保険登録</div></div>'
-    +'<button onclick="location.reload()" style="width:100%;padding:14px;border:1px solid #0F6E56;border-radius:12px;background:#fff;color:#0F6E56;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit">次の作業員を登録する</button>'
-    +'</div>';
+   +'<button onclick="printSummary()" style="width:100%;padding:14px;border:1px solid #185FA5;border-radius:12px;background:#fff;color:#185FA5;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit">🖨️ 登録内容をPDFで保存</button>'
++'<button onclick="location.reload()" style="width:100%;padding:14px;border:1px solid #0F6E56;border-radius:12px;background:#fff;color:#0F6E56;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit">次の作業員を登録する</button>'
++'</div>';
 }
 
 function submit(){
@@ -717,8 +727,11 @@ function submit(){
     tax1:gc('t1'), tax2:gc('t2'), nenkin:gc('nen'), debt:gc('dbt'),
     hoshounin:gv('honin-name'), bankHas:gc('bank-has'), bankName:gv('bank-name'),
     spouse:gc('spouse'), fyt:gc('fyt'), tokubetsu:gc('tokubetsu'),
-    questions:gv('questions-input'), memo:gv('memo-input'),
+    memo:gv('memo-input'),
   };
+
+  var confirmEl=document.getElementById('sc11');
+summaryHTML = confirmEl ? confirmEl.innerHTML : '';
 
   var mc=document.getElementById('main-content');
   mc.innerHTML='<div class="succ" style="display:flex"><div class="si" style="background:#e8f4fd"><div style="width:30px;height:30px;border:3px solid #0F6E56;border-top-color:transparent;border-radius:50%;animation:spin 1s linear infinite"></div></div><div style="font-size:16px;color:#888">送信中...</div></div>';
