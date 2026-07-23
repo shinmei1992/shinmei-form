@@ -1222,13 +1222,22 @@ function generatePDF(){
   hdr.appendChild(hdrText);
   bodyDiv.appendChild(hdr);
 
-  bodyDiv.appendChild(makeSection('PHASE 1 — 基本情報','#185FA5',[
+  var basicRows=[
     makeRow('苗字（漢字）',sd('seiK')),makeRow('苗字（フリガナ）',sd('seiF')),
     makeRow('名前（漢字）',sd('meiK')),makeRow('名前（フリガナ）',sd('meiF')),
     makeRow('生年月日',sd('birth')),makeRow('年齢',d.age?d.age+'歳':'—'),
     makeRow('郵便番号',sd('zip')),makeRow('現住所',sd('addr')),
-    makeRow('電話番号',sd('phone')),makeRow('住まい',sd('live')),
-    makeRow('社会保険',sd('ins')),makeRow('国籍',sd('nation'))
+    makeRow('電話番号',sd('phone'))
+  ];
+  var ecArr=(d.emergencyContacts&&d.emergencyContacts.length)?d.emergencyContacts:['—'];
+  ecArr.forEach(function(txt,idx){
+    basicRows.push(makeRow('緊急連絡先'+(idx+1),txt));
+  });
+  basicRows.push(makeRow('住まい',sd('live')));
+  basicRows.push(makeRow('社会保険',sd('ins')));
+  basicRows.push(makeRow('国籍',sd('nation')));
+  bodyDiv.appendChild(makeSection('PHASE 1 — 基本情報','#185FA5',basicRows));
+
   ]));
   bodyDiv.appendChild(makeSection('PHASE 1 — 就労希望','#185FA5',[
     makeRow('希望職種',sd('works')),
@@ -1294,6 +1303,23 @@ function printForm(){
   window.print();
 }
 
+  function collectEmergencyContacts(){
+  var cards=document.querySelectorAll('#ec-list .ec-card');
+  var arr=[];
+  cards.forEach(function(card){
+    var texts=card.querySelectorAll('input[type="text"]');
+    var tel=card.querySelector('input[type="tel"]');
+    var sel=card.querySelector('select');
+    var name=texts[0]?texts[0].value:'';
+    var addr=texts[1]?texts[1].value:'';
+    var relation=sel?sel.value:'';
+    var phone=tel?tel.value:'';
+    if(name||addr||phone){
+      arr.push((name||'氏名未入力')+'（'+(relation||'続柄未選択')+'）'+(addr?' '+addr:'')+(phone?' '+phone:''));
+    }
+  });
+  return arr;
+}
 // ===== 完了 =====
 function collectData() {
   try{
@@ -1323,6 +1349,7 @@ function collectData() {
       certPhoto1:docPhotos['cert-preview-img-1']||'',
       birth:(y&&m&&d)?y+'年'+m+'月'+d+'日':'', age:ageStr,
       zip:gv('zipcode'), addr:gv('addr'), phone:gv('phone'),
+      emergencyContacts: collectEmergencyContacts(),
       live:st.live||'', ins:st.ins||'', nation:st.nation||'',
       term:gcv('term'), days:gcv('days'), trip:gcv('trip'),
       works:works,
