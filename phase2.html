@@ -308,7 +308,7 @@ textarea{resize:none;line-height:1.6}
         </div></div>
         <div class="rent-row"><div class="rent-label">契約期間</div><div class="rent-val">6ヶ月（自動更新）</div></div>
       </div>
-      <button onclick="printSection('scroll-c06','賃貸借契約証書')" style="width:100%;padding:10px;border:1px solid #185FA5;border-radius:10px;background:#fff;color:#185FA5;font-size:14px;cursor:pointer;font-family:inherit;margin-bottom:10px">🖨️ この書類を印刷する / PDF保存する </button>
+      <button onclick="printSection('sc5','賃貸借契約証書')" style="width:100%;padding:10px;border:1px solid #185FA5;border-radius:10px;background:#fff;color:#185FA5;font-size:14px;cursor:pointer;font-family:inherit;margin-bottom:10px">🖨️ この書類を印刷する / PDF保存する </button>
       <div class="agree-box">
         <div class="agree-row"><div class="agree-check" id="ag5" onclick="toggleAg(5)"><div class="ck"></div></div><div class="agree-text">上記の内容を確認し、同意します（乙）</div></div>
         <div class="fg" style="margin-bottom:0">
@@ -454,10 +454,27 @@ var summaryHTML = '';
 function printSection(sectionId, title){
   var el=document.getElementById(sectionId);
   if(!el)return;
-  var html=el.innerHTML;
+  var clone = el.cloneNode(true);
+  clone.querySelectorAll('button').forEach(function(b){ b.remove(); });
+  clone.querySelectorAll('.agree-box').forEach(function(b){ b.remove(); });
+  clone.querySelectorAll('.hint').forEach(function(h){ h.remove(); });
+  clone.querySelectorAll('select').forEach(function(s){
+    var opt = s.options[s.selectedIndex];
+    var span = document.createElement('span');
+    span.style.fontWeight='600';
+    span.textContent = (opt && opt.value) ? opt.textContent : '未選択';
+    s.parentNode.replaceChild(span, s);
+  });
+  clone.querySelectorAll('input[type="text"], input[type="number"], input[type="tel"]').forEach(function(i){
+    var span = document.createElement('span');
+    span.style.fontWeight='600';
+    span.textContent = i.value || '';
+    i.parentNode.replaceChild(span, i);
+  });
+  var html=clone.innerHTML;
   var printWin=window.open('','_blank','width=800,height=900');
   if(printWin){
-    printWin.document.write('<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><title>'+title+'</title><style>body{font-family:-apple-system,sans-serif;padding:20px;font-size:13px;line-height:1.8;color:#333}strong{font-weight:600}p{margin-bottom:8px}select{display:none}input{display:none}@media print{body{padding:10px}}</style></head><body><h2 style="text-align:center;margin-bottom:16px">'+title+'</h2>'+html+'</body></html>');
+    printWin.document.write('<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><title>'+title+'</title><style>body{font-family:-apple-system,sans-serif;padding:20px;font-size:13px;line-height:1.8;color:#333}strong{font-weight:600}p{margin-bottom:8px}@media print{body{padding:10px}}</style></head><body><h2 style="text-align:center;margin-bottom:16px">'+title+'</h2>'+html+'</body></html>');
     printWin.document.close();
     setTimeout(function(){printWin.print();},500);
   } else {
