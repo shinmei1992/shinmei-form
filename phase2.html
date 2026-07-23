@@ -455,22 +455,32 @@ function printSection(sectionId, title){
   var el=document.getElementById(sectionId);
   if(!el)return;
   var clone = el.cloneNode(true);
-  clone.querySelectorAll('button').forEach(function(b){ b.remove(); });
-  clone.querySelectorAll('.agree-box').forEach(function(b){ b.remove(); });
-  clone.querySelectorAll('.hint').forEach(function(h){ h.remove(); });
-  clone.querySelectorAll('select').forEach(function(s){
-    var opt = s.options[s.selectedIndex];
+
+  var origSelects = el.querySelectorAll('select');
+  var cloneSelects = clone.querySelectorAll('select');
+  cloneSelects.forEach(function(s, idx){
+    var origSel = origSelects[idx];
+    var opt = origSel ? origSel.options[origSel.selectedIndex] : null;
     var span = document.createElement('span');
     span.style.fontWeight='600';
     span.textContent = (opt && opt.value) ? opt.textContent : '未選択';
     s.parentNode.replaceChild(span, s);
   });
-  clone.querySelectorAll('input[type="text"], input[type="number"], input[type="tel"]').forEach(function(i){
+
+  var origInputs = el.querySelectorAll('input[type="text"], input[type="number"], input[type="tel"]');
+  var cloneInputs = clone.querySelectorAll('input[type="text"], input[type="number"], input[type="tel"]');
+  cloneInputs.forEach(function(i, idx){
+    var origInp = origInputs[idx];
     var span = document.createElement('span');
     span.style.fontWeight='600';
-    span.textContent = i.value || '';
+    span.textContent = (origInp && origInp.value) || '';
     i.parentNode.replaceChild(span, i);
   });
+
+  clone.querySelectorAll('button').forEach(function(b){ b.remove(); });
+  clone.querySelectorAll('.agree-box').forEach(function(b){ b.remove(); });
+  clone.querySelectorAll('.hint').forEach(function(h){ h.remove(); });
+
   var html=clone.innerHTML;
   var printWin=window.open('','_blank','width=800,height=900');
   if(printWin){
