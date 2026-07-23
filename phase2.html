@@ -402,6 +402,7 @@ textarea{resize:none;line-height:1.6}
     <!-- 最終確認 -->
     <div class="screen" id="sc11">
       <div style="font-size:14px;color:#888;margin-bottom:14px">PHASE 2・3 の入力内容をご確認ください</div>
+       <button onclick="printAllDocs()" style="width:100%;padding:10px;border:1px solid #185FA5;border-radius:10px;background:#fff;color:#185FA5;font-size:14px;cursor:pointer;font-family:inherit;margin-bottom:16px">📑 契約書類一式を印刷する / PDF保存する</button>
       <div class="cs2">
         <div class="ct">対象者</div>
         <div class="cr"><div class="cla">登録番号</div><div class="cva" id="cv-reg">—</div></div>
@@ -451,11 +452,9 @@ var cvs = {};
 var regNo = '';
 var summaryHTML = '';
 
-function printSection(sectionId, title){
-  var el=document.getElementById(sectionId);
-  if(!el)return;
+  function buildPrintableHTML(el){
+  if(!el) return '';
   var clone = el.cloneNode(true);
-
   var origSelects = el.querySelectorAll('select');
   var cloneSelects = clone.querySelectorAll('select');
   cloneSelects.forEach(function(s, idx){
@@ -466,7 +465,6 @@ function printSection(sectionId, title){
     span.textContent = (opt && opt.value) ? opt.textContent : '未選択';
     s.parentNode.replaceChild(span, s);
   });
-
   var origInputs = el.querySelectorAll('input[type="text"], input[type="number"], input[type="tel"]');
   var cloneInputs = clone.querySelectorAll('input[type="text"], input[type="number"], input[type="tel"]');
   cloneInputs.forEach(function(i, idx){
@@ -476,12 +474,41 @@ function printSection(sectionId, title){
     span.textContent = (origInp && origInp.value) || '';
     i.parentNode.replaceChild(span, i);
   });
-
   clone.querySelectorAll('button').forEach(function(b){ b.remove(); });
   clone.querySelectorAll('.agree-box').forEach(function(b){ b.remove(); });
   clone.querySelectorAll('.hint').forEach(function(h){ h.remove(); });
+  return clone.innerHTML;
+}
 
-  var html=clone.innerHTML;
+function printAllDocs(){
+  var docs = [
+    ['sc0','契約書（日雇就労）'],
+    ['sc1','誓約書'],
+    ['sc2','道具レンタル契約書'],
+    ['sc3','現場指示確認書'],
+    ['sc5','賃貸借契約証書']
+  ];
+  var htmlParts = docs.map(function(d){
+    var el = document.getElementById(d[0]);
+    if(!el) return '';
+    var body = buildPrintableHTML(el);
+    return '<div style="page-break-after:always"><h2 style="text-align:center;margin-bottom:16px">'+d[1]+'</h2>'+body+'</div>';
+  });
+  var html = htmlParts.join('');
+  var printWin=window.open('','_blank','width=800,height=900');
+  if(printWin){
+    printWin.document.write('<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><title>契約書類一式</title><style>body{font-family:-apple-system,sans-serif;padding:20px;font-size:13px;line-height:1.8;color:#333}strong{font-weight:600}p{margin-bottom:8px}@media print{body{padding:10px}}</style></head><body>'+html+'</body></html>');
+    printWin.document.close();
+    setTimeout(function(){printWin.print();},500);
+  } else {
+    alert('ポップアップがブロックされています。ブラウザの設定でポップアップを許可してください。');
+  }
+}
+
+function printSection(sectionId, title){
+  var el=document.getElementById(sectionId);
+  if(!el)return;
+  var html=buildPrintableHTML(el);
   var printWin=window.open('','_blank','width=800,height=900');
   if(printWin){
     printWin.document.write('<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><title>'+title+'</title><style>body{font-family:-apple-system,sans-serif;padding:20px;font-size:13px;line-height:1.8;color:#333}strong{font-weight:600}p{margin-bottom:8px}@media print{body{padding:10px}}</style></head><body><h2 style="text-align:center;margin-bottom:16px">'+title+'</h2>'+html+'</body></html>');
