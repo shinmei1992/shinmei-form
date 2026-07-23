@@ -369,10 +369,10 @@ textarea{resize:none;line-height:1.6}
         <div id="bank-none-msg" style="display:none;background:#fff8e6;border:1px solid #f0d080;border-radius:10px;padding:14px;font-size:14px;color:#7d4e00">後日銀行口座を開設してもらいます。</div>
         <div id="bank-form" style="display:none">
           <div class="fg" style="margin-bottom:10px"><div class="fl">銀行名 <span class="req">必須</span></div><input type="text" id="bank-name" placeholder="例：ゆうちょ銀行"></div>
-          <div class="fg" style="margin-bottom:10px"><div class="fl">支店名 <span class="req">必須</span></div><input type="text" placeholder="支店名を入力"></div>
-          <div class="fg" style="margin-bottom:10px"><div class="fl">口座種別 <span class="req">必須</span></div><div class="cg"><div class="chip" data-g="acct" onclick="cs(this)">普通</div><div class="chip" data-g="acct" onclick="cs(this)">当座</div></div></div>
-          <div class="fg" style="margin-bottom:10px"><div class="fl">口座番号 <span class="req">必須</span></div><input type="number" placeholder="口座番号を入力"></div>
-          <div class="fg" style="margin-bottom:0"><div class="fl">口座名義（フリガナ） <span class="req">必須</span></div><input type="text" placeholder="カタカナで入力"></div>
+          <div class="fg" style="margin-bottom:10px"><div class="fl">支店名 <span class="req">必須</span></div><input type="text" id="bank-branch" placeholder="支店名を入力"></div>
+<div class="fg" style="margin-bottom:10px"><div class="fl">口座種別 <span class="req">必須</span></div><div class="cg"><div class="chip" data-g="acct" onclick="cs(this)">普通</div><div class="chip" data-g="acct" onclick="cs(this)">当座</div></div></div>
+<div class="fg" style="margin-bottom:10px"><div class="fl">口座番号 <span class="req">必須</span></div><input type="number" id="bank-acctno" placeholder="口座番号を入力"></div>
+<div class="fg" style="margin-bottom:0"><div class="fl">口座名義（フリガナ） <span class="req">必須</span></div><input type="text" id="bank-holder" placeholder="カタカナで入力"></div>
         </div>
       </div>
     </div>
@@ -670,7 +670,23 @@ function fillConfirm(){
   document.getElementById('cv-t1').textContent=gc('t1');
   document.getElementById('cv-honin').textContent=gv('honin-name');
   var bankHasEl=document.querySelector('[data-g="bank-has"].sel');
-  document.getElementById('cv-bank').textContent=bankHasEl?bankHasEl.textContent.trim():'—';
+  var bankHasVal=bankHasEl?bankHasEl.textContent.trim():'—';
+  if(bankHasVal==='あり'){
+    var bName=document.getElementById('bank-name');
+    var bBranch=document.getElementById('bank-branch');
+    var bAcctType=gc('acct');
+    var bNo=document.getElementById('bank-acctno');
+    var bHolder=document.getElementById('bank-holder');
+    var parts=[];
+    if(bName&&bName.value)parts.push(bName.value);
+    if(bBranch&&bBranch.value)parts.push(bBranch.value+'支店');
+    if(bAcctType!=='—')parts.push(bAcctType);
+    if(bNo&&bNo.value)parts.push('口座番号:'+bNo.value);
+    if(bHolder&&bHolder.value)parts.push('（'+bHolder.value+'）');
+    document.getElementById('cv-bank').textContent=parts.length?parts.join(' '):'あり';
+  } else {
+    document.getElementById('cv-bank').textContent=bankHasVal;
+  }
   document.getElementById('cv-spouse').textContent=gc('spouse');
   document.getElementById('cv-memo').textContent=gv('memo-input');
 }
@@ -755,6 +771,7 @@ function submit(){
     docCount:document.querySelectorAll('.dcb.on').length, docDate:gv('doc-date'),
     tax1:gc('t1'), tax2:gc('t2'), nenkin:gc('nen'), debt:gc('dbt'),
     hoshounin:gv('honin-name'), bankHas:gc('bank-has'), bankName:gv('bank-name'),
+bankBranch:gv('bank-branch'), bankAcctType:gc('acct'), bankAcctNo:gv('bank-acctno'), bankHolder:gv('bank-holder'),
     spouse:gc('spouse'), fyt:gc('fyt'), tokubetsu:gc('tokubetsu'),
     memo:gv('memo-input'),
   };
