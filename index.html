@@ -1237,8 +1237,6 @@ function generatePDF(){
   basicRows.push(makeRow('社会保険',sd('ins')));
   basicRows.push(makeRow('国籍',sd('nation')));
   bodyDiv.appendChild(makeSection('PHASE 1 — 基本情報','#185FA5',basicRows));
-
-  ]));
   bodyDiv.appendChild(makeSection('PHASE 1 — 就労希望','#185FA5',[
     makeRow('希望職種',sd('works')),
     makeRow('トータル経験年数',d.totalExp||'—'),makeRow('勤務希望期間',sd('term')),
