@@ -452,9 +452,20 @@ var cvs = {};
 var regNo = '';
 var summaryHTML = '';
 
-  function buildPrintableHTML(el){
+function buildPrintableHTML(el){
   if(!el) return '';
   var clone = el.cloneNode(true);
+  // スクロール枠の高さ制限を解除（印刷時に全文表示させるため）
+  var scrollables = clone.querySelectorAll('[style*="overflow"]');
+  var all = [clone].concat(Array.from(scrollables));
+  all.forEach(function(node){
+    if(node.style){
+      node.style.maxHeight = 'none';
+      node.style.height = 'auto';
+      node.style.overflow = 'visible';
+      node.style.overflowY = 'visible';
+    }
+  });
   var origSelects = el.querySelectorAll('select');
   var cloneSelects = clone.querySelectorAll('select');
   cloneSelects.forEach(function(s, idx){
