@@ -113,8 +113,9 @@ textarea{resize:none;line-height:1.6}
   <div class="si"><div style="font-size:28px">📋</div></div>
   <h2>契約・書類登録</h2>
   <p>作業員の登録番号を入力して<br>PHASE 2・3 を開始してください</p>
-  <input type="text" class="reg-input-box" id="reg-no-input" placeholder="SHN-0001" maxlength="8">
-  <div class="hint">登録番号はスプレッドシートで確認できます</div>
+<input type="text" class="reg-input-box" id="reg-no-input" placeholder="SHN-0001" maxlength="8">
+<input type="text" class="reg-input-box" id="reg-name-input" placeholder="氏名（漢字）" style="font-size:16px;letter-spacing:normal;text-align:left">
+<div class="hint">登録番号・氏名はスプレッドシートで確認できます</div>
   <button class="reg-start-btn" onclick="startPhase23()">開始する</button>
 </div>
 
@@ -159,7 +160,8 @@ textarea{resize:none;line-height:1.6}
       <button onclick="printSection('scroll-c01','契約書（日雇就労）')" style="width:100%;padding:10px;border:1px solid #185FA5;border-radius:10px;background:#fff;color:#185FA5;font-size:14px;cursor:pointer;font-family:inherit;margin-bottom:10px">🖨️ この書類を印刷する / PDF保存する</button>
       <div class="agree-box">
         <div class="agree-row"><div class="agree-check" id="ag0" onclick="toggleAg(0)"><div class="ck"></div></div><div class="agree-text">上記の内容を確認し、同意します</div></div>
-        <div class="fg" style="margin-bottom:0"><div class="fl">日付</div><div class="date-display" id="date0"></div></div>
+<div class="fg"><div class="fl">日付</div><div class="date-display" id="date0"></div></div>
+        <div class="fg" style="margin-bottom:0"><div class="fl">署名（氏名）</div><div class="date-display" id="sig-c01">—</div></div>
       </div>
     </div>
     <!-- C02 誓約書 -->
@@ -198,9 +200,9 @@ textarea{resize:none;line-height:1.6}
       <button onclick="printSection('scroll-c02','誓約書')" style="width:100%;padding:10px;border:1px solid #185FA5;border-radius:10px;background:#fff;color:#185FA5;font-size:14px;cursor:pointer;font-family:inherit;margin-bottom:10px">🖨️ この書類を印刷する / PDF保存する</button>
       <div class="agree-box">
         <div class="agree-row"><div class="agree-check" id="ag1" onclick="toggleAg(1)"><div class="ck"></div></div><div class="agree-text">上記の内容を確認し、誓約します</div></div>
-        <div class="fg" style="margin-bottom:0">
-          <div class="fl">氏名（入力） <span class="req">必須</span></div>
-          <input type="text" id="sign-name" placeholder="氏名を入力してください">
+<div class="fg" style="margin-bottom:0">
+          <div class="fl">署名（氏名）</div>
+          <div class="date-display" id="sig-c02">—</div>
         </div>
       </div>
     </div>
@@ -220,8 +222,9 @@ textarea{resize:none;line-height:1.6}
       </div>
       <div class="hint" id="hint-c03" style="color:#c0392b;font-size:12px;margin-bottom:8px">↓ 最後までスクロールしてから同意できます</div>
       <button onclick="printSection('scroll-c03','道具レンタル契約書')" style="width:100%;padding:10px;border:1px solid #185FA5;border-radius:10px;background:#fff;color:#185FA5;font-size:14px;cursor:pointer;font-family:inherit;margin-bottom:10px">🖨️ この書類を印刷する / PDF保存する </button>
-      <div class="agree-box">
+<div class="agree-box">
         <div class="agree-row"><div class="agree-check" id="ag2" onclick="toggleAg(2)"><div class="ck"></div></div><div class="agree-text">上記の内容を確認し、同意します</div></div>
+        <div class="fg" style="margin-bottom:0"><div class="fl">署名（氏名）</div><div class="date-display" id="sig-c03">—</div></div>
       </div>
     </div>
     <!-- C04 現場指示確認書 -->
@@ -254,7 +257,8 @@ textarea{resize:none;line-height:1.6}
             <option>浦和支店</option><option>高田馬場支店</option><option>仙台支店</option><option>福岡営業所</option>
           </select>
         </div>
-        <div class="fg" style="margin-bottom:0"><div class="fl">確認日</div><div class="date-display" id="date3"></div></div>
+<div class="fg"><div class="fl">確認日</div><div class="date-display" id="date3"></div></div>
+        <div class="fg" style="margin-bottom:0"><div class="fl">署名（氏名）</div><div class="date-display" id="sig-c04">—</div></div>
       </div>
     </div>
     <!-- C05 安全教育 -->
@@ -311,11 +315,10 @@ textarea{resize:none;line-height:1.6}
       <button onclick="printSection('sc5','賃貸借契約証書')" style="width:100%;padding:10px;border:1px solid #185FA5;border-radius:10px;background:#fff;color:#185FA5;font-size:14px;cursor:pointer;font-family:inherit;margin-bottom:10px">🖨️ この書類を印刷する / PDF保存する </button>
       <div class="agree-box">
         <div class="agree-row"><div class="agree-check" id="ag5" onclick="toggleAg(5)"><div class="ck"></div></div><div class="agree-text">上記の内容を確認し、同意します（乙）</div></div>
-        <div class="fg" style="margin-bottom:0">
-          <div class="fl">氏名（キー入力） <span class="req">必須</span></div>
-          <input type="text" id="rent-name" placeholder="氏名を入力してください">
+<div class="fg" style="margin-bottom:0">
+          <div class="fl">署名（氏名）</div>
+          <div class="date-display" id="sig-c06">—</div>
         </div>
-      </div>
     </div>
     <!-- I01 社保書類チェック -->
     <div class="screen" id="sc6">
@@ -447,6 +450,7 @@ textarea{resize:none;line-height:1.6}
 var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxxd9KCSXljjz9nQBYmL8rqLhLWvU10LtOQM4q6NmWWkueFW_LoCD2GkJ6Gly6YnvsEnQ/exec';
 
 var cur = 0, total = 12;
+var signName = '';
 var agreed = {};
 var cvs = {};
 var regNo = '';
@@ -535,15 +539,20 @@ window.onload = function(){
   setToday();
   buildPbar();
   updateUI();
-  // URLパラメータから登録番号を自動入力して開始
+  // URLパラメータから登録番号・氏名を自動入力して開始
   var params = new URLSearchParams(window.location.search);
   var regParam = params.get('reg');
+  var nameParam = params.get('name');
   if(regParam){
     var input = document.getElementById('reg-no-input');
-    if(input){
-      input.value = regParam;
-      setTimeout(function(){startPhase23();}, 500);
-    }
+    if(input) input.value = regParam;
+  }
+  if(nameParam){
+    var nameInput = document.getElementById('reg-name-input');
+    if(nameInput) nameInput.value = nameParam;
+  }
+  if(regParam && nameParam){
+    setTimeout(function(){startPhase23();}, 500);
   }
 };
 var scrolledSections = {}; // スクロール完了を記録
@@ -582,15 +591,27 @@ function startPhase23(){
   if(!val){alert('登録番号を入力してください');return;}
   // SHN-のプレフィックスを自動付与
   if(!val.startsWith('SHN-')) val = 'SHN-' + val.replace(/[^0-9]/g,'').padStart(4,'0');
+  var nameVal = document.getElementById('reg-name-input').value.trim();
+  if(!nameVal){alert('氏名を入力してください');return;}
   regNo = val;
-  p1Name = '';
+  signName = nameVal;
+  p1Name = signName;
   document.getElementById('p1-reg-display').textContent = regNo;
-  document.getElementById('p1-name-display').textContent = regNo;
+  document.getElementById('p1-name-display').textContent = signName;
   document.getElementById('reg-input-screen').style.display = 'none';
   document.getElementById('main-form').style.display = 'block';
   setToday();
   buildPbar();
   updateUI();
+  fillSignatures();
+}
+
+function fillSignatures(){
+  var ids = ['sig-c01','sig-c02','sig-c03','sig-c04','sig-c06'];
+  ids.forEach(function(id){
+    var el = document.getElementById(id);
+    if(el) el.textContent = signName;
+  });
 }
 
 function setToday(){
@@ -694,7 +715,7 @@ function clrC(id){var c=document.getElementById(id);if(c){c.getContext('2d').cle
 function fillConfirm(){
   var gv=function(id){var el=document.getElementById(id);return el&&el.value?el.value:'—';};
   document.getElementById('cv-reg').textContent=regNo;
-  document.getElementById('cv-name').textContent=gv('honin-name');
+  ddocument.getElementById('cv-name').textContent=signName||gv('honin-name');
   document.getElementById('cv-c01').textContent=agreed[0]?'✓ 同意済':'—';
   document.getElementById('cv-c02').textContent=agreed[1]?'✓ 誓約済':'—';
   document.getElementById('cv-c03').textContent=agreed[2]?'✓ 同意済':'—';
@@ -805,7 +826,7 @@ function submit(){
     agree_c01:agreed[0]||false, agree_c02:agreed[1]||false,
     agree_c03:agreed[2]||false, agree_c04:agreed[3]||false,
     agree_c06:agreed[5]||false,
-    branch:gv('branch-sel'), rentPrice:gv('rent-price-detail'), rentName:gv('rent-name'),
+    branch:gv('branch-sel'), rentPrice:gv('rent-price-detail'), rentName:signName, signerName:signName,
     docCount:document.querySelectorAll('.dcb.on').length, docDate:gv('doc-date'),
     tax1:gc('t1'), tax2:gc('t2'), nenkin:gc('nen'), debt:gc('dbt'),
     hoshounin:gv('honin-name'), bankHas:gc('bank-has'), bankName:gv('bank-name'),
