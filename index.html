@@ -998,7 +998,7 @@ function copyPhase2Link(){
   var d=savedFormData;
   var regNo=d&&d.registrationNo?d.registrationNo:'—';
   var name=(d.seiK||'')+(d.meiK?' '+d.meiK:'');
-  var url='https://shinmei1992.github.io/shinmei-form/phase2.html?reg='+encodeURIComponent(regNo);
+  var url='https://shinmei1992.github.io/shinmei-form/phase2.html?reg='+encodeURIComponent(regNo)+'&name='+encodeURIComponent(name);
 
   var existing=document.getElementById('branch-select-overlay');
   if(existing)existing.remove();
