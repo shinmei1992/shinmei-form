@@ -320,6 +320,7 @@ textarea{resize:none;line-height:1.6}
           <div class="date-display" id="sig-c06">—</div>
         </div>
     </div>
+          </div>
     <!-- I01 社保書類チェック -->
     <div class="screen" id="sc6">
       <div class="skip-box">社保加入希望の方のみ対象です。希望しない方はスキップしてください。</div>
@@ -715,7 +716,7 @@ function clrC(id){var c=document.getElementById(id);if(c){c.getContext('2d').cle
 function fillConfirm(){
   var gv=function(id){var el=document.getElementById(id);return el&&el.value?el.value:'—';};
   document.getElementById('cv-reg').textContent=regNo;
-  ddocument.getElementById('cv-name').textContent=signName||gv('honin-name');
+  document.getElementById('cv-name').textContent=signName||gv('honin-name');
   document.getElementById('cv-c01').textContent=agreed[0]?'✓ 同意済':'—';
   document.getElementById('cv-c02').textContent=agreed[1]?'✓ 誓約済':'—';
   document.getElementById('cv-c03').textContent=agreed[2]?'✓ 同意済':'—';
